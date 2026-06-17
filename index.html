@@ -1428,8 +1428,9 @@ function setPayQR(tab) {
   var label = tab === 'wechat' ? '微信' : '支付宝';
   
   if (qrImg) {
-    var fallbackQR = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent('向长安游伴支付¥' + amount + '旅行规划费(' + label + ')');
-    var localQR = 'qrcode.png?' + Date.now();
+    // 优先加载对应支付方式的收款码图片
+    var localQR = (tab === 'wechat' ? 'wechat-qr.png' : 'alipay-qr.png');
+    var fallbackQR = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=07C160&data=' + encodeURIComponent('长安游伴旅行规划·' + label + '支付¥' + amount);
     qrImg.src = localQR;
     qrImg.onerror = function() {
       if (this.src.indexOf('api.qrserver.com') === -1) {

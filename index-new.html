@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>长安游伴 · 你的西安智能旅行管家</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,'PingFang SC','Helvetica Neue',sans-serif;background:#fff;color:#1d1d1f;font-size:15px;overflow-x:hidden}
+
+.app-container{width:100%;max-width:430px;min-height:100vh;margin:0 auto;position:relative;overflow:hidden}
+
+/* ===== Pages ===== */
+.page{width:100%;min-height:100vh;position:absolute;top:0;left:0;background:#fff;padding-bottom:80px;display:none;overflow-y:auto}
+.page.active{display:block;position:relative}
+
+/* ===== Top Nav ===== */
+.top-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;position:sticky;top:0;background:#fff;z-index:10}
+.back-btn{font-size:24px;color:#1d1d1f;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:none;background:none;font-weight:300}
+.empty-plan-btn{border:1px solid #1d1d1f;border-radius:99px;padding:6px 14px;font-size:13px;cursor:pointer;background:#fff}
+
+/* ===== Bottom Tab Bar ===== */
+.tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:60px;background:#fff;display:flex;border-top:1px solid #eee;z-index:99}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:#999;font-size:12px;border:none;background:none}
+.tab-item.active{color:#1d1d1f}
+.tab-icon{font-size:20px;margin-bottom:4px}
+
+/* ===== Create Page ===== */
+.create-page{padding:20px}
+.page-title{font-size:30px;font-weight:600;margin:20px 0 24px}
+.input-card{width:100%;border:1px solid #eee;border-radius:20px;padding:20px;margin-bottom:30px}
+.city-input{width:100%;border:none;outline:none;font-size:16px;background:transparent;font-family:inherit}
+.city-tag{display:inline-flex;align-items:center;background:#f5f5f7;padding:6px 12px;border-radius:10px;margin-bottom:10px}
+.tag-close{margin-left:8px;color:#666;cursor:pointer}
+.input-tip{color:#aaa;font-size:14px}
+.sub-title{font-size:22px;font-weight:600;margin:30px 0 16px}
+.date-select{width:100%;border:1px solid #eee;border-radius:20px;padding:18px 20px;display:flex;align-items:center;gap:10px;margin-bottom:30px;cursor:pointer}
+.tag-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:40px}
+.prefer-tag{border:1px solid #ddd;border-radius:99px;padding:12px 0;text-align:center;font-size:14px;cursor:pointer;transition:all 0.2s;background:#fff}
+.prefer-tag.active{border:2px solid #1d1d1f;font-weight:500}
+.submit-btn{width:100%;background:#1d1d1f;color:#fff;border:none;border-radius:99px;padding:16px 0;font-size:17px;font-weight:500;cursor:pointer}
+.submit-btn:active{opacity:.85}
+.loading-text{text-align:center;padding:40px;color:#999;display:none}
+
+/* ===== Schedule Page ===== */
+.schedule-page{padding:0}
+.schedule-header{padding:20px}
+.schedule-top-title{font-size:24px;font-weight:600;margin-bottom:4px}
+.schedule-top-desc{font-size:14px;color:#999}
+.date-tab-wrap{display:flex;gap:20px;overflow-x:auto;padding:0 20px 10px;margin-bottom:4px;-webkit-overflow-scrolling:touch}
+.date-tab{white-space:nowrap;font-size:14px;color:#999;cursor:pointer;padding-bottom:8px;border-bottom:2px solid transparent;background:none;border-left:none;border-right:none;border-top:none}
+.date-tab.active{color:#1d1d1f;border-color:#1d1d1f;font-weight:500}
+.day-theme{padding:0 20px 20px;font-size:16px;color:#666;font-weight:500}
+.schedule-card{margin:0 20px 16px;background:#f5f5f7;border-radius:16px;padding:16px;display:flex;gap:14px;cursor:pointer}
+.schedule-img{width:80px;height:80px;border-radius:12px;object-fit:cover;background:#eee;flex-shrink:0}
+.schedule-info{flex:1;min-width:0}
+.schedule-tag{font-size:12px;color:#999;margin-bottom:4px}
+.schedule-name{font-size:16px;font-weight:500;margin-bottom:6px}
+.schedule-desc{font-size:13px;color:#666;line-height:1.4}
+.schedule-time{font-size:12px;color:#999;margin-top:8px}
+
+/* ===== Explore Page ===== */
+.explore-page{padding:0}
+.explore-header{padding:20px;font-size:24px;font-weight:600}
+.explore-tab-wrap{display:flex;padding:0 20px;gap:24px;overflow-x:auto;margin-bottom:20px;-webkit-overflow-scrolling:touch}
+.explore-tab{white-space:nowrap;font-size:15px;color:#999;cursor:pointer;padding-bottom:8px;border-bottom:2px solid transparent;background:none;border-left:none;border-right:none;border-top:none}
+.explore-tab.active{color:#1d1d1f;border-color:#1d1d1f;font-weight:500}
+.list-item{margin:0 20px 16px;display:flex;gap:14px;cursor:pointer}
+.list-img{width:100px;height:100px;border-radius:12px;object-fit:cover;background:#eee;flex-shrink:0}
+.list-info{flex:1;min-width:0;padding:4px 0}
+.list-title{font-size:16px;font-weight:500;margin-bottom:4px}
+.list-tag{font-size:12px;color:#ff6b6b;margin-bottom:6px}
+.list-desc{font-size:13px;color:#666;line-height:1.4}
+
+/* ===== Mask & Popup ===== */
+.mask{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:100;display:none;align-items:flex-end;justify-content:center}
+.mask.show{display:flex}
+.popup{width:100%;max-width:430px;background:#fff;border-radius:24px 24px 0 0;padding:0;max-height:85vh;overflow-y:auto}
+.popup-header{display:flex;justify-content:space-between;align-items:center;padding:24px 20px 16px;position:sticky;top:0;background:#fff;z-index:5}
+.popup-close{font-size:24px;cursor:pointer;color:#999;width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:none;border:none}
+.popup-title{font-size:20px;font-weight:600}
+.popup-sub{font-size:13px;color:#999;margin-top:4px}
+
+/* Detail popup specific */
+.popup-img-wrap{width:100%;height:200px;background:#eee;overflow:hidden}
+.popup-img-wrap img{width:100%;height:100%;object-fit:cover}
+.popup-desc{padding:0 20px;font-size:14px;color:#333;line-height:1.6;margin:16px 0}
+
+/* Photo carousel */
+.photo-carousel{display:flex;gap:8px;overflow-x:auto;padding:0 20px 16px;-webkit-overflow-scrolling:touch}
+.photo-carousel img{width:120px;height:90px;border-radius:10px;object-fit:cover;flex-shrink:0}
+.section-label{padding:0 20px;font-size:13px;color:#999;margin-top:8px;margin-bottom:8px}
+
+/* Review blocks */
+.comment-block{padding:0 20px;margin:20px 0}
+.comment-title{font-size:16px;font-weight:500;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.good-comment{background:#f0fdf4;padding:14px;border-radius:12px;font-size:13px;color:#16a34a;margin-bottom:8px;line-height:1.6}
+.bad-comment{background:#fef2f2;padding:14px;border-radius:12px;font-size:13px;color:#ef4444;line-height:1.6}
+
+/* Bottom action bar */
+.popup-btn-group{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:16px 20px;border-top:1px solid #f0f0f0;position:sticky;bottom:0;background:#fff}
+.popup-btn{text-align:center;font-size:12px;color:#666;cursor:pointer;background:none;border:none;padding:8px 0}
+.popup-btn-icon{font-size:20px;margin-bottom:4px;display:block}
+
+/* Add plan popup */
+.add-plan-item{padding:16px;border:1px solid #eee;border-radius:16px;margin:12px 20px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.add-plan-item.active{border-color:#10b981;background:#f0fdf4}
+.plan-check{width:22px;height:22px;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;flex-shrink:0}
+.add-plan-item.active .plan-check{background:#10b981;border-color:#10b981}
+.confirm-btn{width:calc(100% - 40px);margin:20px 20px;background:#1d1d1f;color:#fff;border:none;border-radius:99px;padding:14px 0;font-size:16px;cursor:pointer}
+.confirm-btn:active{opacity:.85}
+
+/* ===== Payment ===== */
+.pay-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.65);z-index:9999;display:none;align-items:center;justify-content:center}
+.pay-overlay.show{display:flex}
+.pay-modal{background:#fff;border-radius:20px;width:92%;max-width:380px;overflow:hidden;animation:payIn .35s ease}
+@keyframes payIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.pay-header{background:#1d1d1f;padding:28px 20px 20px;text-align:center;color:#fff;position:relative}
+.pay-close{position:absolute;top:12px;right:16px;background:rgba(255,255,255,.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer}
+.pay-icon{font-size:48px;margin-bottom:10px}
+.pay-title{font-size:20px;font-weight:700}
+.pay-sub{font-size:13px;opacity:.8;margin-top:6px}
+.pay-body{padding:24px 20px}
+.pay-price-row{text-align:center;margin-bottom:20px}
+.pay-price{font-size:36px;font-weight:800;color:#1d1d1f}
+.pay-price small{font-size:14px;font-weight:400}
+.pay-orig{font-size:14px;color:#999;text-decoration:line-through;margin-left:8px}
+.pay-qrcode-section{text-align:center;margin-bottom:16px}
+.pay-qrcode-title{font-size:14px;font-weight:600;color:#333;margin-bottom:14px}
+.pay-qrcode-box{display:inline-block;background:#f8f8f8;border-radius:16px;padding:16px;border:2px dashed #07C160}
+.pay-qrcode-img{width:180px;height:180px;border-radius:8px;background:#fff;display:block}
+.pay-qrcode-amount{font-size:22px;font-weight:800;color:#1d1d1f;margin-top:10px}
+.pay-qrcode-tip{font-size:12px;color:#999;margin-top:10px;line-height:1.5}
+.pay-divider{display:flex;align-items:center;gap:12px;margin:20px 0 16px;color:#bbb;font-size:12px}
+.pay-divider::before,.pay-divider::after{content:'';flex:1;height:1px;background:#e0e0e0}
+.pay-features{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.pay-feat{display:flex;align-items:center;gap:10px;font-size:13px;color:#444}
+.pf-icon{width:32px;height:32px;border-radius:8px;background:#f5f5f7;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.pay-btn{width:100%;background:#07C160;color:#fff;border:none;border-radius:50px;padding:15px;font-size:17px;font-weight:700;cursor:pointer}
+.pay-btn:active{transform:scale(.97);background:#06AD56}
+.pay-btn.disabled{background:#ccc;cursor:not-allowed}
+.pay-footer{text-align:center;padding:0 20px 20px;font-size:11px;color:#999}
+.pay-footer a{color:#1d1d1f;text-decoration:underline}
+
+/* ===== Hero Page (保留旧版简易入口) ===== */
+.hero-page{background:linear-gradient(160deg,#0A1628,#0D2B3E,#154A5C);min-height:100vh;display:flex;flex-direction:column;padding-bottom:100px}
+.hero-top{padding:48px 24px 0;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(212,160,23,.15);border:1px solid rgba(212,160,23,.4);border-radius:20px;padding:5px 14px;font-size:12px;color:#C8963E;margin-bottom:20px}
+.hero-avatar{width:72px;height:72px;border-radius:50%;background:#1A8A7D;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 14px;border:3px solid rgba(212,160,23,.5)}
+.hero-title{font-size:28px;font-weight:700;color:#fff;letter-spacing:2px}
+.hero-title span{color:#C8963E}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.6);margin-top:8px;line-height:1.6}
+.hero-voice-btn{display:inline-block;margin-top:12px;padding:8px 20px;background:rgba(255,255,255,.08);border-radius:20px;font-size:12px;color:rgba(255,255,255,.7);cursor:pointer;border:1px solid rgba(255,255,255,.15)}
+.hero-voice-btn.playing{background:rgba(212,160,23,.25);color:#C8963E;border-color:rgba(212,160,23,.5)}
+.weather-widget{margin:14px auto 0;background:rgba(255,255,255,.06);border-radius:12px;padding:10px 14px;display:inline-block}
+.weather-loading{font-size:12px;color:rgba(255,255,255,.4)}
+
+.hero-feat-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 20px 16px}
+.hero-feat-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px;cursor:pointer;transition:all .2s;text-align:left}
+.hero-feat-card:active{background:rgba(212,160,23,.12);border-color:#C8963E;transform:scale(.97)}
+.hero-feat-icon{font-size:20px;margin-bottom:4px}
+.hero-feat-title{font-size:12px;font-weight:600;color:#fff}
+.hero-feat-desc{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px}
+.hero-feat-row2{padding:0 20px 4px}
+.hero-feat-ai{position:relative;display:flex;gap:10px}
+.hero-feat-badge{position:absolute;top:8px;right:10px;background:#C8963E;color:#fff;font-size:9px;padding:1px 6px;border-radius:4px;font-weight:600}
+
+.hero-samples{padding:0 20px 12px}
+.hero-samples-title{font-size:11px;color:rgba(255,255,255,.4);text-align:center;margin-bottom:8px}
+.sample-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.sample-chip{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:5px 10px;font-size:11px;color:rgba(255,255,255,.65);cursor:pointer}
+.sample-chip:active{background:rgba(212,160,23,.15);border-color:#C8963E;color:#C8963E}
+
+.hero-cta{padding:0 20px 20px}
+.btn-primary{width:100%;background:#1A8A7D;color:#fff;border:none;border-radius:50px;padding:16px;font-size:17px;font-weight:700;cursor:pointer}
+.btn-primary:active{opacity:.85}
+.hero-price{text-align:center;margin-top:10px;font-size:12px;color:rgba(255,255,255,.4)}
+
+/* ===== Form Page ===== */
+.form-page{background:#fff;padding-bottom:100px}
+.form-topbar{background:#fff;padding:16px 20px;position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f0f0f0}
+.form-topbar .back-btn{width:30px;height:30px;border-radius:50%;background:#f5f5f7;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#1d1d1f;border:none;flex-shrink:0}
+.form-topbar h2{font-size:16px;font-weight:600;color:#1d1d1f}
+.form-topbar p{font-size:11px;color:#999}
+
+.section{margin:14px 14px;background:#fff;border-radius:16px;padding:16px;border:1px solid #eee}
+.section-header{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #f0f0f0}
+.section-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:#f5f5f7}
+.section-header h3{font-size:15px;font-weight:700}
+.s-tag{font-size:10px;color:#999;margin-left:auto}
+
+.field-group{margin-bottom:14px}
+.field-group:last-child{margin-bottom:0}
+.field-label{font-size:13px;font-weight:600;color:#1d1d1f;margin-bottom:8px;display:flex;align-items:center;gap:4px}
+.field-label .req{color:#ef4444}
+.field-input{width:100%;background:#f5f5f7;border:1.5px solid #e5e5e5;border-radius:12px;padding:11px 12px;font-size:14px;color:#1d1d1f;outline:none;font-family:inherit;transition:border-color .2s}
+.field-input:focus{border-color:#1d1d1f;background:#fff}
+.field-input::placeholder{color:#bbb}
+textarea.field-input{min-height:70px;resize:none;line-height:1.5}
+
+.date-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.date-row input[type="date"]{-webkit-appearance:none;background:#f5f5f7;border:1.5px solid #e5e5e5;border-radius:12px;padding:11px 10px;font-size:14px;color:#1d1d1f;font-family:inherit;width:100%}
+.date-row input[type="date"]:focus{border-color:#1d1d1f;outline:none}
+
+.chip-group{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:7px 13px;border-radius:18px;border:1.5px solid #ddd;background:#fff;font-size:13px;color:#666;cursor:pointer;transition:all .2s;user-select:none;white-space:nowrap}
+.chip.selected{background:#1d1d1f;border-color:#1d1d1f;color:#fff;font-weight:500}
+.chip:active{transform:scale(.96)}
+
+.count-row{display:flex;align-items:center;gap:12px}
+.count-display{display:flex;align-items:center;gap:8px}
+.count-btn{width:30px;height:30px;border-radius:50%;border:1.5px solid #1d1d1f;background:#fff;color:#1d1d1f;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.count-btn:active{background:#f5f5f7}
+.count-num{font-size:18px;font-weight:700;color:#1d1d1f;min-width:28px;text-align:center}
+
+.submit-area{margin:20px 14px}
+.btn-submit{width:100%;background:#1d1d1f;color:#fff;border:none;border-radius:50px;padding:17px;font-size:17px;font-weight:700;cursor:pointer}
+.btn-submit:active{opacity:.85}
+.submit-hint{text-align:center;margin-top:8px;font-size:11px;color:#999}
+
+/* ===== Loading ===== */
+.loading-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 24px;text-align:center}
+.load-avatar{width:72px;height:72px;border-radius:50%;background:#1A8A7D;display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:20px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.06);opacity:.8}}
+.load-title{font-size:18px;font-weight:700;margin-bottom:8px}
+.load-sub{font-size:13px;color:#999;margin-bottom:32px}
+.load-progress{width:200px;height:4px;background:#e5e5e5;border-radius:2px;overflow:hidden;margin-bottom:16px}
+.load-bar{height:100%;width:30%;background:#1d1d1f;border-radius:2px;animation:loading 2s ease-in-out infinite}
+@keyframes loading{0%{width:10%;margin-left:0}50%{width:40%;margin-left:30%}100%{width:10%;margin-left:90%}}
+.load-tips{font-size:12px;color:#999;line-height:1.8}
+.load-tips span{display:block;animation:fadeInOut 3s ease-in-out infinite}
+.load-tips span:nth-child(2){animation-delay:1s}
+.load-tips span:nth-child(3){animation-delay:2s}
+@keyframes fadeInOut{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* ===== Result Page ===== */
+.result-page{background:#fff;padding-bottom:100px;min-height:100vh}
+.res-header{background:#f5f5f7;padding:20px 20px 24px;border-bottom:1px solid #eee}
+.res-title{font-size:20px;font-weight:700;line-height:1.4}
+.res-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.res-meta span{font-size:11px;color:#999;display:flex;align-items:center;gap:3px}
+.res-body{padding:12px}
+
+.rcard{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;border:1px solid #eee}
+.rcard-title{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.rcard-title::before{content:'';width:3px;height:16px;background:#1d1d1f;border-radius:2px;flex-shrink:0}
+
+.day-block{background:#f5f5f7;border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.day-head{display:flex;align-items:center;gap:10px}
+.day-num{width:30px;height:30px;border-radius:50%;background:#1d1d1f;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.day-theme2{font-size:13px;font-weight:700}
+.day-nav{margin-left:auto}
+.btn-nav{background:#f5f5f7;color:#1d1d1f;border:1px solid #ddd;border-radius:14px;padding:5px 10px;font-size:11px;cursor:pointer}
+
+.tl{padding:4px 0 0 6px}
+.tl-item{display:flex;gap:8px;padding:8px 0;position:relative}
+.tl-item::before{content:'';position:absolute;left:5px;top:22px;bottom:-8px;width:1px;background:#ddd}
+.tl-item:last-child::before{display:none}
+.tl-dot{width:11px;height:11px;border-radius:50%;background:#1d1d1f;flex-shrink:0;margin-top:5px;border:2px solid #e5e5e5}
+.tl-info{flex:1}
+.tl-time{font-size:11px;color:#999}
+.tl-name{font-size:13px;font-weight:600}
+.tl-tip{font-size:11px;color:#666;margin-top:3px;background:#fafafa;border-radius:6px;padding:5px 8px;line-height:1.4}
+.tl-nav{margin-top:2px}
+.tl-nav a{font-size:10px;color:#1d1d1f;text-decoration:none;background:#f5f5f7;padding:2px 7px;border-radius:10px}
+
+.res-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #eee;padding:10px 14px;display:flex;gap:8px;z-index:100}
+.btn-share{flex:1;background:#f5f5f7;border:1px solid #ddd;border-radius:50px;padding:12px;font-size:13px;font-weight:600;cursor:pointer}
+.btn-newplan{flex:2;background:#1d1d1f;border:none;border-radius:50px;padding:12px;font-size:14px;color:#fff;font-weight:600;cursor:pointer}
+.gallery-btn{background:#f5f5f7;border:1px solid #ddd;border-radius:50px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer}
+
+/* ===== Food/Spots/Hotel/Driver Modals (旧版保留) ===== */
+.food-overlay,.spots-overlay,.driver-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:none}
+.food-overlay.show,.spots-overlay.show,.driver-overlay.show{display:flex;align-items:flex-end;justify-content:center}
+.food-modal,.spots-modal,.driver-modal{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:600px;max-height:80vh;overflow-y:auto;padding:20px 16px 30px;animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.food-modal h3,.spots-modal h3,.driver-modal h3{font-size:18px;margin-bottom:4px}
+.food-subtitle,.spots-subtitle,.driver-subtitle{font-size:12px;color:#999;margin-bottom:16px}
+
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:#f0f0f0;border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#666;z-index:10}
+
+.cat-tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.cat-tab{padding:6px 14px;border-radius:20px;border:1.5px solid #ddd;background:#fff;font-size:12px;color:#666;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s}
+.cat-tab.active{background:#1d1d1f;color:#fff;border-color:#1d1d1f;font-weight:600}
+
+/* Hotel items */
+.hotel-list-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid #f0f0f0;align-items:flex-start}
+.hotel-list-item:last-child{border-bottom:none}
+.hotel-photo{width:90px;height:90px;border-radius:12px;flex-shrink:0;overflow:hidden;background:#f5f5f5}
+.hotel-photo img{width:100%;height:100%;object-fit:cover}
+.hotel-detail{flex:1;min-width:0}
+.hotel-detail .h-name{font-size:15px;font-weight:700;margin-bottom:4px}
+.hotel-detail .h-dist{font-size:11px;color:#999;margin-bottom:4px}
+.hotel-detail .h-price-row{display:flex;align-items:center;gap:8px;margin:6px 0}
+.hotel-detail .h-price{font-size:18px;font-weight:700;color:#ef4444}
+.hotel-detail .h-price s{font-size:12px;color:#999;font-weight:400;margin-left:4px}
+.hotel-detail .h-rebate{background:#fef2f2;color:#ef4444;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:600}
+.hotel-btn-row{display:flex;gap:6px;margin-top:8px}
+.hotel-btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:16px;font-size:11px;cursor:pointer;text-decoration:none;border:none;font-weight:600}
+.hotel-btn.buy{background:#1d1d1f;color:#fff}
+.hotel-btn.nav{background:#f5f5f7;color:#1d1d1f;border:1px solid #ddd}
+
+/* Spot items */
+.spot-item{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #f0f0f0;align-items:flex-start}
+.spot-item:last-child{border-bottom:none}
+.spot-rank{width:28px;height:28px;border-radius:50%;background:#1d1d1f;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:4px}
+.spot-info{flex:1;min-width:0}
+.spot-name{font-size:15px;font-weight:700}
+.spot-meta{font-size:11px;color:#999;margin:3px 0}
+.spot-desc{font-size:12px;color:#666;line-height:1.5}
+
+/* Food items */
+.food-list-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid #f0f0f0;align-items:flex-start}
+.food-list-item:last-child{border-bottom:none}
+.food-avatar{width:60px;height:60px;border-radius:10px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0;overflow:hidden}
+.food-avatar img{width:100%;height:100%;object-fit:cover}
+.food-info{flex:1;min-width:0}
+.food-name{font-size:15px;font-weight:700}
+.food-addr{font-size:12px;color:#999;margin:4px 0}
+.food-desc{font-size:12px;color:#666;line-height:1.5}
+.food-price{color:#ef4444;font-weight:700;font-size:12px}
+
+/* Driver */
+.driver-card{background:#fafafa;border-radius:12px;padding:14px;margin-bottom:12px;border:1px solid #eee}
+.driver-card:last-child{margin-bottom:0}
+.driver-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.driver-avatar{width:48px;height:48px;border-radius:50%;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.driver-name{font-size:16px;font-weight:700}
+.driver-stars{color:#FFB800;font-size:12px}
+.driver-price-tag{font-size:20px;font-weight:700;color:#ef4444}
+.driver-price-unit{font-size:12px;color:#999}
+
+/* ===== Chat Modal ===== */
+.chat-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:none}
+.chat-overlay.show{display:flex;align-items:flex-end;justify-content:center}
+.chat-modal{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:600px;height:85vh;display:flex;flex-direction:column;animation:slideUp .3s ease}
+.chat-header{display:flex;align-items:center;gap:10px;padding:16px;border-bottom:1px solid #eee;flex-shrink:0}
+.chat-avatar{width:40px;height:40px;border-radius:50%;background:#f5f5f7;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.chat-header-info{flex:1}
+.chat-name{font-size:15px;font-weight:700}
+.chat-status{font-size:11px;color:#10b981}
+.chat-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;background:#f9f7f4}
+.chat-msg{max-width:85%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.6;animation:msgIn .3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.chat-msg.bot{background:#fff;align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.chat-msg.user{background:#1d1d1f;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.chat-input-area{display:flex;gap:8px;padding:12px 16px;border-top:1px solid #eee;background:#fff;flex-shrink:0}
+.chat-input-area input{flex:1;border:1.5px solid #e0e0e0;border-radius:24px;padding:10px 16px;font-size:14px;outline:none;font-family:inherit}
+.chat-input-area input:focus{border-color:#1d1d1f}
+.chat-input-area button{width:44px;height:44px;border-radius:50%;background:#1d1d1f;color:#fff;border:none;font-size:18px;cursor:pointer;flex-shrink:0}
+.chat-quick-qs{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 8px;flex-shrink:0;overflow-x:auto}
+.chat-quick{background:#f0f0f0;border:none;border-radius:16px;padding:5px 12px;font-size:11px;color:#555;cursor:pointer;white-space:nowrap;flex-shrink:0}
+
+/* ===== Guide Modal ===== */
+.guide-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:none}
+.guide-overlay.show{display:flex;align-items:flex-end;justify-content:center}
+.guide-modal{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:600px;max-height:85vh;overflow-y:auto;padding:0 0 24px;animation:slideUp .3s ease}
+.guide-close{position:sticky;top:0;background:#fff;padding:16px 20px;z-index:10;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee}
+.guide-close-btn{width:32px;height:32px;border-radius:50%;background:#f0f0f0;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* ===== Gallery & Poster ===== */
+.gallery-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:1000;display:none}
+.gallery-overlay.show{display:flex;flex-direction:column}
+.gallery-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;color:#fff}
+.gallery-header h3{font-size:16px}
+.gallery-grid{flex:1;overflow-y:auto;padding:0 12px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;align-content:start}
+.gallery-item{aspect-ratio:1;border-radius:8px;background:#333;position:relative;overflow:hidden;cursor:pointer}
+.gallery-item img{width:100%;height:100%;object-fit:cover}
+.gallery-bar{display:flex;gap:10px;padding:16px 20px;background:#1a1a1a}
+.gallery-bar button{flex:1;border:none;border-radius:50px;padding:12px;font-size:14px;font-weight:600;cursor:pointer}
+.gallery-share-btn{background:#1d1d1f;color:#fff}
+.gallery-back-btn{background:#333;color:#fff}
+
+.poster-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:2000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.poster-overlay.show{display:flex}
+.poster-canvas-wrap{background:#fff;border-radius:12px;overflow:hidden;max-width:340px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.poster-canvas-wrap canvas{width:100%;display:block}
+.poster-hint{color:#ccc;margin-top:16px;font-size:13px;text-align:center}
+.poster-close{color:#fff;margin-top:12px;font-size:14px;cursor:pointer;border:1px solid #555;border-radius:50px;padding:8px 24px;background:transparent}
+
+/* ===== Misc ===== */
+.err-box{background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:16px;margin:20px;text-align:center}
+.err-box p{font-size:13px;color:#991b1b;margin-bottom:10px;line-height:1.6}
+.err-box .hint{font-size:11px;color:#999;margin-bottom:10px;line-height:1.6}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.8);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+#debug-panel{display:none;position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:#1a1a1a;color:#0f0;font-size:12px;padding:10px;z-index:9999;font-family:monospace;white-space:pre-wrap;border-top:2px solid #f44}
+</style>
+</head>
+<body>
+<div class="app-container">
+
+<!-- ===== 1. 创建行程页 ===== -->
+<div class="page active create-page" id="page-hero">
+  <div class="top-nav">
+    <div class="back-btn">&lsaquo;</div>
+    <div class="empty-plan-btn">创建空计划</div>
+  </div>
+  <h1 class="page-title">你想去哪里？</h1>
+  <div class="input-card">
+    <div class="city-tag"><span>📍</span> <span id="cityTagText">西安</span><span class="tag-close" onclick="">✕</span></div>
+    <input class="city-input" id="cityInput" value="西安" placeholder="输入旅行城市，例如：西安、成都、重庆">
+    <div class="input-tip">输入任意城市，即可智能生成真实旅行攻略</div>
+  </div>
+  <h2 class="sub-title">你想去多久？</h2>
+  <div class="date-select" id="dateText">
+    <span>🗓</span>
+    <span>选择出行天数与日期</span>
+    <span style="margin-left:auto">&rsaquo;</span>
+  </div>
+  <h2 class="sub-title">旅行偏好</h2>
+  <div class="tag-grid" id="preferGrid">
+    <div class="prefer-tag active" data-key="scenery">📍 经典必玩</div>
+    <div class="prefer-tag active" data-key="food">🍽 吃吃喝喝</div>
+    <div class="prefer-tag" data-key="quiet">🕵 小众探索</div>
+    <div class="prefer-tag active" data-key="photo">📸 拍照出片</div>
+    <div class="prefer-tag" data-key="shop">🛍 逛街购物</div>
+    <div class="prefer-tag" data-key="walk">🚶 citywalk</div>
+    <div class="prefer-tag" data-key="nature">🏞 自然风光</div>
+    <div class="prefer-tag" data-key="art">🎨 文艺展览</div>
+    <div class="prefer-tag" data-key="history">🏛 历史古建</div>
+  </div>
+  <div class="loading-text" id="loadingTxt">正在调取高德真实数据，智能生成行程...</div>
+  <button class="submit-btn" id="genBtn" onclick="generateRealSchedule()">智能规划真实行程</button>
+</div>
+
+<!-- ===== 2. 行程总览页 ===== -->
+<div class="page schedule-page" id="page-schedule">
+  <div class="schedule-header">
+    <div class="top-nav" style="padding:0">
+      <div class="back-btn" onclick="showPage('hero')">&lsaquo;</div>
+      <div class="empty-plan-btn">编辑行程</div>
+    </div>
+    <h1 class="schedule-top-title" id="scheduleTitle">城市深度游</h1>
+    <p class="schedule-top-desc">智能定制真实旅行行程</p>
+  </div>
+  <div class="date-tab-wrap" id="dateTabWrap"></div>
+  <div class="day-theme" id="dayTheme"></div>
+  <div id="scheduleList"></div>
+</div>
+
+<!-- ===== 3. 探索页 ===== -->
+<div class="page explore-page" id="page-explore">
+  <div class="explore-header" id="exploreTitle">发现城市</div>
+  <div class="explore-tab-wrap" id="exploreTabWrap">
+    <div class="explore-tab active" data-type="scenic">景点</div>
+    <div class="explore-tab" data-type="food">美食</div>
+    <div class="explore-tab" data-type="drink">饮品</div>
+    <div class="explore-tab" data-type="shop">购物</div>
+    <div class="explore-tab" data-type="hotel">住宿</div>
+  </div>
+  <div id="exploreList"></div>
+</div>
+
+<!-- ===== 底部导航 ===== -->
+<div class="tab-bar">
+  <div class="tab-item active" id="tabSchedule" onclick="switchTab('schedule')">
+    <span class="tab-icon">📋</span><span>行程</span>
+  </div>
+  <div class="tab-item" id="tabExplore" onclick="switchTab('explore')">
+    <span class="tab-icon">🔍</span><span>探索</span>
+  </div>
+</div>
+
+<!-- ===== 详情弹窗 ===== -->
+<div class="mask" id="detailMask" onclick="closeMask(event)">
+  <div class="popup" onclick="event.stopPropagation()">
+    <div class="popup-header">
+      <div>
+        <div class="popup-title" id="popupName"></div>
+        <div class="popup-sub" id="popupSubTxt"></div>
+      </div>
+      <button class="popup-close" onclick="closeDetailPopup()">×</button>
+    </div>
+    <div class="popup-img-wrap"><img id="popupImg" alt="" src=""></div>
+    <div class="section-label">地点介绍 AI生成</div>
+    <div class="popup-desc" id="popupDesc"></div>
+    <div class="photo-carousel" id="popupPhotos"></div>
+    <div class="comment-block">
+      <div class="comment-title">真实评价</div>
+      <div class="good-comment" id="goodComment"></div>
+      <div class="bad-comment" id="badComment"></div>
+    </div>
+    <div class="popup-btn-group">
+      <button class="popup-btn" onclick="openAddPlanPopup()"><span class="popup-btn-icon">➕</span>添加至</button>
+      <button class="popup-btn"><span class="popup-btn-icon">❤️</span>收藏</button>
+      <button class="popup-btn"><span class="popup-btn-icon">✅</span>打卡</button>
+      <button class="popup-btn"><span class="popup-btn-icon">🧭</span>导航</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 添加行程弹窗 ===== -->
+<div class="mask" id="addPlanMask" onclick="closeMask(event)">
+  <div class="popup" onclick="event.stopPropagation()">
+    <div class="popup-header">
+      <div class="popup-title">添加至行程</div>
+      <button class="popup-close" onclick="closeAddPlanPopup()">×</button>
+    </div>
+    <div class="add-plan-item active">
+      <div class="plan-check">✓</div>
+      <div>
+        <div style="font-weight:500" id="addPlanName">城市深度游</div>
+        <div style="font-size:12px;color:#999;margin-top:4px" id="addPlanDate">自定义行程</div>
+      </div>
+    </div>
+    <button class="confirm-btn" onclick="successAdd()">确认添加</button>
+  </div>
+</div>
+
+<!-- ===== 支付弹窗 ===== -->
+<div class="pay-overlay" id="pay-overlay">
+  <div class="pay-modal">
+    <div class="pay-header">
+      <button class="pay-close" onclick="closePayModal()">✕</button>
+      <div class="pay-icon">🔒</div>
+      <div class="pay-title">解锁AI行程规划</div>
+      <div class="pay-sub">一次解锁，全程无忧</div>
+    </div>
+    <div class="pay-body">
+      <div class="pay-price-row">
+        <span class="pay-price">¥9.9 <small>/ 全程</small></span>
+        <span class="pay-orig">¥29.9</span>
+      </div>
+      <div class="pay-qrcode-section">
+        <div class="pay-qrcode-title">📱 微信/支付宝扫码支付</div>
+        <div class="pay-qrcode-box">
+          <img class="pay-qrcode-img" id="pay-qrcode-img" src="" alt="付款二维码">
+          <div class="pay-qrcode-amount">¥9.90</div>
+        </div>
+        <div class="pay-qrcode-tip">截图保存 → 打开微信/支付宝扫一扫 → 支付 ¥9.90</div>
+      </div>
+      <div class="pay-divider"><span>支付完成后</span></div>
+      <button class="pay-btn" id="pay-btn" onclick="startPay()">✅ 已完成支付 · 点击解锁行程</button>
+    </div>
+    <div class="pay-footer">支付后即刻生效 · <a href="#" onclick="alert('请联系微信：xiaochangan');return false">联系客服</a></div>
+  </div>
+</div>
+
+<!-- ===== Toast ===== -->
+<div class="toast" id="toast"></div>
+
+<hr>
+<!-- 以下保留旧版弹窗所需的DOM（供JS兼容） -->
+
+<div class="food-overlay" id="food-overlay" onclick="closeFoodModal(event)">
+  <div class="food-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeFoodModal()">✕</button>
+    <h3>🍜 小长安私藏 · 本地人美食</h3>
+    <p class="food-subtitle">都是额吃了十年以上的老店</p>
+    <div class="cat-tabs" id="food-cat-tabs"></div>
+    <div id="food-list"></div>
+  </div>
+</div>
+
+<div class="spots-overlay" id="spots-overlay" onclick="closeSpotsModal(event)">
+  <div class="spots-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeSpotsModal()">✕</button>
+    <h3>🧭 西安周边景点 · 按距离排序</h3>
+    <p class="spots-subtitle">以你的位置为中心，由近到远</p>
+    <div id="spots-list"></div>
+  </div>
+</div>
+
+<div class="food-overlay" id="hotel-overlay" onclick="closeHotelModal(event)">
+  <div class="food-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeHotelModal()">✕</button>
+    <h3>🏨 附近酒店 · 精选推荐</h3>
+    <p class="food-subtitle">以你的位置为中心，从近到远排序</p>
+    <div class="cat-tabs" id="hotel-cat-tabs"></div>
+    <div id="hotel-list"></div>
+  </div>
+</div>
+
+<div class="driver-overlay" id="driver-overlay" onclick="closeDriverModal(event)">
+  <div class="driver-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeDriverModal()">✕</button>
+    <h3>🚗 一人一车 · 本地司机全程托管</h3>
+    <p class="driver-subtitle">西安土著老司机，5座轿车，¥400/天</p>
+    <div id="driver-list"></div>
+  </div>
+</div>
+
+<div class="chat-overlay" id="chat-overlay" onclick="closeAIChat(event)">
+  <div class="chat-modal" onclick="event.stopPropagation()">
+    <div class="chat-header">
+      <div class="chat-avatar">🏯</div>
+      <div class="chat-header-info">
+        <div class="chat-name">小长安 AI智能体</div>
+        <div class="chat-status">在线 · 西安旅行专家</div>
+      </div>
+      <button class="modal-close" style="position:static" onclick="closeAIChat()">✕</button>
+    </div>
+    <div class="chat-body" id="chat-body"></div>
+    <div class="chat-quick-qs">
+      <button class="chat-quick" onclick="askQuick('3天亲子游怎么安排？')">3天亲子游</button>
+      <button class="chat-quick" onclick="askQuick('兵马俑门票多少钱？')">兵马俑门票</button>
+      <button class="chat-quick" onclick="askQuick('推荐回民街必吃的店')">回民街必吃</button>
+      <button class="chat-quick" onclick="askQuick('住哪个区域最方便？')">住哪最方便</button>
+    </div>
+    <div class="chat-input-area">
+      <input id="chat-input" type="text" placeholder="输入你的问题，小长安随时回答…" onkeydown="if(event.key==='Enter')sendChatMsg()">
+      <button onclick="sendChatMsg()">➤</button>
+    </div>
+  </div>
+</div>
+
+<div class="guide-overlay" id="guide-overlay" onclick="closeGuide(event)">
+  <div class="guide-modal" onclick="event.stopPropagation()">
+    <div class="guide-close">
+      <strong style="font-size:16px" id="guide-title">景点攻略</strong>
+      <button class="guide-close-btn" onclick="closeGuide()">✕</button>
+    </div>
+    <img id="guide-hero-img" src="" alt="" style="width:100%;height:200px;object-fit:cover;border-radius:0 0 12px 12px;display:block" onerror="this.style.display='none'">
+    <p id="guide-intro-text" style="margin:14px 20px 0;font-size:13px;color:#555;line-height:1.8"></p>
+    <h4 style="padding:0 20px;margin:16px 0 10px;font-size:14px">📸 最佳拍照机位</h4>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:0 20px" id="guide-photo-grid"></div>
+    <div style="padding:0 20px" id="guide-tip-section"></div>
+  </div>
+</div>
+
+<div class="gallery-overlay" id="gallery-overlay">
+  <div class="gallery-header">
+    <h3>📷 我的旅行图集</h3>
+    <button class="guide-close-btn" style="background:#555;color:#fff" onclick="closeGallery()">✕</button>
+  </div>
+  <div class="gallery-grid" id="gallery-grid"></div>
+  <div class="gallery-bar">
+    <button class="gallery-back-btn" onclick="closeGallery()">返回</button>
+    <button class="gallery-share-btn" onclick="genSharePoster()">🎨 生成分享海报</button>
+  </div>
+</div>
+<input type="file" accept="image/*" id="photo-input" style="display:none" multiple onchange="handlePhotoUpload(event)">
+
+<div class="poster-overlay" id="poster-overlay" onclick="closePoster()">
+  <div class="poster-canvas-wrap" onclick="event.stopPropagation()">
+    <canvas id="poster-canvas" width="340" height="500"></canvas>
+  </div>
+  <p class="poster-hint">👆 长按图片保存到相册，分享到朋友圈</p>
+  <button class="poster-close" onclick="closePoster()">关闭</button>
+</div>
+
+<div id="debug-panel"></div>
+
+<hr style="margin:40px 0;border:none">
+<h3 style="text-align:center;color:#999;font-size:14px;padding:20px">← 上方为新版圆周旅迹UI · 下方保留旧版完整功能 →</h3>
+<hr style="margin:40px 0;border:none">
+
+</div>
+
+<script>
+// ============ 圆周旅迹 · 核心交互脚本 ============
+
+// ---- 标签切换 ----
+document.querySelectorAll('.prefer-tag').forEach(tag => {
+  tag.onclick = function(){ this.classList.toggle('active'); }
+});
+
+// ---- 探索页标签切换 ----
+document.querySelectorAll('.explore-tab').forEach(tab => {
+  tab.onclick = function(){
+    document.querySelectorAll('.explore-tab').forEach(t=>t.classList.remove('active'));
+    this.classList.add('active');
+    getExploreData(this.dataset.type);
+  }
+});
+
+// ---- 页面切换 ----
+let nowPage = 'create';
+function goSchedulePage(){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-schedule').classList.add('active');
+  nowPage='schedule';
+  updateTab();
+}
+function switchTab(type){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  if(type==='schedule'){
+    document.getElementById('page-schedule').classList.add('active');
+    nowPage='schedule';
+  }else{
+    document.getElementById('page-explore').classList.add('active');
+    nowPage='explore';
+    getExploreData('scenic');
+  }
+  updateTab();
+}
+function updateTab(){
+  document.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('active'));
+  if(nowPage==='schedule') document.getElementById('tabSchedule').classList.add('active');
+  else document.getElementById('tabExplore').classList.add('active');
+}
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  if (id === 'hero' || id === 'create') {
+    document.getElementById('page-hero').classList.add('active');
+    nowPage = 'create';
+  } else if (id === 'schedule') {
+    document.getElementById('page-schedule').classList.add('active');
+    nowPage = 'schedule';
+  } else if (id === 'explore') {
+    document.getElementById('page-explore').classList.add('active');
+    nowPage = 'explore';
+  }
+  updateTab();
+}
+
+// ---- 高德API ----
+const AMAP_KEY = 'bb7f0c78ad5530def46192c141edf568';
+let currentCity = '西安';
+let currentPOIList = [];
+
+async function getAmapPOI(city, type){
+  const typeMap = {scenic:'110101|110102|110103',food:'050000',drink:'060000',shop:'080000',hotel:'140100'};
+  const url = `https://restapi.amap.com/v3/place/text?key=${AMAP_KEY}&city=${city}&types=${typeMap[type]}&offset=15&page=1&extensions=all`;
+  const res = await fetch(url);
+  const data = await res.json();
+  return data.pois || [];
+}
+
+async function getExploreData(type){
+  currentCity = document.getElementById('cityInput').value || '西安';
+  document.getElementById('exploreTitle').innerText = '发现'+currentCity;
+  const list = await getAmapPOI(currentCity, type);
+  currentPOIList = list;
+  let html = '';
+  list.forEach(item => {
+    const img = item.photos&&item.photos[0]?item.photos[0].url:'';
+    html += `<div class="list-item" onclick="openRealDetail(${JSON.stringify(item).replace(/"/g,'&quot;')})">
+      <img class="list-img" src="${img}" alt="${item.name}" onerror="this.style.display='none'" style="background:#f5f5f7">
+      <div class="list-info">
+        <div class="list-title">${item.name}</div>
+        <div class="list-tag">${item.type||''}</div>
+        <div class="list-desc">${item.address||(item.pname+item.cityname+item.adname)}</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('exploreList').innerHTML = html;
+}
+
+// ---- 详情弹窗 ----
+function openRealDetail(item){
+  document.getElementById('popupName').innerText = item.name;
+  document.getElementById('popupSubTxt').innerText = '评分'+(item.rating||'4.5')+'｜'+(item.cityname||'')+(item.adname||'');
+  document.getElementById('popupImg').src = item.photos&&item.photos[0]?item.photos[0].url:'';
+  document.getElementById('popupDesc').innerText = item.introduction || '位于'+item.address+'，是热门游玩点位，口碑良好，适合旅行打卡。';
+  // 多图轮播
+  let photoHtml = '';
+  if(item.photos&&item.photos.length){
+    item.photos.forEach(p=>{photoHtml += `<img src="${p.url}" alt="">`;});
+  }
+  document.getElementById('popupPhotos').innerHTML = photoHtml;
+  document.getElementById('goodComment').innerText = '✅ 评分'+(item.rating||'4.5')+'，位置好找，体验舒适';
+  document.getElementById('badComment').innerText = '❌ 节假日人流量较大，建议错峰出行';
+  document.getElementById('detailMask').classList.add('show');
+}
+
+function closeDetailPopup(){document.getElementById('detailMask').classList.remove('show')}
+function openAddPlanPopup(){document.getElementById('addPlanMask').classList.add('show')}
+function closeAddPlanPopup(){document.getElementById('addPlanMask').classList.remove('show')}
+function closeMask(e){if(e.target.classList.contains('mask')){closeDetailPopup();closeAddPlanPopup()}}
+function successAdd(){alert('成功添加到真实行程！');closeAddPlanPopup()}
+
+// ---- 智能生成行程 ----
+async function generateRealSchedule(){
+  const city = document.getElementById('cityInput').value || '西安';
+  currentCity = city;
+  document.getElementById('genBtn').style.display='none';
+  document.getElementById('loadingTxt').style.display='block';
+  const scenicList = await getAmapPOI(city,'scenic');
+  const foodList = await getAmapPOI(city,'food');
+  const hotelList = await getAmapPOI(city,'hotel');
+  document.getElementById('scheduleTitle').innerText = city+'深度游';
+  document.getElementById('addPlanName').innerText = city+'深度游';
+  document.getElementById('addPlanDate').innerText = '智能生成真实行程计划';
+  const dayText = ['第一天·经典打卡','第二天·人文漫游','第三天·美食休闲','第四天·小众探索','第五天·收尾返程'];
+  let dateTabHtml = '';
+  for(let i=1;i<=5;i++) dateTabHtml += `<div class="date-tab ${i===1?'active':''}">第${i}天</div>`;
+  document.getElementById('dateTabWrap').innerHTML = dateTabHtml;
+  document.getElementById('dayTheme').innerText = '📸 '+dayText[0];
+  let scheduleHtml = '';
+  scenicList.slice(0,3).forEach((item,idx)=>{
+    const img = item.photos&&item.photos[0]?item.photos[0].url:'';
+    const timeArr = ['09:00-11:30','14:00-16:00','16:30-18:00'];
+    scheduleHtml += `<div class="schedule-card" onclick="openRealDetail(${JSON.stringify(item).replace(/"/g,'&quot;')})">
+      <img class="schedule-img" src="${img}" alt="${item.name}" onerror="this.style.display='none'" style="background:#f5f5f7">
+      <div class="schedule-info">
+        <div class="schedule-tag">景点｜${timeArr[idx]}</div>
+        <div class="schedule-name">${item.name}</div>
+        <div class="schedule-desc">${item.introduction||item.type||''}</div>
+        <div class="schedule-time">官方真实点位｜推荐游玩2小时</div>
+      </div>
+    </div>`;
+  });
+  if(foodList[0]){
+    const fimg = foodList[0].photos&&foodList[0].photos[0]?foodList[0].photos[0].url:'';
+    scheduleHtml += `<div class="schedule-card" onclick="openRealDetail(${JSON.stringify(foodList[0]).replace(/"/g,'&quot;')})">
+      <img class="schedule-img" src="${fimg}" alt="${foodList[0].name}" style="background:#f5f5f7">
+      <div class="schedule-info">
+        <div class="schedule-tag">美食｜18:30-20:00</div>
+        <div class="schedule-name">${foodList[0].name}</div>
+        <div class="schedule-desc">${foodList[0].type||''}</div>
+        <div class="schedule-time">本地热门美食店</div>
+      </div>
+    </div>`;
+  }
+  if(hotelList[0]){
+    const himg = hotelList[0].photos&&hotelList[0].photos[0]?hotelList[0].photos[0].url:'';
+    scheduleHtml += `<div class="schedule-card" onclick="openRealDetail(${JSON.stringify(hotelList[0]).replace(/"/g,'&quot;')})">
+      <img class="schedule-img" src="${himg}" alt="${hotelList[0].name}" style="background:#f5f5f7">
+      <div class="schedule-info">
+        <div class="schedule-tag">住宿｜当晚入住</div>
+        <div class="schedule-name">${hotelList[0].name}</div>
+        <div class="schedule-desc">${hotelList[0].address||''}</div>
+        <div class="schedule-time">交通便利｜高分推荐</div>
+      </div>
+    </div>`;
+  }
+  document.getElementById('scheduleList').innerHTML = scheduleHtml;
+  document.getElementById('loadingTxt').style.display='none';
+  document.getElementById('genBtn').style.display='block';
+  goSchedulePage();
+}
+</script>
+</body>
+</html>

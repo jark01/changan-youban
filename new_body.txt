@@ -1,0 +1,704 @@
+</style>
+</head>
+<body>
+
+<div class="app-container">
+
+<!-- ===== 支付弹窗 ===== -->
+<div class="pay-overlay" id="pay-overlay">
+  <div class="pay-modal">
+    <div class="pay-header">
+      <button class="pay-close" onclick="closePayModal()">✕</button>
+      <div class="pay-icon">🔒</div>
+      <div class="pay-title">解锁全部功能</div>
+      <div class="pay-sub">一次解锁，全程无忧</div>
+    </div>
+    <div class="pay-body">
+      <div class="pay-price-row">
+        <span class="pay-price">¥9.9 <small>/ 全程</small></span>
+        <span class="pay-orig">¥29.9</span>
+      </div>
+      <div class="pay-qrcode-section">
+        <div class="pay-qrcode-title">📱 微信/支付宝扫码支付</div>
+        <div class="pay-qrcode-box">
+          <img class="pay-qrcode-img" id="pay-qrcode-img" src="" alt="付款二维码">
+          <div class="pay-qrcode-amount">¥9.90</div>
+        </div>
+        <div class="pay-qrcode-tip">截图保存 → 打开微信/支付宝扫一扫 → 支付 ¥9.90</div>
+      </div>
+      <div class="pay-divider"><span>支付完成后</span></div>
+      <button class="pay-btn" id="pay-btn" onclick="startPay()">✅ 已完成支付 · 点击解锁行程</button>
+    </div>
+    <div class="pay-footer">支付后即刻生效 · <a href="#" onclick="alert('请联系微信：xiaochangan');return false;">联系客服</a></div>
+  </div>
+</div>
+
+<!-- ===== 1. 长安伴游（主页）===== -->
+<div id="page-home" class="page active">
+
+  <!-- 钟楼 Hero Banner -->
+  <div class="hero-banner">
+    <img src="https://images.unsplash.com/photo-1547981609-4b899bf996ca?w=800&q=80" alt="西安钟楼" onerror="this.src='https://pixabay.com/get/g30566490cf940b751205246088fd6af46623b01ac78a0a815e774e8e46575542ca6e2523cc494f0f17fedaebd734dfae_1920.jpg'">
+    <div class="hero-overlay">
+      <div class="hero-city-tag">📍 中国·西安</div>
+      <div class="hero-title">长安伴游</div>
+      <div class="hero-sub">AI智能旅行伙伴 · 西安14年土著</div>
+    </div>
+  </div>
+
+  <!-- AI智能体自我介绍 -->
+  <div class="ai-intro-card">
+    <button class="ai-voice-btn" id="aiVoiceBtn" onclick="toggleVoiceIntro()" title="听小长安陕西话介绍">🔊</button>
+    <div class="ai-avatar-row">
+      <div class="ai-avatar-icon">🏯</div>
+      <div>
+        <div class="ai-intro-name">小长安 · AI智能体</div>
+        <div class="ai-intro-status">🟢 在线 · 随时为你服务</div>
+      </div>
+    </div>
+    <div class="ai-intro-body">
+      <div class="ai-feature-row">
+        <span class="ai-feature-tag">🗺️ 智能行程规划</span>
+        <span class="ai-feature-tag">🍜 本地美食推荐</span>
+        <span class="ai-feature-tag">🏨 酒店实时比价</span>
+        <span class="ai-feature-tag">🚗 专车接送</span>
+        <span class="ai-feature-tag">📸 拍照攻略</span>
+        <span class="ai-feature-tag">💬 24h陪聊</span>
+      </div>
+      <div class="ai-intro-text">
+        嘿！额是<strong>小长安</strong>，在西安活了14年的土著向导。额能帮你<strong>规划行程路线</strong>、推荐<strong>本地人私藏的美食</strong>、找到<strong>性价比最高的酒店</strong>、安排<strong>靠谱专车司机</strong>，还能<strong>陪你聊天解闷</strong>。不管你是带娃亲子游、情侣浪漫游还是独自探索，额都能给你安排得明明白白的。有啥问题随时问额，额就是你贴身的<strong>西安旅行管家</strong>！
+      </div>
+    </div>
+  </div>
+
+  <!-- 表单区域 -->
+  <div class="home-form-section">
+
+    <!-- 地点 -->
+    <div class="form-section-title"><span class="sec-dot"></span>想去哪儿</div>
+    <div class="home-city-card">
+      <div class="home-city-tag">📍 西安 <span class="tag-close" onclick="this.parentElement.remove();document.getElementById('homeCityInput').value=''">×</span></div>
+      <input class="home-city-input" id="homeCityInput" placeholder="输入旅行城市" value="西安">
+    </div>
+
+    <!-- 日期 -->
+    <div class="form-section-title"><span class="sec-dot"></span>什么时间</div>
+    <div class="date-picker-row">
+      <div class="date-picker-item" id="dpStart" onclick="document.getElementById('homeStartDate').showPicker()">
+        <span class="dp-icon">📅</span>
+        <div class="dp-text">
+          <div class="dp-label">开始日期</div>
+          <div class="dp-placeholder" id="dpStartText">点击选择</div>
+        </div>
+        <input type="date" id="homeStartDate" onchange="onHomeDateChange()">
+      </div>
+      <div class="date-picker-item" id="dpEnd" onclick="document.getElementById('homeEndDate').showPicker()">
+        <span class="dp-icon">📅</span>
+        <div class="dp-text">
+          <div class="dp-label">结束日期</div>
+          <div class="dp-placeholder" id="dpEndText">点击选择</div>
+        </div>
+        <input type="date" id="homeEndDate" onchange="onHomeDateChange()">
+      </div>
+    </div>
+
+    <!-- 人数选择：成人/儿童/老人 -->
+    <div class="form-section-title"><span class="sec-dot"></span>多少人</div>
+    <div class="person-counter-row">
+      <div class="person-counter">
+        <div class="pc-emoji">🧑</div>
+        <div class="pc-type">成人</div>
+        <div class="pc-controls">
+          <button class="pc-btn" onclick="adjHomeCount('adult',-1)">−</button>
+          <span class="pc-num" id="homeAdultNum">2</span>
+          <button class="pc-btn" onclick="adjHomeCount('adult',1)">+</button>
+        </div>
+      </div>
+      <div class="person-counter">
+        <div class="pc-emoji">👶</div>
+        <div class="pc-type">儿童</div>
+        <div class="pc-controls">
+          <button class="pc-btn" onclick="adjHomeCount('child',-1)">−</button>
+          <span class="pc-num" id="homeChildNum">0</span>
+          <button class="pc-btn" onclick="adjHomeCount('child',1)">+</button>
+        </div>
+      </div>
+      <div class="person-counter">
+        <div class="pc-emoji">👴</div>
+        <div class="pc-type">老人</div>
+        <div class="pc-controls">
+          <button class="pc-btn" onclick="adjHomeCount('elder',-1)">−</button>
+          <span class="pc-num" id="homeElderNum">0</span>
+          <button class="pc-btn" onclick="adjHomeCount('elder',1)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="pc-total-row">共 <strong id="homeTotalPeople">2</strong> 人</div>
+
+    <!-- 旅行偏好 -->
+    <div class="form-section-title"><span class="sec-dot"></span>旅行偏好</div>
+    <div class="home-prefer-grid" id="homePreferGrid">
+      <div class="home-prefer-tag active" onclick="this.classList.toggle('active')">📍 经典必玩</div>
+      <div class="home-prefer-tag active" onclick="this.classList.toggle('active')">🍽 吃吃喝喝</div>
+      <div class="home-prefer-tag" onclick="this.classList.toggle('active')">🕵 小众探索</div>
+      <div class="home-prefer-tag active" onclick="this.classList.toggle('active')">📸 拍照出片</div>
+      <div class="home-prefer-tag" onclick="this.classList.toggle('active')">🛍 逛街购物</div>
+      <div class="home-prefer-tag" onclick="this.classList.toggle('active')">🚶 citywalk</div>
+      <div class="home-prefer-tag" onclick="this.classList.toggle('active')">🏞 自然风光</div>
+      <div class="home-prefer-tag" onclick="this.classList.toggle('active')">🎨 文艺展览</div>
+      <div class="home-prefer-tag" onclick="this.classList.toggle('active')">🏛 历史古建</div>
+    </div>
+
+    <!-- 提交按钮 -->
+    <div class="home-loading-text" id="homeLoadingTxt">正在调取高德真实数据，智能生成行程…</div>
+    <button class="home-submit-btn" onclick="goToForm()">🗺️ 智能规划真实行程</button>
+  </div>
+
+  <!-- 天气 -->
+  <div class="weather-widget" id="weather-widget">
+    <span class="weather-loading">🌤 加载天气中…</span>
+  </div>
+</div>
+
+<!-- ===== 2. 美食页 ===== -->
+<div id="page-food" class="page food-page">
+  <div class="food-page-header">
+    <span class="fp-icon">🍜</span>本地美食
+  </div>
+  <p class="food-page-sub">高德实时数据 · 都是额吃了十年以上的老店</p>
+  <div class="food-cat-scroll" id="foodPageCatTabs"></div>
+  <div class="food-page-list" id="foodPageList">
+    <div style="text-align:center;padding:40px;color:#c7c7cc">📡 正在从高德获取附近真实美食...</div>
+  </div>
+</div>
+
+<!-- ===== 3. 酒店页 ===== -->
+<div id="page-hotel" class="page hotel-page">
+  <div class="hotel-page-header">
+    <span style="font-size:26px">🏨</span>附近酒店
+  </div>
+  <p class="food-page-sub">以钟楼为中心 · 从近到远 · 实时比价</p>
+  <div class="hotel-cat-scroll" id="hotelPageCatTabs"></div>
+  <div class="hotel-page-list" id="hotelPageList">
+    <div style="text-align:center;padding:40px;color:#c7c7cc">📡 正在加载酒店数据...</div>
+  </div>
+</div>
+
+<!-- ===== 4. 景点页 ===== -->
+<div id="page-spots" class="page spots-page">
+  <div class="spots-page-header">
+    <span style="font-size:26px">🏛️</span>西安景点
+  </div>
+  <p class="spots-page-sub">以钟楼为中心 · 由近到远排序 · 高德实时数据</p>
+  <div class="spots-page-list" id="spotsPageList">
+    <div style="text-align:center;padding:40px;color:#c7c7cc">📡 正在从高德获取景点数据...</div>
+  </div>
+</div>
+
+<!-- ===== 5. AI对话页 ===== -->
+<div id="page-chat" class="page chat-page">
+  <div class="chat-page-header">
+    <div class="chat-page-avatar">🏯</div>
+    <div class="chat-page-info">
+      <div class="chat-page-name">小长安 · AI智能体</div>
+      <div class="chat-page-status">在线 · 西安旅行专家</div>
+    </div>
+  </div>
+  <div class="chat-page-body" id="chatPageBody"></div>
+  <div class="chat-page-quick" id="chatPageQuick">
+    <button class="chat-page-quick-btn" onclick="askQuickPage('3天亲子游怎么安排？')">3天亲子游</button>
+    <button class="chat-page-quick-btn" onclick="askQuickPage('兵马俑门票多少钱？')">兵马俑门票</button>
+    <button class="chat-page-quick-btn" onclick="askQuickPage('推荐回民街必吃的店')">回民街必吃</button>
+    <button class="chat-page-quick-btn" onclick="askQuickPage('住哪个区域最方便？')">住哪最方便</button>
+    <button class="chat-page-quick-btn" onclick="askQuickPage('给我一个3天情侣游行程')">情侣游行程</button>
+  </div>
+  <div class="chat-page-input">
+    <input id="chatPageInput" type="text" placeholder="输入你的问题，小长安随时回答…" onkeydown="if(event.key==='Enter')sendChatPageMsg()">
+    <button onclick="sendChatPageMsg()">➤</button>
+  </div>
+</div>
+
+<!-- ===== 6. 我的页 ===== -->
+<div id="page-me" class="page me-page">
+  <div class="me-header">
+    <div class="me-avatar">🧳</div>
+    <div class="me-name">旅行者</div>
+    <div class="me-id">长安伴游 · AI智能旅行</div>
+    <div class="me-stats">
+      <div class="me-stat">
+        <div class="me-stat-num" id="meTripCount">0</div>
+        <div class="me-stat-label">生成行程</div>
+      </div>
+      <div class="me-stat">
+        <div class="me-stat-num" id="mePhotoCount">0</div>
+        <div class="me-stat-label">旅行照片</div>
+      </div>
+      <div class="me-stat">
+        <div class="me-stat-num" id="meChatCount">0</div>
+        <div class="me-stat-label">AI对话</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="me-menu">
+    <div class="me-menu-item" onclick="switchTab('home')">
+      <div class="me-menu-icon red">🏯</div>
+      <span class="me-menu-text">行程规划</span>
+      <span class="me-menu-arrow">›</span>
+    </div>
+    <div class="me-menu-item" onclick="switchTab('food')">
+      <div class="me-menu-icon green">🍜</div>
+      <span class="me-menu-text">美食收藏</span>
+      <span class="me-menu-arrow">›</span>
+    </div>
+    <div class="me-menu-item" onclick="switchTab('chat')">
+      <div class="me-menu-icon blue">💬</div>
+      <span class="me-menu-text">AI对话记录</span>
+      <span class="me-menu-arrow">›</span>
+    </div>
+    <div class="me-menu-item" onclick="openGallery()">
+      <div class="me-menu-icon orange">📷</div>
+      <span class="me-menu-text">我的图集</span>
+      <span class="me-menu-arrow">›</span>
+    </div>
+    <div class="me-menu-item" onclick="toast('客服微信：xiaochangan')">
+      <div class="me-menu-icon gray">🎧</div>
+      <span class="me-menu-text">联系客服</span>
+      <span class="me-menu-arrow">›</span>
+    </div>
+    <div class="me-menu-item" onclick="toast('长安伴游 v3.0 · AI驱动 · 高德数据')">
+      <div class="me-menu-icon gray">ℹ️</div>
+      <span class="me-menu-text">关于长安伴游</span>
+      <span class="me-menu-arrow">›</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 底部导航 ===== -->
+<div class="tab-bar">
+  <div class="tab-item active" id="tabHome" onclick="switchTab('home')">
+    <span class="tab-icon">🏯</span><span>长安伴游</span>
+  </div>
+  <div class="tab-item" id="tabFood" onclick="switchTab('food')">
+    <span class="tab-icon">🍜</span><span>美食</span>
+  </div>
+  <div class="tab-item" id="tabHotel" onclick="switchTab('hotel')">
+    <span class="tab-icon">🏨</span><span>酒店</span>
+  </div>
+  <div class="tab-item" id="tabSpots" onclick="switchTab('spots')">
+    <span class="tab-icon">🏛️</span><span>景点</span>
+  </div>
+  <div class="tab-item" id="tabChat" onclick="switchTab('chat')">
+    <span class="tab-icon">🤖</span><span>AI对话</span>
+  </div>
+  <div class="tab-item" id="tabMe" onclick="switchTab('me')">
+    <span class="tab-icon">👤</span><span>我的</span>
+  </div>
+</div>
+
+<!-- ===== 行程总览页（保留）===== -->
+<div id="page-schedule" class="page schedule-page">
+  <div class="schedule-header">
+    <div class="top-nav" style="padding:0;border:none">
+      <div class="back-btn" onclick="switchTab('home')">←</div>
+      <div class="action-btn" onclick="showPage('form')">编辑行程</div>
+    </div>
+    <h1 class="schedule-top-title" id="scheduleTitle">西安深度游</h1>
+    <p class="schedule-top-desc" id="scheduleSub">智能定制真实旅行行程</p>
+  </div>
+  <div class="date-tab-wrap" id="dateTabWrap"></div>
+  <div class="day-theme" id="dayTheme"></div>
+  <div id="scheduleList">
+    <div class="schedule-empty">
+      <div class="empty-icon">🗺️</div>
+      <p>还没有生成行程</p>
+      <button onclick="switchTab('home')">去创建行程</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 探索页（保留）===== -->
+<div id="page-explore" class="page explore-page">
+  <div class="explore-header" id="exploreTitle">发现西安</div>
+  <div class="explore-map-wrap" id="explore-map-wrap">
+    <div class="map-placeholder" id="map-placeholder">🗺️ 加载地图中…</div>
+  </div>
+  <div class="explore-tab-wrap">
+    <div class="explore-tab active" data-type="scenic" onclick="switchExploreTab('scenic',this)">景点</div>
+    <div class="explore-tab" data-type="food" onclick="switchExploreTab('food',this)">美食</div>
+    <div class="explore-tab" data-type="drink" onclick="switchExploreTab('drink',this)">饮品</div>
+    <div class="explore-tab" data-type="shop" onclick="switchExploreTab('shop',this)">购物</div>
+    <div class="explore-tab" data-type="hotel" onclick="switchExploreTab('hotel',this)">住宿</div>
+  </div>
+  <div id="exploreList">
+    <div style="text-align:center;padding:40px;color:#c7c7cc">选择分类开始探索…</div>
+  </div>
+</div>
+
+<!-- ===== 详情弹窗 ===== -->
+<div class="mask" id="detailMask" onclick="closeDetailMask(event)">
+  <div class="popup" onclick="event.stopPropagation()">
+    <div class="popup-header">
+      <div class="popup-title-row">
+        <div class="popup-title" id="popupName"></div>
+        <div class="popup-sub" id="popupSubTxt"></div>
+      </div>
+      <button class="popup-close" onclick="closeDetailPopup()">✕</button>
+    </div>
+    <div class="popup-gallery" id="popup-gallery"></div>
+    <div class="popup-desc" id="popupDesc"></div>
+    <div class="comment-block">
+      <div class="comment-title">游玩参考</div>
+      <div class="good-comment" id="goodComment"></div>
+      <div class="bad-comment" id="badComment"></div>
+    </div>
+    <div class="popup-btn-group">
+      <button class="popup-btn" onclick="openAddPlanPopup()"><span class="popup-btn-icon">➕</span>加入行程</button>
+      <button class="popup-btn"><span class="popup-btn-icon">❤️</span>收藏</button>
+      <button class="popup-btn"><span class="popup-btn-icon">✅</span>打卡</button>
+      <button class="popup-btn primary"><span class="popup-btn-icon">🧭</span>导航</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 添加至行程弹窗 ===== -->
+<div class="mask" id="addPlanMask" onclick="closeAddPlanMask(event)">
+  <div class="popup" onclick="event.stopPropagation()">
+    <div class="popup-header">
+      <div class="popup-title">添加至行程</div>
+      <button class="popup-close" onclick="closeAddPlanPopup()">✕</button>
+    </div>
+    <div class="add-plan-item active">
+      <div class="plan-check">✓</div>
+      <div>
+        <div style="font-weight:500" id="addPlanName">西安深度游</div>
+        <div style="font-size:12px;color:#8e8e93;margin-top:4px" id="addPlanDate">自定义行程</div>
+      </div>
+    </div>
+    <button class="confirm-btn" onclick="successAddPlan()">确认添加</button>
+  </div>
+</div>
+
+<!-- ===== FORM PAGE ===== -->
+<div id="page-form" class="page">
+  <div class="form-topbar">
+    <button class="back-btn" onclick="switchTab('home')">←</button>
+    <div><h2>告诉小长安你的需求</h2><p>勾选就行，不用打字</p></div>
+  </div>
+  <div class="section sec-transport">
+    <div class="section-header">
+      <div class="section-icon">🚗</div><h3>出行信息</h3><span class="s-tag">必填</span>
+    </div>
+    <div class="field-group">
+      <div class="field-label">出发城市 <span class="req">*</span></div>
+      <input class="field-input" id="f-from" type="text" placeholder="例如：北京 / 上海 / 成都">
+    </div>
+    <div class="field-group">
+      <div class="field-label">出行日期</div>
+      <div class="date-row">
+        <input type="date" id="f-depart" onchange="onDateChange()">
+        <input type="date" id="f-return" onchange="onDateChange()">
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">交通方式</div>
+      <div class="chip-group">
+        <div class="chip selected" onclick="selChip('transport','公共交通',this)">🚇 公共交通</div>
+        <div class="chip" onclick="selChip('transport','自驾',this)">🚗 自驾</div>
+        <div class="chip" onclick="selChip('transport','专车+司机',this)">🚘 专车+司机</div>
+        <div class="chip" onclick="selChip('transport','打车+公交',this)">🚕 打车+公交</div>
+      </div>
+    </div>
+  </div>
+  <div class="section sec-play">
+    <div class="section-header">
+      <div class="section-icon">👥</div><h3>出行同伴</h3><span class="s-tag">必填</span>
+    </div>
+    <div class="field-group">
+      <div class="field-label">和谁来？ <span class="req">*</span></div>
+      <div class="chip-group">
+        <div class="chip" onclick="selChip('who','独自出行',this)">🧑 独自出行</div>
+        <div class="chip" onclick="selChip('who','情侣出游',this)">💑 情侣出游</div>
+        <div class="chip" onclick="selChip('who','朋友结伴',this)">👫 朋友结伴</div>
+        <div class="chip" onclick="selChip('who','带娃家庭',this)">👨‍👩‍👧 带娃家庭</div>
+        <div class="chip" onclick="selChip('who','带父母',this)">👴 带父母</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">几个人？ <span class="req">*</span></div>
+      <div class="count-row">
+        <div class="count-display">
+          <button class="count-btn" onclick="adjCount(-1)">−</button>
+          <span class="count-num" id="count-num">2</span>
+          <button class="count-btn" onclick="adjCount(1)">+</button>
+          <span style="font-size:14px;color:var(--text2);margin-left:4px;">人</span>
+        </div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">人均预算 <span class="req">*</span></div>
+      <div class="chip-group">
+        <div class="chip" onclick="selChip('budget','800元以下',this)">800以下</div>
+        <div class="chip" onclick="selChip('budget','800-1500元',this)">800-1500</div>
+        <div class="chip" onclick="selChip('budget','1500-3000元',this)">1500-3000</div>
+        <div class="chip" onclick="selChip('budget','3000元以上',this)">3000+不限</div>
+      </div>
+    </div>
+  </div>
+  <div class="section sec-stay">
+    <div class="section-header">
+      <div class="section-icon">🏨</div><h3>住宿需求</h3>
+    </div>
+    <div class="field-group">
+      <div class="field-label">每晚预算</div>
+      <div class="chip-group">
+        <div class="chip" onclick="selChip('hotelBudget','200以下',this)">200以下</div>
+        <div class="chip selected" onclick="selChip('hotelBudget','200-400',this)">200-400</div>
+        <div class="chip" onclick="selChip('hotelBudget','400-600',this)">400-600</div>
+        <div class="chip" onclick="selChip('hotelBudget','600以上',this)">600以上</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">住宿类型</div>
+      <div class="chip-group">
+        <div class="chip" onclick="selChip('hotelType','经济连锁',this)">经济连锁</div>
+        <div class="chip selected" onclick="selChip('hotelType','舒适型',this)">舒适型</div>
+        <div class="chip" onclick="selChip('hotelType','高档酒店',this)">高档酒店</div>
+        <div class="chip" onclick="selChip('hotelType','特色民宿',this)">特色民宿</div>
+      </div>
+    </div>
+  </div>
+  <div class="section sec-food">
+    <div class="section-header">
+      <div class="section-icon">🍲</div><h3>美食偏好</h3>
+    </div>
+    <div class="field-group">
+      <div class="field-label">口味偏好（可多选）</div>
+      <div class="chip-group">
+        <div class="chip multi" onclick="this.classList.toggle('selected')">本地小吃</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">网红打卡</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">高档餐厅</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">苍蝇馆子</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">夜市路边摊</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">想吃啥？（可多选）</div>
+      <div class="chip-group">
+        <div class="chip multi" onclick="this.classList.toggle('selected')">肉夹馍</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">羊肉泡馍</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">凉皮</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">BiangBiang面</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">灌汤包</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">烤肉</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">胡辣汤</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">葫芦头</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">饮食禁忌</div>
+      <div class="chip-group">
+        <div class="chip" onclick="selChip('foodTaboo','无忌讳',this)">无忌讳</div>
+        <div class="chip" onclick="selChip('foodTaboo','清真',this)">清真</div>
+        <div class="chip" onclick="selChip('foodTaboo','不吃辣',this)">不吃辣</div>
+        <div class="chip" onclick="selChip('foodTaboo','素食',this)">素食</div>
+      </div>
+    </div>
+  </div>
+  <div class="section sec-play">
+    <div class="section-header">
+      <div class="section-icon">🎯</div><h3>游玩偏好</h3><span class="s-tag">必填</span>
+    </div>
+    <div class="field-group">
+      <div class="field-label">旅行风格（可多选）<span class="req">*</span></div>
+      <div class="chip-group">
+        <div class="chip multi" onclick="this.classList.toggle('selected')">🏛️ 深度文化</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">📸 打卡拍照</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">🍲 美食为主</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">🌿 休闲放松</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">🧗 探险刺激</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">🛍️ 逛街购物</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">必去景点（可多选）</div>
+      <div class="chip-group" style="max-height:160px;overflow-y:auto;">
+        <div class="chip multi" onclick="this.classList.toggle('selected')">兵马俑</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">城墙</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">长恨歌</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">华山</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">大唐不夜城</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">陕历博</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">大雁塔</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">钟鼓楼</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">回民街</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">书院门</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">骊山</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">汉阳陵</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">每日节奏</div>
+      <div class="chip-group">
+        <div class="chip" onclick="selChip('pace','轻松型(3-4个地方)',this)">🐢 轻松型</div>
+        <div class="chip selected" onclick="selChip('pace','适中型(4-5个地方)',this)">🐇 适中型</div>
+        <div class="chip" onclick="selChip('pace','紧凑型(5-6个地方)',this)">🏃 紧凑型</div>
+      </div>
+    </div>
+  </div>
+  <div class="section sec-note">
+    <div class="section-header">
+      <div class="section-icon">📝</div><h3>补充说明</h3>
+    </div>
+    <div class="field-group">
+      <div class="field-label">特殊需求（可多选）</div>
+      <div class="chip-group">
+        <div class="chip multi" onclick="this.classList.toggle('selected')">🎂 生日</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">💒 求婚/蜜月</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">📅 纪念日</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">♿ 无障碍需求</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">👶 婴儿车友好</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">还有什么想说的？</div>
+      <textarea class="field-input" id="f-note" placeholder="比如：孩子4岁喜欢恐龙、老婆爱拍照发朋友圈、不想走太多楼梯、对花粉过敏……"></textarea>
+    </div>
+  </div>
+  <div class="submit-area">
+    <button class="btn-submit" onclick="submitForm()">🗺️ 小长安，帮我规划路线！</button>
+    <p class="submit-hint">AI自动生成行程 · ¥9.9解锁专属规划</p>
+  </div>
+</div>
+
+<!-- ===== LOADING ===== -->
+<div id="page-loading" class="page">
+  <div class="load-avatar">🏯</div>
+  <h2 class="load-title">小长安正在给你写路线…</h2>
+  <p class="load-sub">根据你的喜好，AI正在规划最优行程</p>
+  <div class="load-progress"><div class="load-bar"></div></div>
+  <div class="load-tips">
+    <span>🗺️ 正在计算最优化景点顺序…</span>
+    <span>🍲 正在筛选私房美食推荐…</span>
+    <span>🧭 正在生成高德导航链接…</span>
+  </div>
+  <div id="load-log" style="margin-top:18px;font-size:12px;color:#999;text-align:left;max-width:320px;margin-left:auto;margin-right:auto;"></div>
+</div>
+
+<!-- ===== RESULT ===== -->
+<div id="page-result" class="page">
+  <div class="res-header">
+    <div class="res-tag">✅ 小长安专属路线</div>
+    <div class="res-title" id="res-title">西安定制游</div>
+    <div class="res-meta" id="res-meta"></div>
+  </div>
+  <div class="res-body" id="result-body"></div>
+  <div class="res-bar">
+    <button class="gallery-btn" onclick="openGallery()">📷 图集</button>
+    <button class="btn-share" onclick="shareResult()">📤 分享</button>
+    <button class="btn-newplan" onclick="switchTab('home')">✅ 重新规划</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- MODALS (keep for backward compatibility) -->
+<div class="guide-overlay" id="guide-overlay" onclick="closeGuide(event)">
+  <div class="guide-modal" id="guide-modal" onclick="event.stopPropagation()">
+    <div class="guide-close">
+      <strong style="font-size:16px;color:var(--text);" id="guide-title">景点攻略</strong>
+      <button class="guide-close-btn" onclick="closeGuide()">✕</button>
+    </div>
+    <img id="guide-hero-img" src="" alt="" style="width:100%;height:200px;object-fit:cover;border-radius:12px;display:block;" onerror="this.style.display='none'">
+    <p id="guide-intro-text" style="margin:14px 20px 0;font-size:13px;color:#555;line-height:1.8;"></p>
+    <div class="guide-photo-section">
+      <h4 style="padding:0 20px;margin:16px 0 10px;font-size:14px;color:var(--text);">📸 最佳拍照机位</h4>
+      <div class="guide-photo-grid" id="guide-photo-grid"></div>
+    </div>
+    <div class="guide-tip-section" id="guide-tip-section"></div>
+  </div>
+</div>
+
+<div class="gallery-overlay" id="gallery-overlay">
+  <div class="gallery-header">
+    <h3>📷 我的旅行图集</h3>
+    <button class="guide-close-btn" style="background:#555;color:#fff;" onclick="closeGallery()">✕</button>
+  </div>
+  <div class="gallery-grid" id="gallery-grid"></div>
+  <div class="gallery-bar">
+    <button class="gallery-back-btn" onclick="closeGallery()">返回</button>
+    <button class="gallery-share-btn" id="gallery-share-btn" onclick="genSharePoster()">🎨 生成分享海报</button>
+  </div>
+</div>
+
+<input type="file" accept="image/*" id="photo-input" style="display:none" multiple onchange="handlePhotoUpload(event)">
+
+<div class="poster-overlay" id="poster-overlay" onclick="closePoster()">
+  <div class="poster-canvas-wrap" onclick="event.stopPropagation()">
+    <canvas id="poster-canvas" width="340" height="500"></canvas>
+  </div>
+  <p class="poster-hint">👆 长按图片保存到相册，分享到朋友圈</p>
+  <button class="poster-close" onclick="closePoster()">关闭</button>
+</div>
+
+<!-- Legacy modals -->
+<div class="food-overlay" id="food-overlay" onclick="closeFoodModal(event)">
+  <div class="food-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeFoodModal()">✕</button>
+    <h3>🍜 小长安私藏 · 本地人美食</h3>
+    <p class="food-subtitle">都是额吃了十年以上的老店，绝对不坑</p>
+    <div class="cat-tabs" id="food-cat-tabs"></div>
+    <div id="food-list"></div>
+  </div>
+</div>
+<div class="spots-overlay" id="spots-overlay" onclick="closeSpotsModal(event)">
+  <div class="spots-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeSpotsModal()">✕</button>
+    <h3>🧭 西安周边景点 · 按距离排序</h3>
+    <p class="spots-subtitle">以钟楼为中心，由近到远</p>
+    <div id="spots-list"></div>
+  </div>
+</div>
+<div class="driver-overlay" id="driver-overlay" onclick="closeDriverModal(event)">
+  <div class="driver-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeDriverModal()">✕</button>
+    <h3>🚗 一人一车 · 本地司机全程托管</h3>
+    <p class="driver-subtitle">西安土著老司机，5座轿车，¥400/天</p>
+    <div id="driver-list"></div>
+  </div>
+</div>
+<div class="food-overlay" id="hotel-overlay" onclick="closeHotelModal(event)">
+  <div class="food-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeHotelModal()">✕</button>
+    <h3>🏨 附近酒店 · 小长安精选</h3>
+    <p class="food-subtitle">以钟楼为中心，从近到远排序</p>
+    <div class="cat-tabs" id="hotel-cat-tabs"></div>
+    <div id="hotel-list"></div>
+  </div>
+</div>
+<div class="chat-overlay" id="chat-overlay" onclick="closeAIChat(event)">
+  <div class="chat-modal" onclick="event.stopPropagation()">
+    <div class="chat-header">
+      <div class="chat-avatar">🏯</div>
+      <div class="chat-header-info">
+        <div class="chat-name">小长安 AI智能体</div>
+        <div class="chat-status">在线 · 西安旅行专家</div>
+      </div>
+      <button class="modal-close" style="position:static;" onclick="closeAIChat()">✕</button>
+    </div>
+    <div class="chat-body" id="chat-body"></div>
+    <div class="chat-quick-qs" id="chat-quick-qs">
+      <button class="chat-quick" onclick="askQuick('3天亲子游怎么安排？')">3天亲子游</button>
+      <button class="chat-quick" onclick="askQuick('兵马俑门票多少钱？')">兵马俑门票</button>
+      <button class="chat-quick" onclick="askQuick('推荐回民街必吃的店')">回民街必吃</button>
+      <button class="chat-quick" onclick="askQuick('住哪个区域最方便？')">住哪最方便</button>
+      <button class="chat-quick" onclick="askQuick('给我一个3天情侣游行程')">情侣游行程</button>
+    </div>
+    <div class="chat-input-area">
+      <input id="chat-input" type="text" placeholder="输入你的问题…" onkeydown="if(event.key==='Enter')sendChatMsg()">
+      <button onclick="sendChatMsg()">➤</button>
+    </div>
+  </div>
+</div>
+
+<div id="debug-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:#1a1a1a;color:#0f0;font-size:12px;padding:10px;z-index:9999;font-family:monospace;white-space:pre-wrap;border-top:2px solid #f44;"></div>

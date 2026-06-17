@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>小八API链路测试</title>
+<style>
+body{font-family:sans-serif;max-width:480px;margin:40px auto;padding:20px;background:#F9F7F4;}
+h2{color:#C84B31;}
+#log{background:#1a1a1a;color:#0f0;padding:12px;border-radius:8px;font-size:12px;max-height:50vh;overflow:auto;white-space:pre-wrap;margin-top:16px;}
+button{background:#C84B31;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:15px;cursor:pointer;margin:8px 8px 8px 0;}
+input{padding:8px;font-size:15px;width:100%;box-sizing:border-box;}
+</style>
+</head>
+<body>
+
+<h2>🔬 小八API链路测试</h2>
+<p>这个页面只做一件事：点按钮 → 调 /api/chat → 显示结果。<br>用来确认浏览器→代理→DeepSeek 这条链路是否通畅。</p>
+
+<div style="margin:16px 0;">
+  <label>问题：</label><br>
+  <input id="q" value="用一句话介绍西安" />
+</div>
+<button onclick="testApi()">发请求</button>
+<button onclick="document.getElementById('log').textContent=''">清日志</button>
+
+<div id="log">等待操作...</div>
+
+<script>
+// 详细日志
+function log(msg) {
+  const el = document.getElementById('log');
+  const t = new Date().toLocaleTimeString('zh-CN');
+  el.textContent += '[' + t + '] ' + msg + '\n';
+  el.scrollTop = el.scrollHeight;
+}
+
+async function testApi() {
+  const q = document.getElementById('q').value.trim();
+  if (!q) return alert('请输入问题');
+
+  log('📤 准备发送 fetch 请求...');
+  log('   URL: ' + location.origin + '/api/chat');
+  log('   当前页面协议: ' + location.protocol + '//' + location.host);
+
+  const body = JSON.stringify({
+    model: 'deepseek-chat',
+    max_tokens: 200,
+    messages: [
+      {role:'system', content:'简短回复'},
+      {role:'user', content: q}
+    ]
+  });
+  log('📦 请求体长度: ' + body.length + ' 字节');
+
+  try {
+    log('⏳ 发起 fetch...');
+    const t0 = Date.now();
+    const resp = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: body
+    });
+    const dt = Date.now() - t0;
+    log('✅ fetch 返回！状态码: ' + resp.status + '，耗时: ' + dt + 'ms');
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(()=>({}));
+      log('❌ HTTP错误: ' + JSON.stringify(err));
+      return;
+    }
+
+    const data = await resp.json();
+    log('✅ 解析JSON成功');
+    const content = (data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content) || '(无content)';
+    log('📥 DeepSeek回复: ' + content.substring(0, 200));
+  } catch(e) {
+    log('❌ 异常: ' + e.name + ' - ' + e.message);
+    if (e.name === 'AbortError') log('   (请求被abort了)');
+    if (e.message.includes('Failed to fetch')) log('   (可能是CORS或网络错误)');
+  }
+}
+
+// 页面加载时自动检测
+log('页面加载完成');
+log('当前地址: ' + location.href);
+if (location.protocol === 'file:') {
+  log('⚠️ 警告：页面通过 file:// 协议打开！fetch会失败！');
+  log('请通过 http://localhost:3456/test-minimal.html 访问此页面');
+}
+</script>
+</body>
+</html>
