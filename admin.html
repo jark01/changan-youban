@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>长安游伴 · Token 管理</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, 'PingFang SC', sans-serif; background: #F5F5F5; padding: 20px; }
+h1 { font-size: 24px; margin-bottom: 4px; }
+.sub { color: #999; font-size: 13px; margin-bottom: 20px; }
+.card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.card h2 { font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: #E8453C; color: #fff; }
+.btn-secondary { background: #F0F0F0; color: #333; }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+input, textarea { width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 8px; font-size: 14px; }
+textarea { resize: vertical; min-height: 60px; font-family: monospace; }
+.row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+.tag { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.tag-green { background: #ECFDF5; color: #059669; }
+.tag-red { background: #FEF2F1; color: #E8453C; }
+.tag-gray { background: #F5F5F5; color: #999; }
+.token-list { font-size: 13px; }
+.token-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #F0F0F0; flex-wrap: wrap; }
+.token-item:last-child { border-bottom: none; }
+.token-code { font-family: monospace; font-size: 12px; flex: 1; min-width: 200px; word-break: break-all; }
+.public-url-box { background: #FFF8E1; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 12px; }
+.public-url-box code { background: #FFF3CD; padding: 2px 6px; border-radius: 3px; font-size: 12px; }
+.qrcode-area { text-align: center; padding: 20px; }
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 24px; border-radius: 8px; font-size: 14px; z-index: 999; opacity: 0; transition: opacity 0.3s; }
+.toast.show { opacity: 1; }
+.full-link { background: #F5F5F5; padding: 10px; border-radius: 6px; font-size: 12px; word-break: break-all; margin-top: 8px; font-family: monospace; }
+.copy-btn { color: #3B82F6; cursor: pointer; font-size: 12px; border: none; background: none; text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<h1>🏮 长安游伴 · Token 管理</h1>
+<p class="sub">生成一次性访问码，买家付费后发送链接</p>
+
+<!-- 公网地址配置 -->
+<div class="card">
+  <h2>🌐 公网地址配置</h2>
+  <p style="font-size:13px;color:#666;margin-bottom:10px;">服务器启动后自动开启内网穿透，点击「自动获取」加载当前公网地址</p>
+  <div class="row">
+    <input type="text" id="public-host" placeholder="例如：https://changan-youban.loca.lt" style="flex:1;">
+    <button class="btn btn-primary btn-sm" onclick="autoGetUrl()">🔄 自动获取</button>
+    <button class="btn btn-secondary btn-sm" onclick="saveHost()">保存</button>
+  </div>
+  <p style="font-size:11px;color:#999;margin-top:4px;">当前地址：<span id="current-host" style="color:#E8453C;">未设置</span></p>
+  <p style="font-size:11px;color:#666;margin-top:6px;">⚠️ 说明：localtunnel 每次启动地址不同（除非固定子域名），重启服务器后需重新获取</p>
+</div>
+
+<!-- 生成 Token -->
+<div class="card">
+  <h2>🔑 生成新 Token</h2>
+  <div class="row">
+    <input type="number" id="gen-count" value="1" min="1" max="20" style="width:80px;" placeholder="数量">
+    <button class="btn btn-primary" onclick="generateToken()">生成访问码</button>
+    <button class="btn btn-secondary" onclick="refreshList()">🔄 刷新列表</button>
+  </div>
+  <div id="gen-result" style="margin-top:12px;display:none;">
+    <p style="font-size:13px;font-weight:600;margin-bottom:8px;">✅ 生成成功！</p>
+    <div id="gen-links"></div>
+  </div>
+</div>
+
+<!-- Token 列表 -->
+<div class="card">
+  <h2>📋 Token 使用记录</h2>
+  <div class="token-list" id="token-list">加载中…</div>
+</div>
+
+<!-- 二维码生成 -->
+<div class="card" id="qrcode-card" style="display:none;">
+  <h2>📱 扫码体验</h2>
+  <div class="qrcode-area" id="qrcode-area"></div>
+  <p style="text-align:center;font-size:12px;color:#999;">用户扫码后可直接使用</p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ADMIN_KEY = 'changan2026';
+
+async function autoGetUrl() {
+  try {
+    showToast('正在获取公网地址...');
+    const resp = await fetch('/api/public-url');
+    const data = await resp.json();
+    if (data.url) {
+      document.getElementById('public-host').value = data.url;
+      localStorage.setItem('public_host', data.url);
+      document.getElementById('current-host').textContent = data.url;
+      showToast('✅ 已自动填入公网地址！');
+      refreshList();
+    } else {
+      showToast('⏳ 内网穿透还在连接中，请稍后重试');
+    }
+  } catch(e) {
+    showToast('获取失败: ' + e.message);
+  }
+}
+
+function getPublicHost() {
+  return localStorage.getItem('public_host') || '';
+}
+
+function saveHost() {
+  const host = document.getElementById('public-host').value.trim();
+  if (!host) { showToast('请输入公网地址'); return; }
+  localStorage.setItem('public_host', host);
+  document.getElementById('current-host').textContent = host;
+  showToast('公网地址已保存');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => showToast('已复制到剪贴板'))
+    .catch(() => showToast('复制失败，请手动复制'));
+}
+
+async function generateToken() {
+  const count = parseInt(document.getElementById('gen-count').value) || 1;
+  try {
+    const resp = await fetch('/api/token?action=create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: ADMIN_KEY, count })
+    });
+    const data = await resp.json();
+    
+    const host = getPublicHost();
+    const resultDiv = document.getElementById('gen-result');
+    const linksDiv = document.getElementById('gen-links');
+    
+    if (data.token) {
+      const link = host ? host + '/?token=' + data.token : 'http://localhost:3457/?token=' + data.token;
+      linksDiv.innerHTML = `<div class="public-url-box">
+        <strong>完整链接：</strong><br>
+        <div class="full-link">${link}</div>
+        <button class="copy-btn" onclick="copyText('${link}')">📋 复制链接</button>
+        <button class="copy-btn" onclick="copyText('${data.token}')" style="margin-left:10px;">📋 仅复制token</button>
+      </div>`;
+    } else if (data.tokens) {
+      let html = '';
+      data.tokens.forEach((t, i) => {
+        const link = host ? host + '/?token=' + t : 'http://localhost:3457/?token=' + t;
+        html += `<div class="public-url-box" style="margin-bottom:8px;">
+          <strong>#${i+1}</strong> <code>${t}</code><br>
+          <div class="full-link">${link}</div>
+          <button class="copy-btn" onclick="copyText('${link}')">📋 复制链接</button>
+        </div>`;
+      });
+      linksDiv.innerHTML = html;
+    }
+    resultDiv.style.display = 'block';
+    refreshList();
+  } catch (e) {
+    showToast('生成失败: ' + e.message);
+  }
+}
+
+async function refreshList() {
+  try {
+    const resp = await fetch('/api/token?action=list', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: ADMIN_KEY })
+    });
+    const data = await resp.json();
+    const tokens = data.tokens || {};
+    const listDiv = document.getElementById('token-list');
+    
+    const entries = Object.entries(tokens).sort((a, b) => 
+      new Date(b[1].created_at) - new Date(a[1].created_at)
+    );
+    
+    if (entries.length === 0) {
+      listDiv.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">暂无 token，请生成</p>';
+      return;
+    }
+    
+    let html = `<div style="font-size:12px;color:#999;margin-bottom:8px;">
+      总计: ${entries.length} | 
+      已用: ${entries.filter(e => e[1].used).length} | 
+      未用: ${entries.filter(e => !e[1].used).length}
+    </div>`;
+    
+    entries.forEach(([token, info]) => {
+      const host = getPublicHost();
+      const link = host ? host + '/?token=' + token : '?token=' + token;
+      const statusTag = info.used 
+        ? '<span class="tag tag-red">已使用</span>' 
+        : '<span class="tag tag-green">未使用</span>';
+      const time = info.used 
+        ? '使用于 ' + new Date(info.used_at).toLocaleString('zh-CN')
+        : '创建于 ' + new Date(info.created_at).toLocaleString('zh-CN');
+      
+      html += `<div class="token-item">
+        <span style="font-size:20px;">${info.used ? '🔴' : '🟢'}</span>
+        <span class="token-code">${token}</span>
+        ${statusTag}
+        <span style="font-size:11px;color:#999;">${time}</span>
+        ${!info.used ? `<button class="copy-btn" onclick="copyText('${link}')">复制链接</button>` : ''}
+      </div>`;
+    });
+    
+    listDiv.innerHTML = html;
+  } catch (e) {
+    document.getElementById('token-list').innerHTML = '<p style="color:#E8453C;">加载失败: ' + e.message + '</p>';
+  }
+}
+
+// 初始化
+document.getElementById('public-host').value = getPublicHost();
+document.getElementById('current-host').textContent = getPublicHost() || '未设置（使用 localhost）';
+refreshList();
+</script>
+</body>
+</html>

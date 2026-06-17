@@ -1,0 +1,15 @@
+# Backup files
+*.bak
+*_bak.html
+*-bak.html
+*-old.html
+*v2-bak*
+-check.js
+_check*
+
+# Temp/sensitive
+tunnel.js
+qrcode.png
+
+# Node modules
+node_modules/

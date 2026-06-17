@@ -1,0 +1,3707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>长安游伴 · 西安AI旅行规划师</title>
+  <style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,'PingFang SC','Helvetica Neue',sans-serif;background:#f5f5f5;color:#1d1d1f;font-size:15px;overflow-x:hidden}
+:root{--primary:#1d1d1f;--green:#34C759;--red:#FF3B30;--gold:#FF9500;--border:#e5e5ea;--text2:#8e8e93;--text3:#c7c7cc;--radius:16px}
+.app-container{width:100%;max-width:430px;min-height:100vh;margin:0 auto;position:relative;overflow:hidden;background:#fff}
+
+/* ===== Hero Section (长安伴游主页) ===== */
+.hero-section{position:relative;width:100%;height:200px;overflow:hidden;background:#1d1d1f}
+.hero-bg{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}
+.hero-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,.55) 70%,rgba(0,0,0,.75) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+.hero-title{font-size:24px;font-weight:800;color:#fff;letter-spacing:2px;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.8);margin-top:6px;letter-spacing:1px}
+
+/* ===== AI Intro Section ===== */
+.intro-section{padding:20px 16px 16px;background:#fff;text-align:center}
+.intro-avatar{font-size:48px;margin-bottom:8px;display:block}
+.intro-name{font-size:20px;font-weight:700;color:#1d1d1f;margin-bottom:4px}
+.intro-tagline{font-size:12px;color:#E8453C;font-weight:500;margin-bottom:14px}
+.intro-desc{font-size:14px;color:#555;line-height:1.8;text-align:left;background:#fafafa;border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.intro-features{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:6px}
+.intro-feat{background:#FEF2F1;color:#E8453C;font-size:11px;padding:6px 12px;border-radius:99px;font-weight:500}
+.intro-feat:nth-child(2){background:#ECFDF5;color:#10B981}
+.intro-feat:nth-child(3){background:#EFF6FF;color:#3B82F6}
+.intro-feat:nth-child(4){background:#FFFBEB;color:#F59E0B}
+.intro-feat:nth-child(5){background:#F5F3FF;color:#8B5CF6}
+.voice-big-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#E8453C,#F87171);color:#fff;border:none;border-radius:99px;padding:12px 24px;font-size:15px;font-weight:600;cursor:pointer;margin:8px 0 4px;box-shadow:0 4px 14px rgba(232,69,60,.35);transition:all .2s}
+.voice-big-btn:active{transform:scale(.95);box-shadow:0 2px 8px rgba(232,69,60,.25)}
+.voice-big-btn.playing{animation:pulse 1.2s ease infinite}
+@keyframes pulse{0%,100%{box-shadow:0 4px 14px rgba(232,69,60,.35)}50%{box-shadow:0 4px 24px rgba(232,69,60,.6)}}
+
+/* ===== Form on Main Page ===== */
+.main-form{padding:0;background:transparent}
+.main-form .section{margin:10px 0;border-radius:12px}
+.main-form .section:first-child{margin-top:0}
+.form-section-title{font-size:16px;font-weight:700;color:#1d1d1f;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.form-section-title::before{content:'';display:inline-block;width:4px;height:16px;background:#E8453C;border-radius:2px;margin-right:2px}
+.person-picker{display:flex;flex-direction:column;gap:10px;margin-bottom:10px}
+.person-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#f9f9fb;border-radius:12px}
+.person-info{display:flex;align-items:center;gap:8px}
+.person-emoji{font-size:20px}
+.person-label{font-size:14px;color:#1d1d1f;font-weight:500}
+.person-sub{font-size:11px;color:#8e8e93}
+.person-counter{display:flex;align-items:center;gap:10px}
+.person-count-btn{width:30px;height:30px;border-radius:50%;border:2px solid #e5e5ea;background:#fff;font-size:17px;color:#1d1d1f;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.person-count-btn:active{background:#f0f0f0}
+.person-count-btn.disabled{opacity:.3;pointer-events:none}
+.person-count-num{font-size:16px;font-weight:600;width:24px;text-align:center;color:#1d1d1f}
+
+/* ===== Mine Page ===== */
+.mine-page{padding:16px}
+.mine-card{background:#f9f9fb;border-radius:16px;padding:20px;margin-bottom:16px;text-align:center}
+.mine-avatar{font-size:56px;margin-bottom:8px;display:block}
+.mine-name{font-size:18px;font-weight:700;color:#1d1d1f}
+.mine-desc{font-size:12px;color:#8e8e93;margin-top:4px}
+.mine-menu-item{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #f0f0f0;cursor:pointer;font-size:14px;color:#1d1d1f}
+.mine-menu-item:active{opacity:.6}
+.mine-menu-icon{font-size:22px;width:28px;text-align:center}
+.mine-menu-arrow{color:#c7c7cc;font-size:16px;margin-left:auto}
+
+/* Pages */
+.page{width:100%;min-height:100vh;position:absolute;top:0;left:0;background:#fff;padding-bottom:70px;display:none;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.page.active{display:block;position:relative}
+
+/* Top Nav */
+.top-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;position:sticky;top:0;background:#fff;z-index:10}
+.back-btn{font-size:22px;color:#1d1d1f;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:none;border:none}
+.action-btn{border:1.5px solid #d1d1d6;border-radius:99px;padding:6px 14px;font-size:13px;cursor:pointer;background:#fff;color:#1d1d1f}
+
+/* Bottom Tab Bar */
+.tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:60px;background:rgba(255,255,255,.95);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);display:flex;border-top:1px solid #f0f0f0;z-index:99;padding:0 2px}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:#8e8e93;font-size:10px;border:none;background:none;transition:color .2s;padding:4px 0}
+.tab-item.active{color:#E8453C}
+.tab-icon{font-size:20px;margin-bottom:1px;line-height:1}
+
+/* Create Page */
+.create-page{padding:16px 16px 0}
+.create-title{font-size:32px;font-weight:700;line-height:1.2;margin:10px 0 24px;letter-spacing:-.5px}
+.input-card{width:100%;border:1.5px solid #e5e5ea;border-radius:16px;padding:16px;margin-bottom:20px;background:#f9f9fb;transition:border-color .2s}
+.input-card:focus-within{border-color:#1d1d1f;background:#fff}
+.city-input{width:100%;border:none;outline:none;font-size:16px;background:transparent;font-family:inherit}
+.city-tag{display:inline-flex;align-items:center;background:#1d1d1f;color:#fff;padding:5px 10px;border-radius:8px;margin-bottom:8px;font-size:13px;gap:6px}
+.tag-close{color:rgba(255,255,255,.7);cursor:pointer;font-size:14px;line-height:1}
+.input-tip{color:#8e8e93;font-size:13px;margin-top:6px}
+.sub-title{font-size:20px;font-weight:700;margin:24px 0 12px}
+.date-select{width:100%;border:1.5px solid #e5e5ea;border-radius:16px;padding:16px;display:flex;align-items:center;gap:10px;margin-bottom:20px;cursor:pointer;background:#f9f9fb;transition:border-color .2s}
+.date-select:active{border-color:#1d1d1f}
+.date-select .date-icon{font-size:20px}
+.date-select .date-text{flex:1;font-size:15px;color:#1d1d1f}
+.date-select .date-arrow{color:#c7c7cc;font-size:16px}
+.tag-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:32px}
+.prefer-tag{border:1.5px solid #e5e5ea;border-radius:99px;padding:11px 0;text-align:center;font-size:13px;cursor:pointer;transition:all .2s;background:#fff;color:#1d1d1f}
+.prefer-tag.active{background:#1d1d1f;border-color:#1d1d1f;color:#fff;font-weight:500}
+.submit-btn{width:100%;background:#1d1d1f;color:#fff;border:none;border-radius:16px;padding:16px 0;font-size:17px;font-weight:600;cursor:pointer;letter-spacing:.5px}
+.submit-btn:active{opacity:.85;transform:scale(.98)}
+.loading-text{text-align:center;padding:24px;color:#8e8e93;font-size:14px;display:none}
+
+/* Quick Entry Cards */
+.quick-entry-title{font-size:20px;font-weight:700;margin:28px 0 14px}
+.quick-entry-sub{font-size:12px;color:#8e8e93;margin-bottom:12px}
+.quick-entry-row{display:flex;gap:8px;margin-bottom:8px}
+.quick-card{flex:1;border-radius:16px;padding:14px 6px;text-align:center;cursor:pointer;transition:all .2s;border:1.5px solid transparent;display:flex;flex-direction:column;align-items:center;gap:6px}
+.quick-card:active{transform:scale(.96)}
+.quick-card.food{background:#ECFDF5;border-color:#A7F3D0}
+.quick-card.food:active{background:#D1FAE5}
+.quick-card.scenic{background:#FEF2F1;border-color:#FECACA}
+.quick-card.scenic:active{background:#FEE2E2}
+.quick-card.hotel{background:#EFF6FF;border-color:#BFDBFE}
+.quick-card.hotel:active{background:#DBEAFE}
+.quick-card.driver{background:#FFFBEB;border-color:#FDE68A}
+.quick-card.driver:active{background:#FEF3C7}
+.quick-card.ai{width:100%;flex-direction:row;justify-content:center;gap:12px;background:#F5F5F7;border-color:#D1D5DB;padding:16px;border-radius:16px;margin-bottom:8px}
+.quick-card.ai:active{background:#E5E7EB}
+.quick-card.ai .qc-badge{background:#1d1d1f;color:#fff;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+.qc-icon{font-size:28px;line-height:1}
+.qc-label{font-size:11px;font-weight:600;color:#1d1d1f}
+.qc-desc{font-size:10px;color:#8e8e93}
+.quick-card.ai .qc-icon{font-size:32px}
+.quick-card.ai .qc-info{text-align:left;flex:1}
+.quick-card.ai .qc-label{font-size:14px}
+.quick-card.ai .qc-desc{font-size:11px}
+
+/* Schedule Page */
+.schedule-page{padding:0;background:#fff}
+.schedule-header{padding:16px 16px 8px}
+.schedule-top-title{font-size:22px;font-weight:700;margin-bottom:2px}
+.schedule-top-desc{font-size:13px;color:#8e8e93}
+.date-tab-wrap{display:flex;gap:8px;overflow-x:auto;padding:8px 16px 12px;margin-bottom:4px;scrollbar-width:none}
+.date-tab-wrap::-webkit-scrollbar{display:none}
+.date-tab{white-space:nowrap;font-size:14px;color:#8e8e93;cursor:pointer;padding:7px 14px;border-radius:20px;background:#f5f5f7;border:none;transition:all .2s}
+.date-tab.active{color:#fff;background:#1d1d1f;font-weight:500}
+.day-theme{padding:4px 16px 16px;font-size:15px;color:#1d1d1f;font-weight:600}
+.schedule-card{margin:0 16px 12px;background:#f5f5f7;border-radius:16px;padding:14px;display:flex;gap:12px;cursor:pointer;transition:transform .15s}
+.schedule-card:active{transform:scale(.98)}
+.schedule-img{width:72px;height:72px;border-radius:12px;object-fit:cover;background:#e5e5ea;flex-shrink:0}
+.schedule-info{flex:1;min-width:0}
+.schedule-tag{font-size:11px;color:#8e8e93;margin-bottom:3px}
+.schedule-name{font-size:15px;font-weight:600;margin-bottom:2px}
+.schedule-desc{font-size:12px;color:#8e8e93;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.schedule-time{font-size:11px;color:#c7c7cc;margin-top:4px}
+.schedule-empty{text-align:center;padding:60px 20px;color:#c7c7cc}
+.schedule-empty .empty-icon{font-size:40px;margin-bottom:12px}
+.schedule-empty p{font-size:14px;margin-bottom:16px}
+.schedule-empty button{background:#1d1d1f;color:#fff;border:none;border-radius:16px;padding:12px 24px;font-size:15px;cursor:pointer}
+
+/* Explore Page */
+.explore-page{padding:0;background:#fff}
+.explore-header{padding:16px;font-size:24px;font-weight:700}
+.explore-map-wrap{margin:0 16px 12px;border-radius:16px;overflow:hidden;height:160px;background:#f5f5f7;position:relative}
+.explore-map-wrap .map-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#c7c7cc;font-size:14px}
+.explore-tab-wrap{display:flex;padding:0 16px;gap:6px;overflow-x:auto;margin-bottom:16px;scrollbar-width:none}
+.explore-tab-wrap::-webkit-scrollbar{display:none}
+.explore-tab{white-space:nowrap;font-size:14px;color:#8e8e93;cursor:pointer;padding:8px 16px;border-radius:20px;background:#f5f5f7;border:none;transition:all .2s}
+.explore-tab.active{color:#fff;background:#1d1d1f;font-weight:500}
+.list-item{margin:0 16px 12px;display:flex;gap:12px;cursor:pointer;align-items:center;transition:transform .15s}
+.list-item:active{transform:scale(.98)}
+.list-img{width:64px;height:64px;border-radius:12px;object-fit:cover;background:#f5f5f7;flex-shrink:0}
+.list-info{flex:1;min-width:0}
+.list-title{font-size:15px;font-weight:600;margin-bottom:2px}
+.list-tag{display:inline-block;font-size:11px;color:#FF9500;background:#fff8f0;padding:2px 8px;border-radius:4px;margin-bottom:4px}
+.list-desc{font-size:12px;color:#8e8e93;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list-arrow{color:#c7c7cc;font-size:16px;flex-shrink:0}
+
+/* Detail Popup */
+.mask{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:100;display:none;align-items:flex-end;justify-content:center}
+.mask.show{display:flex}
+.popup{width:100%;max-width:430px;background:#fff;border-radius:24px 24px 0 0;padding:0;max-height:85vh;overflow-y:auto;animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.popup-header{display:flex;justify-content:space-between;align-items:flex-start;padding:20px 16px 8px;position:sticky;top:0;background:#fff;z-index:5}
+.popup-close{font-size:20px;cursor:pointer;color:#8e8e93;width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:#f5f5f7;border:none;border-radius:50%}
+.popup-title-row{flex:1;min-width:0}
+.popup-title{font-size:20px;font-weight:700;margin-bottom:2px}
+.popup-sub{font-size:13px;color:#8e8e93}
+.popup-gallery{position:relative;margin:12px 16px;border-radius:12px;overflow:hidden;height:200px;background:#f5f5f7}
+.popup-gallery img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;transition:opacity .3s}
+.popup-gallery-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:2}
+.popup-gallery-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:all .2s}
+.popup-gallery-dot.active{background:#fff;width:18px;border-radius:3px}
+.popup-gallery-nav{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;z-index:2;border:none;color:#1d1d1f}
+.popup-gallery-prev{left:8px}
+.popup-gallery-next{right:8px}
+.popup-desc{margin:8px 16px;font-size:14px;color:#1d1d1f;line-height:1.7}
+.comment-block{margin:8px 16px 16px}
+.comment-title{font-size:14px;font-weight:600;margin-bottom:10px}
+.good-comment{background:#f0fdf4;padding:12px 14px;border-radius:12px;font-size:13px;color:#16a34a;margin-bottom:8px;line-height:1.5}
+.bad-comment{background:#fef2f2;padding:12px 14px;border-radius:12px;font-size:13px;color:#ef4444;line-height:1.5}
+.popup-btn-group{display:flex;gap:8px;padding:12px 16px 20px;border-top:1px solid #f0f0f0}
+.popup-btn{flex:1;text-align:center;font-size:11px;color:#8e8e93;cursor:pointer;border:none;background:none;padding:6px 0}
+.popup-btn-icon{font-size:22px;margin-bottom:4px;display:block}
+.popup-btn.primary{color:#1d1d1f}
+.popup-btn.primary .popup-btn-icon{color:#1d1d1f}
+
+/* Add Plan Popup */
+.add-plan-item{padding:14px 16px;border:2px solid #e5e5ea;border-radius:14px;margin:0 16px 12px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.add-plan-item.active{border-color:#1d1d1f;background:#f9f9fb}
+.plan-check{width:22px;height:22px;border-radius:50%;border:2px solid #d1d1d6;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;flex-shrink:0}
+.add-plan-item.active .plan-check{background:#1d1d1f;border-color:#1d1d1f}
+.confirm-btn{width:calc(100% - 32px);margin:8px 16px 24px;background:#1d1d1f;color:#fff;border:none;border-radius:16px;padding:14px 0;font-size:16px;font-weight:600;cursor:pointer}
+.confirm-btn:active{opacity:.85}
+
+/* Payment Modal */
+.pay-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.65);z-index:9999;display:none;align-items:center;justify-content:center}
+.pay-overlay.show{display:flex}
+.pay-modal{background:#fff;border-radius:20px;width:92%;max-width:380px;overflow:hidden;animation:payIn .35s ease}
+@keyframes payIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.pay-header{background:#1d1d1f;padding:28px 20px 20px;text-align:center;color:#fff;position:relative}
+.pay-close{position:absolute;top:12px;right:16px;background:rgba(255,255,255,.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer}
+.pay-icon{font-size:48px;margin-bottom:10px}
+.pay-title{font-size:20px;font-weight:700}
+.pay-sub{font-size:13px;opacity:.8;margin-top:6px}
+.pay-body{padding:24px 20px}
+.pay-price-row{text-align:center;margin-bottom:20px}
+.pay-price{font-size:36px;font-weight:800;color:#1d1d1f}
+.pay-price small{font-size:14px;font-weight:400}
+.pay-orig{font-size:14px;color:#8e8e93;text-decoration:line-through;margin-left:8px}
+.pay-qrcode-section{text-align:center;margin-bottom:16px}
+.pay-qrcode-title{font-size:14px;font-weight:600;color:#1d1d1f;margin-bottom:14px}
+.pay-qrcode-box{display:inline-block;background:#f8f8f8;border-radius:16px;padding:16px;border:2px dashed #07C160}
+.pay-qrcode-img{width:180px;height:180px;border-radius:8px;background:#fff;display:block}
+.pay-qrcode-amount{font-size:22px;font-weight:800;color:#1d1d1f;margin-top:10px}
+.pay-qrcode-tip{font-size:12px;color:#8e8e93;margin-top:10px;line-height:1.5}
+.pay-tabs{display:flex;gap:0;margin-bottom:16px;background:#f5f5f7;border-radius:12px;padding:4px}
+.pay-tab{flex:1;text-align:center;padding:10px 0;border-radius:10px;font-size:13px;font-weight:600;color:#8e8e93;cursor:pointer;transition:all .2s;border:none;background:none}
+.pay-tab.active{background:#07C160;color:#fff;box-shadow:0 2px 8px rgba(7,193,96,.3)}
+.pay-tab.ali.active{background:#1677FF;box-shadow:0 2px 8px rgba(22,119,255,.3)}
+.pay-divider{display:flex;align-items:center;gap:12px;margin:20px 0 16px;color:#8e8e93;font-size:12px}
+.pay-divider::before,.pay-divider::after{content:'';flex:1;height:1px;background:#e5e5ea}
+.pay-features{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.pay-feat{display:flex;align-items:center;gap:10px;font-size:13px;color:#1d1d1f}
+.pf-icon{width:32px;height:32px;border-radius:8px;background:#f5f5f7;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.pay-btn{width:100%;background:#07C160;color:#fff;border:none;border-radius:16px;padding:15px;font-size:17px;font-weight:700;cursor:pointer}
+.pay-btn:active{transform:scale(.97);background:#06AD56}
+.pay-btn.disabled{background:#ccc;cursor:not-allowed}
+.pay-footer{text-align:center;padding:0 20px 20px;font-size:11px;color:#8e8e93}
+.pay-footer a{color:#1d1d1f;text-decoration:underline}
+
+/* Form Page */
+.form-page{background:#fff;padding-bottom:100px}
+.form-topbar{background:#fff;padding:14px 16px;position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f0f0f0}
+.form-topbar .back-btn{width:30px;height:30px;border-radius:50%;background:#f5f5f7;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#1d1d1f;border:none;flex-shrink:0}
+.form-topbar h2{font-size:16px;font-weight:600}
+.form-topbar p{font-size:11px;color:#8e8e93}
+.section{margin:12px 12px;background:#fff;border-radius:16px;padding:16px;border:1.5px solid #e5e5ea}
+.section-header{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #f0f0f0}
+.section-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:#f5f5f7}
+.section-header h3{font-size:15px;font-weight:700}
+.s-tag{font-size:10px;color:#8e8e93;margin-left:auto}
+.field-group{margin-bottom:14px}
+.field-group:last-child{margin-bottom:0}
+.field-label{font-size:13px;font-weight:600;color:#1d1d1f;margin-bottom:8px;display:flex;align-items:center;gap:4px}
+.field-label .req{color:#ef4444}
+.field-input{width:100%;background:#f5f5f7;border:1.5px solid #e5e5ea;border-radius:12px;padding:11px 12px;font-size:14px;color:#1d1d1f;outline:none;font-family:inherit;transition:border-color .2s}
+.field-input:focus{border-color:#1d1d1f;background:#fff}
+.field-input::placeholder{color:#c7c7cc}
+textarea.field-input{min-height:70px;resize:none;line-height:1.5}
+.date-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.date-row input[type="date"]{-webkit-appearance:none;background:#f5f5f7;border:1.5px solid #e5e5ea;border-radius:12px;padding:11px 10px;font-size:14px;color:#1d1d1f;font-family:inherit;width:100%}
+.date-row input[type="date"]:focus{border-color:#1d1d1f;outline:none}
+.chip-group{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:7px 13px;border-radius:18px;border:1.5px solid #d1d1d6;background:#fff;font-size:13px;color:#1d1d1f;cursor:pointer;transition:all .2s;user-select:none;white-space:nowrap}
+.chip.selected{background:#1d1d1f;border-color:#1d1d1f;color:#fff;font-weight:500}
+.chip:active{transform:scale(.96)}
+.count-row{display:flex;align-items:center}
+.count-display{display:flex;align-items:center;gap:12px;background:#f5f5f7;border-radius:12px;padding:6px 12px}
+.count-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid #d1d1d6;background:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1d1d1f}
+.count-num{font-size:18px;font-weight:700;min-width:24px;text-align:center}
+.submit-area{padding:20px 12px 40px;text-align:center}
+.btn-submit{width:100%;background:#1d1d1f;color:#fff;border:none;border-radius:16px;padding:16px 0;font-size:17px;font-weight:600;cursor:pointer}
+.btn-submit:active{opacity:.85}
+.submit-hint{text-align:center;margin-top:8px;font-size:11px;color:#8e8e93}
+
+/* Loading Page */
+.loading-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 24px;text-align:center}
+.load-avatar{width:72px;height:72px;border-radius:50%;background:#1d1d1f;display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:20px;animation:pulse 1.5s ease-in-out infinite;color:#fff}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.06);opacity:.8}}
+.load-title{font-size:18px;font-weight:700;margin-bottom:8px}
+.load-sub{font-size:13px;color:#8e8e93;margin-bottom:32px}
+.load-progress{width:200px;height:4px;background:#e5e5ea;border-radius:2px;overflow:hidden;margin-bottom:16px}
+.load-bar{height:100%;width:30%;background:#1d1d1f;border-radius:2px;animation:loading 2s ease-in-out infinite}
+@keyframes loading{0%{width:10%;margin-left:0}50%{width:40%;margin-left:30%}100%{width:10%;margin-left:90%}}
+.load-tips{font-size:12px;color:#8e8e93;line-height:1.8}
+.load-tips span{display:block;animation:fadeInOut 3s ease-in-out infinite}
+.load-tips span:nth-child(2){animation-delay:1s}
+.load-tips span:nth-child(3){animation-delay:2s}
+@keyframes fadeInOut{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* Result Page */
+.result-page{background:#fff;padding-bottom:100px;min-height:100vh}
+.res-header{background:#f5f5f7;padding:20px 16px 24px;border-bottom:1px solid #e5e5ea}
+.res-tag{display:inline-block;font-size:12px;color:#1d1d1f;background:#fff;padding:4px 10px;border-radius:8px;margin-bottom:8px}
+.res-title{font-size:20px;font-weight:700;line-height:1.4}
+.res-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.res-meta span{font-size:11px;color:#8e8e93;display:flex;align-items:center;gap:3px}
+.res-body{padding:12px}
+.rcard{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;border:1.5px solid #e5e5ea}
+.rcard-title{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.rcard-title::before{content:'';width:3px;height:16px;background:#1d1d1f;border-radius:2px;flex-shrink:0}
+.day-block{background:#f5f5f7;border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.day-head{display:flex;align-items:center;gap:10px}
+.day-num{width:30px;height:30px;border-radius:50%;background:#1d1d1f;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.day-theme2{font-size:13px;font-weight:700}
+.day-nav{margin-left:auto}
+.btn-nav{background:#fff;color:#1d1d1f;border:1.5px solid #d1d1d6;border-radius:14px;padding:5px 10px;font-size:11px;cursor:pointer}
+.tl{padding:4px 0 0 6px}
+.tl-item{display:flex;gap:8px;padding:8px 0;position:relative}
+.tl-item::before{content:'';position:absolute;left:5px;top:22px;bottom:-8px;width:1px;background:#d1d1d6}
+.tl-item:last-child::before{display:none}
+.tl-dot{width:11px;height:11px;border-radius:50%;background:#1d1d1f;flex-shrink:0;margin-top:5px;border:2px solid #e5e5ea}
+.tl-info{flex:1}
+.tl-time{font-size:11px;color:#8e8e93}
+.tl-name{font-size:13px;font-weight:600}
+.tl-tip{font-size:11px;color:#8e8e93;margin-top:3px;background:#f9f9fb;border-radius:6px;padding:5px 8px;line-height:1.4}
+.tl-nav{margin-top:2px;display:flex;gap:6px}
+.tl-nav a{font-size:10px;color:#1d1d1f;text-decoration:none;background:#f5f5f7;padding:2px 7px;border-radius:10px}
+.tl-guide-btn{font-size:10px;color:#1d1d1f;background:#f5f5f7;border:none;padding:2px 7px;border-radius:10px;cursor:pointer}
+.res-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-top:1px solid #f0f0f0;padding:10px 14px;display:flex;gap:8px;z-index:100;max-width:430px;margin:0 auto}
+.btn-share{flex:1;background:#f5f5f7;border:1.5px solid #d1d1d6;border-radius:16px;padding:12px;font-size:13px;font-weight:600;cursor:pointer}
+.btn-newplan{flex:2;background:#1d1d1f;border:none;border-radius:16px;padding:12px;font-size:14px;color:#fff;font-weight:600;cursor:pointer}
+.gallery-btn{background:#f5f5f7;border:1.5px solid #d1d1d6;border-radius:16px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer}
+
+/* Food/Spots/Hotel/Driver Modals */
+.food-overlay,.spots-overlay,.driver-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:none}
+.food-overlay.show,.spots-overlay.show,.driver-overlay.show{display:flex;align-items:flex-end;justify-content:center}
+.food-modal,.spots-modal,.driver-modal{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:430px;max-height:80vh;overflow-y:auto;padding:20px 16px 30px;animation:slideUp .3s ease}
+.food-modal h3,.spots-modal h3,.driver-modal h3{font-size:18px;margin-bottom:4px}
+.food-subtitle,.spots-subtitle,.driver-subtitle{font-size:12px;color:#8e8e93;margin-bottom:16px}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:#f5f5f7;border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#8e8e93;z-index:10}
+.cat-tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.cat-tabs::-webkit-scrollbar{display:none}
+.cat-tab{padding:6px 14px;border-radius:20px;border:1.5px solid #d1d1d6;background:#fff;font-size:12px;color:#1d1d1f;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s}
+.cat-tab.active{background:#1d1d1f;color:#fff;border-color:#1d1d1f;font-weight:600}
+
+/* Hotel items */
+.hotel-list-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid #f0f0f0;align-items:flex-start}
+.hotel-list-item:last-child{border-bottom:none}
+.hotel-photo{width:90px;height:90px;border-radius:12px;flex-shrink:0;overflow:hidden;background:#f5f5f5}
+.hotel-photo img{width:100%;height:100%;object-fit:cover}
+.hotel-detail{flex:1;min-width:0}
+.hotel-detail .h-name{font-size:15px;font-weight:700;margin-bottom:4px}
+.hotel-detail .h-dist{font-size:11px;color:#8e8e93;margin-bottom:4px}
+.hotel-detail .h-price-row{display:flex;align-items:center;gap:8px;margin:6px 0}
+.hotel-detail .h-price{font-size:18px;font-weight:700;color:#ef4444}
+.hotel-detail .h-price s{font-size:12px;color:#8e8e93;font-weight:400;margin-left:4px}
+.hotel-detail .h-rebate{background:#fef2f2;color:#ef4444;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:600}
+.hotel-btn-row{display:flex;gap:6px;margin-top:8px}
+.hotel-btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:16px;font-size:11px;cursor:pointer;text-decoration:none;border:none;font-weight:600}
+.hotel-btn.buy{background:#1d1d1f;color:#fff}
+.hotel-btn.nav{background:#f5f5f7;color:#1d1d1f;border:1.5px solid #d1d1d6}
+
+/* Spot items */
+.spot-item{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #f0f0f0;align-items:flex-start}
+.spot-item:last-child{border-bottom:none}
+.spot-rank{width:28px;height:28px;border-radius:50%;background:#1d1d1f;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:4px}
+.spot-info{flex:1;min-width:0}
+.spot-name{font-size:15px;font-weight:700}
+.spot-meta{font-size:11px;color:#8e8e93;margin:3px 0}
+.spot-desc{font-size:12px;color:#8e8e93;line-height:1.5}
+
+/* Food items */
+.food-list-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid #f0f0f0;align-items:flex-start}
+.food-list-item:last-child{border-bottom:none}
+.food-avatar{width:60px;height:60px;border-radius:10px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0;overflow:hidden}
+.food-avatar img{width:100%;height:100%;object-fit:cover}
+.food-info{flex:1;min-width:0}
+.food-name{font-size:15px;font-weight:700}
+.food-dist{font-size:11px;color:#8e8e93;margin:3px 0}
+.food-rating{display:inline-block;background:#fff8f0;color:#FF9500;font-size:11px;padding:2px 6px;border-radius:4px}
+.food-gourmet-tag{display:inline-block;background:#f0fdf4;color:#16a34a;font-size:10px;padding:1px 6px;border-radius:4px;margin-left:4px}
+.food-discount{display:inline-block;background:#fef2f2;color:#ef4444;font-size:10px;padding:1px 6px;border-radius:4px;margin-left:4px}
+
+/* Driver items */
+.driver-card{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid #f0f0f0;align-items:center}
+.driver-card:last-child{border-bottom:none}
+.driver-avatar{width:56px;height:56px;border-radius:50%;background:#f5f5f7;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.driver-info{flex:1;min-width:0}
+.driver-name{font-size:15px;font-weight:700}
+.driver-desc{font-size:12px;color:#8e8e93;margin:3px 0}
+.driver-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.driver-tag{font-size:10px;color:#1d1d1f;background:#f5f5f7;padding:2px 8px;border-radius:10px}
+.driver-contact{background:#1d1d1f;color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:12px;cursor:pointer}
+.driver-contact:active{opacity:.85}
+
+/* Chat Modal */
+.chat-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:none}
+.chat-overlay.show{display:flex;align-items:flex-end;justify-content:center}
+.chat-modal{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:430px;height:80vh;display:flex;flex-direction:column;animation:slideUp .3s ease}
+.chat-header{display:flex;align-items:center;gap:10px;padding:16px;border-bottom:1px solid #f0f0f0;flex-shrink:0}
+.chat-avatar{width:40px;height:40px;border-radius:50%;background:#1d1d1f;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;color:#fff}
+.chat-header-info{flex:1}
+.chat-name{font-size:15px;font-weight:600}
+.chat-status{font-size:11px;color:#34C759}
+.chat-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.chat-msg{padding:10px 14px;border-radius:16px;max-width:80%;font-size:14px;line-height:1.5;animation:fadeInUp .25s ease}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.chat-msg.user{align-self:flex-end;background:#1d1d1f;color:#fff;border-bottom-right-radius:4px}
+.chat-msg.bot{align-self:flex-start;background:#f5f5f7;color:#1d1d1f;border-bottom-left-radius:4px}
+.chat-typing{align-self:flex-start;padding:12px 16px;border-radius:16px;background:#f5f5f7;display:flex;gap:4px}
+.chat-typing span{width:6px;height:6px;border-radius:50%;background:#c7c7cc;animation:typingBounce 1.4s ease-in-out infinite}
+.chat-typing span:nth-child(2){animation-delay:.2s}
+.chat-typing span:nth-child(3){animation-delay:.4s}
+@keyframes typingBounce{0%,80%,100%{transform:scale(.7);opacity:.4}40%{transform:scale(1);opacity:1}}
+.chat-input-area{display:flex;gap:8px;padding:12px 16px 16px;border-top:1px solid #f0f0f0;flex-shrink:0}
+.chat-input-area input{flex:1;background:#f5f5f7;border:1.5px solid #e5e5ea;border-radius:20px;padding:10px 14px;font-size:14px;outline:none;font-family:inherit}
+.chat-input-area input:focus{border-color:#1d1d1f}
+.chat-input-area button{width:40px;height:40px;border-radius:50%;background:#1d1d1f;color:#fff;border:none;font-size:16px;cursor:pointer;flex-shrink:0}
+.chat-quick-qs{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 8px;flex-shrink:0;overflow-x:auto}
+.chat-quick{background:#f5f5f7;border:none;border-radius:16px;padding:5px 12px;font-size:11px;color:#1d1d1f;cursor:pointer;white-space:nowrap;flex-shrink:0}
+
+/* Guide Modal */
+.guide-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:none}
+.guide-overlay.show{display:flex;align-items:flex-end;justify-content:center}
+.guide-modal{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:430px;max-height:85vh;overflow-y:auto;padding:0 0 24px;animation:slideUp .3s ease}
+.guide-close{position:sticky;top:0;background:#fff;padding:16px;z-index:10;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f0f0f0}
+.guide-close-btn{width:32px;height:32px;border-radius:50%;background:#f5f5f7;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* Gallery & Poster */
+.gallery-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:1000;display:none}
+.gallery-overlay.show{display:flex;flex-direction:column}
+.gallery-header{display:flex;justify-content:space-between;align-items:center;padding:16px;color:#fff}
+.gallery-header h3{font-size:16px}
+.gallery-grid{flex:1;overflow-y:auto;padding:0 12px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;align-content:start}
+.gallery-item{aspect-ratio:1;border-radius:8px;background:#333;position:relative;overflow:hidden;cursor:pointer}
+.gallery-item img{width:100%;height:100%;object-fit:cover}
+.gallery-bar{display:flex;gap:10px;padding:16px;background:#1a1a1a}
+.gallery-bar button{flex:1;border:none;border-radius:16px;padding:12px;font-size:14px;font-weight:600;cursor:pointer}
+.gallery-share-btn{background:#1d1d1f;color:#fff}
+.gallery-back-btn{background:#333;color:#fff}
+.poster-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:2000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.poster-overlay.show{display:flex}
+.poster-canvas-wrap{background:#fff;border-radius:12px;overflow:hidden;max-width:340px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.poster-canvas-wrap canvas{width:100%;display:block}
+.poster-hint{color:#ccc;margin-top:16px;font-size:13px;text-align:center}
+.poster-close{color:#fff;margin-top:12px;font-size:14px;cursor:pointer;border:1px solid #555;border-radius:16px;padding:8px 24px;background:transparent}
+
+/* Misc */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.8);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+#debug-panel{display:none;position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:#1a1a1a;color:#0f0;font-size:12px;padding:10px;z-index:9999;font-family:monospace;white-space:pre-wrap;border-top:2px solid #f44}
+.weather-widget{margin:12px 0 0;border-radius:12px;display:flex;align-items:center;gap:8px;font-size:12px;color:#8e8e93;padding:8px 12px;background:#f5f5f7}
+.weather-widget .w-icon{font-size:24px}
+.weather-widget .w-temp{font-size:18px;font-weight:600;color:#1d1d1f}
+
+/* 主页内结果容器 */
+.create-result{display:none;padding-bottom:60px}
+.create-result.show{display:block}
+.create-result .res-header{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.create-result .res-title{font-size:20px;font-weight:700;color:#1d1d1f}
+.create-result .res-meta{display:flex;gap:12px;margin-top:8px;font-size:12px;color:#8e8e93;flex-wrap:wrap}
+.create-result .res-meta span{background:#f5f5f7;border-radius:6px;padding:3px 8px}
+.create-result .rcard{background:#fff;border-radius:14px;padding:16px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.create-result .rcard-title{font-size:15px;font-weight:600;margin-bottom:10px;color:#1d1d1f}
+.create-result .day-block{margin-bottom:0}
+.create-result .day-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.create-result .day-num{background:var(--c-red);color:#fff;width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.create-result .day-theme{font-weight:600;font-size:14px;color:#1d1d1f;flex:1}
+.create-result .day-nav .btn-nav{font-size:11px;border:1px solid #e5e5ea;background:#fff;border-radius:8px;padding:5px 10px;cursor:pointer;color:#8e8e93}
+.create-result .tl{padding-left:16px;border-left:2px solid #f0f0f0;margin-left:14px}
+.create-result .tl-item{position:relative;margin-bottom:14px;padding-left:16px}
+.create-result .tl-dot{position:absolute;left:-7px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--c-red);border:2px solid #fff;box-shadow:0 0 0 2px var(--c-red)}
+.create-result .tl-time{font-size:11px;color:#8e8e93;margin-bottom:2px}
+.create-result .tl-name{font-weight:600;font-size:14px;color:#1d1d1f;margin-bottom:2px}
+.create-result .tl-tip{font-size:12px;color:#8e8e93;margin-bottom:4px;line-height:1.5}
+.create-result .tl-nav{display:flex;gap:6px;margin-top:4px}
+.create-result .tl-nav a,.create-result .tl-nav button{font-size:11px;color:var(--c-red);text-decoration:none;background:var(--c-red-light);border:none;border-radius:6px;padding:3px 8px;cursor:pointer}
+.create-result .btn-back-plan{display:block;width:100%;margin:0 auto 12px;padding:10px;border:1.5px solid #e5e5ea;border-radius:12px;background:#fff;font-size:14px;color:#8e8e93;cursor:pointer;font-family:inherit}
+.create-result .btn-back-plan:hover{color:var(--c-red);border-color:var(--c-red)}
+.weather-loading{font-size:12px;color:#c7c7cc}
+.gallery-wrap{position:relative;overflow:hidden;border-radius:12px}
+.gallery-img-wrap{position:relative}
+.gallery-dots-bar{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:4px;z-index:2}
+.gallery-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer}
+.gallery-dot.active{background:#fff;width:16px;border-radius:3px}
+.gallery-info-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:11px;color:#8e8e93}
+.hotel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:none}
+.hotel-overlay.show{display:flex;align-items:flex-end;justify-content:center}
+
+/* Voice intro button */
+.voice-intro-btn{display:block;width:100%;margin-top:10px;background:#F5F5F7;border:1.5px solid #E5E5EA;border-radius:16px;padding:13px 0;font-size:14px;font-weight:500;cursor:pointer;color:#1D1D1F;letter-spacing:.5px;transition:all .2s}
+.voice-intro-btn:active{background:#E5E7EB;transform:scale(.98)}
+.voice-intro-btn.playing{background:#1D1D1F;color:#fff;border-color:#1D1D1F;animation:voiPulse 1.2s ease-in-out infinite}
+@keyframes voiPulse{0%,100%{box-shadow:0 0 0 0 rgba(29,29,31,.3)}50%{box-shadow:0 0 0 8px rgba(29,29,31,0)}}
+
+/* List items (food/spots/hotel rendering) */
+.list-photo{width:72px;height:72px;border-radius:12px;overflow:hidden;background:#f5f5f5;position:relative;flex-shrink:0}
+.list-name{font-size:15px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:6px}
+.list-price{font-size:14px;font-weight:700;color:#ef4444}
+.list-addr{font-size:11px;color:#8e8e93;margin:2px 0;line-height:1.4}
+.list-desc{font-size:12px;color:#8e8e93;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list-tags{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0}
+.list-btn-row{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.list-nav{display:inline-flex;align-items:center;gap:3px;padding:5px 12px;border-radius:14px;font-size:11px;font-weight:500;cursor:pointer;text-decoration:none;background:#F5F5F7;color:#1D1D1F;border:1px solid #E5E5EA}
+.list-nav:active{background:#E5E7EB}
+.list-nav.blue{background:#EFF6FF;border-color:#BFDBFE;color:#2563EB}
+
+/* Spot rank badge */
+.spot-rank-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:700;margin-left:2px;flex-shrink:0}
+.spot-rank-badge.gold{background:#FFD700;color:#5D4037}
+.spot-rank-badge.silver{background:#C0C0C0;color:#37474F}
+.spot-rank-badge.bronze{background:#CD853F;color:#fff}
+.spot-rank-badge.normal{background:#E5E5EA;color:#8E8E93}
+
+/* Photo tag (distance overlay) */
+.photo-tag{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.65);color:#fff;font-size:10px;padding:2px 7px;border-radius:8px;font-weight:500;z-index:1}
+
+/* Xiaoba bubble (result page) */
+.xb-bubble{background:#F5F5F7;border-radius:14px;padding:14px;margin-bottom:0}
+.xb-bub-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.xb-bub-avatar{width:32px;height:32px;border-radius:50%;background:#1D1D1F;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;flex-shrink:0}
+.xb-bub-name{font-size:14px;font-weight:700;color:#1D1D1F}
+.xb-bub-text{font-size:14px;color:#1D1D1F;line-height:1.7}
+
+/* Food grid (result page) */
+.food-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.food-card{background:#F5F5F7;border-radius:12px;padding:12px}
+.food-card .food-name{font-size:14px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.food-area{font-size:11px;color:#8E8E93;margin-bottom:4px}
+.food-tip{font-size:11px;color:#8E8E93;line-height:1.4}
+
+/* Hotel card (result page) */
+.hotel-card{display:flex;gap:12px;align-items:flex-start}
+.hotel-emoji{font-size:36px;line-height:1;flex-shrink:0}
+.hotel-info{flex:1;min-width:0}
+.hotel-name{font-size:15px;font-weight:700;margin-bottom:4px}
+.hotel-meta{font-size:12px;color:#8E8E93;margin-bottom:6px;line-height:1.4}
+.hotel-price{display:flex;align-items:center;gap:8px}
+.price-now{font-size:16px;font-weight:700;color:#ef4444}
+.rebate-tag{background:#fef2f2;color:#ef4444;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:600}
+
+/* Budget grid (result page) */
+.budget-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.bg-item{background:#F5F5F7;border-radius:10px;padding:10px 12px}
+.bg-label{font-size:12px;color:#8E8E93;margin-bottom:4px}
+.bg-val{font-size:16px;font-weight:700;color:#1D1D1F}
+.bg-total{display:flex;justify-content:space-between;align-items:center;background:#1D1D1F;border-radius:10px;padding:12px 14px;color:#fff}
+.bg-total-label{font-size:13px;opacity:.8}
+.bg-total-val{font-size:20px;font-weight:800}
+
+/* Car card (result page) */
+.car-card{background:#FFFBEB;border-radius:12px;padding:14px;border:1px solid #FDE68A}
+.car-title{font-size:14px;font-weight:600;margin-bottom:8px;color:#1D1D1F}
+.car-price{font-size:24px;font-weight:800;color:#1D1D1F;margin-bottom:8px}
+.car-price s{font-size:14px;color:#8E8E93;font-weight:400;margin-left:6px}
+.car-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.car-tag{background:#fff;border:1px solid #FDE68A;border-radius:8px;padding:3px 8px;font-size:11px;color:#92400E}
+.car-book{width:100%;background:#1D1D1F;color:#fff;border:none;border-radius:12px;padding:10px 0;font-size:14px;font-weight:600;cursor:pointer}
+.car-book:active{opacity:.85}
+
+/* Tips list (result page) */
+.tips-list{display:flex;flex-direction:column;gap:8px}
+.tips-item{background:#FFF8F0;border-radius:10px;padding:10px 12px;font-size:13px;color:#8E8E93;line-height:1.5;position:relative;padding-left:28px}
+.tips-item::before{content:'⚠️';position:absolute;left:8px;top:10px;font-size:12px}
+
+/* Error box */
+.err-box{text-align:center;padding:40px 20px;color:#1D1D1F;background:#FFF;border-radius:16px;margin:12px}
+.err-box p{font-size:16px;margin-bottom:12px}
+.err-box .hint{font-size:13px;color:#8E8E93;margin-bottom:20px;padding:10px;background:#F5F5F7;border-radius:10px;line-height:1.5}
+.btn-retry{display:inline-block;background:#1D1D1F;color:#fff;border:none;border-radius:16px;padding:12px 28px;font-size:15px;font-weight:600;cursor:pointer}
+.btn-retry:active{opacity:.85}
+
+/* Guide photo cards */
+.guide-photo-card{background:#F5F5F7;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.p-emoji{font-size:28px;line-height:1}
+.p-title{font-size:14px;font-weight:700;color:#1D1D1F}
+.p-desc{font-size:12px;color:#8E8E93;line-height:1.5}
+
+/* Disclaimer box */
+.disclaimer-box{background:#FFF8F0;border:1px solid #FED7AA;border-radius:10px;padding:10px 12px;font-size:11px;color:#9A3412;margin-bottom:14px;line-height:1.5}
+
+/* Photo fallback */
+.photo-fallback{display:none;width:100%;height:100%}
+
+/* Driver modal extended */
+.driver-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.driver-stars{font-size:11px;color:#FF9500;font-weight:600}
+.driver-info-row{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:#8E8E93;margin:8px 0}
+.driver-contact{display:flex;gap:8px;margin-top:8px}
+.driver-wx-btn{flex:1;background:#07C160;color:#fff;border:none;border-radius:10px;padding:8px 0;font-size:12px;cursor:pointer;font-weight:600}
+.driver-wx-btn:active{background:#06AD56}
+.driver-call-btn{flex:1;background:#1D1D1F;color:#fff;border:none;border-radius:10px;padding:8px 0;font-size:12px;cursor:pointer;font-weight:600}
+.driver-call-btn:active{opacity:.85}
+
+/* Weather widget extended */
+.weather-main{display:flex;align-items:center;gap:12px}
+.weather-icon{font-size:42px;line-height:1;flex-shrink:0}
+.weather-temp{font-size:28px;font-weight:700;color:#1D1D1F}
+.weather-desc{font-size:12px;color:#8E8E93;display:block;margin:2px 0}
+.weather-info{font-size:10px;color:#C7C7CC;margin-top:2px}
+.weather-forecast{display:flex;gap:16px;margin-top:10px;padding-top:10px;border-top:1px solid #E5E5EA}
+.wf-day{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:#8E8E93}
+.wf-icon{font-size:20px}
+.wf-temp{font-weight:600;color:#1D1D1F}
+
+/* Schedule page message time */
+.msg-time{font-size:10px;color:#C7C7CC;margin-top:4px;text-align:right}
+
+#page-hero{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="app-container">
+
+<!-- ===== 支付弹窗 ===== -->
+<div class="pay-overlay" id="pay-overlay">
+  <div class="pay-modal">
+    <div class="pay-header">
+      <button class="pay-close" onclick="closePayModal()">✕</button>
+      <div class="pay-icon">🔒</div>
+      <div class="pay-title">解锁全部功能</div>
+      <div class="pay-sub">一次解锁，全程无忧</div>
+    </div>
+    <div class="pay-body">
+      <div class="pay-price-row">
+        <span class="pay-price">¥9.9 <small>/ 全程</small></span>
+        <span class="pay-orig">¥29.9</span>
+      </div>
+      <div class="pay-tabs">
+        <button class="pay-tab active" onclick="switchPayTab('wechat',this)">💚 微信支付</button>
+        <button class="pay-tab ali" onclick="switchPayTab('alipay',this)">💙 支付宝</button>
+      </div>
+      <div class="pay-qrcode-section">
+        <div class="pay-qrcode-box">
+          <img class="pay-qrcode-img" id="pay-qrcode-img" src="" alt="付款二维码">
+          <div class="pay-qrcode-amount">¥9.90</div>
+        </div>
+        <div class="pay-qrcode-tip" id="pay-qrcode-tip">截图保存 → 打开微信扫一扫 → 支付 ¥9.90</div>
+      </div>
+      <div class="pay-divider"><span>支付完成后</span></div>
+      <button class="pay-btn" id="pay-btn" onclick="startPay()">✅ 已完成支付 · 点击解锁行程</button>
+    </div>
+    <div class="pay-footer">支付后即刻生效 · <a href="#" onclick="alert('请联系微信：xiaochangan');return false;">联系客服</a></div>
+  </div>
+</div>
+
+<!-- ===== 1. 创建行程页 ===== -->
+<div id="page-create" class="page active">
+  <!-- Hero: 钟楼实景 -->
+  <div class="hero-section">
+    <img class="hero-bg" src="https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800&q=80" alt="西安钟楼" onerror="this.style.display='none';this.nextElementSibling.style.background='linear-gradient(135deg,#1d1d1f 0%,#3d1a1a 100%)'">
+    <div class="hero-overlay">
+      <div class="hero-title">长安伴游</div>
+      <div class="hero-sub">你的西安AI智能旅行伴侣</div>
+    </div>
+  </div>
+
+  <!-- 直达表单 -->
+  <div class="main-form">
+    <!-- 出行信息 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">🚌</div><h3>出行信息</h3><span class="s-tag">必填</span>
+      </div>
+      <div class="field-group">
+        <div class="field-label">出发城市 <span class="req">*</span></div>
+        <input class="field-input" id="fromCity" type="text" placeholder="例如：北京 / 上海 / 成都" value="北京">
+      </div>
+      <div class="field-group">
+        <div class="field-label">出行日期</div>
+        <div class="date-row">
+          <input type="date" id="startDate" onchange="onDateChange()">
+          <input type="date" id="endDate" onchange="onDateChange()">
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">交通方式</div>
+        <div class="chip-group">
+          <div class="chip selected" onclick="toggleChip(this)">🚌 公共交通</div>
+          <div class="chip" onclick="toggleChip(this)">🚗 自驾</div>
+          <div class="chip" onclick="toggleChip(this)">🚙 专车+司机</div>
+          <div class="chip" onclick="toggleChip(this)">🚕 打车+公交</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 同伴 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">👫</div><h3>出行同伴</h3><span class="s-tag">必填</span>
+      </div>
+      <div class="field-group">
+        <div class="field-label">和谁来？ <span class="req">*</span></div>
+        <div class="chip-group">
+          <div class="chip" onclick="toggleChip(this)">🧑 独自出行</div>
+          <div class="chip" onclick="toggleChip(this)">💑 情侣出游</div>
+          <div class="chip" onclick="toggleChip(this)">👫 朋友结伴</div>
+          <div class="chip" onclick="toggleChip(this)">👨‍👩‍👧 带娃家庭</div>
+          <div class="chip" onclick="toggleChip(this)">👴 带父母</div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">出行人数 <span class="req">*</span></div>
+        <div class="person-picker">
+          <div class="person-row">
+            <div class="person-info">
+              <span class="person-emoji">🧑</span><div><div class="person-label">成人</div><div class="person-sub">12岁以上</div></div>
+            </div>
+            <div class="person-counter">
+              <button class="person-count-btn" onclick="adjPerson('adult',-1)">−</button>
+              <span class="person-count-num" id="cnt-adult">2</span>
+              <button class="person-count-btn" onclick="adjPerson('adult',1)">+</button>
+            </div>
+          </div>
+          <div class="person-row">
+            <div class="person-info">
+              <span class="person-emoji">🧒</span><div><div class="person-label">儿童</div><div class="person-sub">3~12岁</div></div>
+            </div>
+            <div class="person-counter">
+              <button class="person-count-btn" onclick="adjPerson('child',-1)">−</button>
+              <span class="person-count-num" id="cnt-child">0</span>
+              <button class="person-count-btn" onclick="adjPerson('child',1)">+</button>
+            </div>
+          </div>
+          <div class="person-row">
+            <div class="person-info">
+              <span class="person-emoji">👴</span><div><div class="person-label">老人</div><div class="person-sub">65岁以上</div></div>
+            </div>
+            <div class="person-counter">
+              <button class="person-count-btn" onclick="adjPerson('elder',-1)">−</button>
+              <span class="person-count-num" id="cnt-elder">0</span>
+              <button class="person-count-btn" onclick="adjPerson('elder',1)">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">人均预算 <span class="req">*</span></div>
+        <div class="chip-group">
+          <div class="chip" onclick="toggleChip(this)">800以下</div>
+          <div class="chip" onclick="toggleChip(this)">800-1500</div>
+          <div class="chip" onclick="toggleChip(this)">1500-3000</div>
+          <div class="chip" onclick="toggleChip(this)">3000+不限</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 住宿 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">🏨</div><h3>住宿需求</h3>
+      </div>
+      <div class="field-group">
+        <div class="field-label">每晚预算</div>
+        <div class="chip-group">
+          <div class="chip" onclick="toggleChip(this)">200以下</div>
+          <div class="chip selected" onclick="toggleChip(this)">200-400</div>
+          <div class="chip" onclick="toggleChip(this)">400-600</div>
+          <div class="chip" onclick="toggleChip(this)">600以上</div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">住宿类型</div>
+        <div class="chip-group">
+          <div class="chip" onclick="toggleChip(this)">经济连锁</div>
+          <div class="chip selected" onclick="toggleChip(this)">舒适型</div>
+          <div class="chip" onclick="toggleChip(this)">高档酒店</div>
+          <div class="chip" onclick="toggleChip(this)">特色民宿</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 美食 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">🍜</div><h3>美食偏好</h3>
+      </div>
+      <div class="field-group">
+        <div class="field-label">口味偏好（可多选）</div>
+        <div class="chip-group">
+          <div class="chip multi" onclick="this.classList.toggle('selected')">本地小吃</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">网红打卡</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">苍蝇馆子</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">夜市路边摊</div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">想吃啥？（可多选）</div>
+        <div class="chip-group">
+          <div class="chip multi" onclick="this.classList.toggle('selected')">肉夹馍</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">羊肉泡馍</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">凉皮</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">BiangBiang面</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">灌汤包</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">烤肉</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">胡辣汤</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">葫芦头</div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">饮食禁忌</div>
+        <div class="chip-group">
+          <div class="chip" onclick="toggleChip(this)">无忌讳</div>
+          <div class="chip" onclick="toggleChip(this)">清真</div>
+          <div class="chip" onclick="toggleChip(this)">不吃辣</div>
+          <div class="chip" onclick="toggleChip(this)">素食</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 游玩 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">🏛</div><h3>游玩偏好</h3><span class="s-tag">必填</span>
+      </div>
+      <div class="field-group">
+        <div class="field-label">旅行风格（可多选）<span class="req">*</span></div>
+        <div class="chip-group">
+          <div class="chip multi" onclick="this.classList.toggle('selected')">🏛 深度文化</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">📸 打卡拍照</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">🍜 美食为主</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">🌿 休闲放松</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">🎯 探险刺激</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">🛍 逛街购物</div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">必去景点（可多选）</div>
+        <div class="chip-group" style="max-height:160px;overflow-y:auto;">
+          <div class="chip multi" onclick="this.classList.toggle('selected')">兵马俑</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">城墙</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">长恨歌</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">华山</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">大唐不夜城</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">陕历博</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">大雁塔</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">钟鼓楼</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">回民街</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">书院门</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">骊山</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">汉阳陵</div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">每日节奏</div>
+        <div class="chip-group">
+          <div class="chip" onclick="toggleChip(this)">🐢 轻松型</div>
+          <div class="chip selected" onclick="toggleChip(this)">🚶 适中型</div>
+          <div class="chip" onclick="toggleChip(this)">🏃 紧凑型</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 备注 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon">📝</div><h3>补充说明</h3>
+      </div>
+      <div class="field-group">
+        <div class="field-label">特殊需求（可多选）</div>
+        <div class="chip-group">
+          <div class="chip multi" onclick="this.classList.toggle('selected')">🎂 生日</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">💍 求婚/蜜月</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">🎉 纪念日</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">♿ 无障碍需求</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">👶 婴儿车友好</div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">还有什么想说的？</div>
+        <textarea class="field-input" id="f-note" placeholder="比如：孩子4岁喜欢恐龙、老婆爱拍照发朋友圈、不想走太多楼梯、对花粉过敏……"></textarea>
+      </div>
+    </div>
+
+    <div class="loading-text" id="loadingTxt">🧭 正在调取高德真实数据，小长安也在思考中…</div>
+    <button class="submit-btn" id="genBtn" onclick="genPlan()">🚀 开始智能规划</button>
+  </div>
+
+  <!-- 天气小部件 -->
+  <div class="weather-widget" id="weather-widget">
+    <span class="weather-loading">🌤 加载天气中…</span>
+  </div>
+
+  <!-- 规划结果（内嵌显示） -->
+  <div class="create-result" id="create-result">
+    <button class="btn-back-plan" onclick="backToForm()">← 返回修改</button>
+    <div class="res-header">
+      <div class="res-title" id="cr-title">你的专属西安路线</div>
+      <div class="res-meta" id="cr-meta"></div>
+    </div>
+    <div id="cr-body"></div>
+  </div>
+</div>
+
+<!-- ===== 2. 行程总览页 ===== -->
+<div id="page-schedule" class="page schedule-page">
+  <div class="schedule-header">
+    <div class="top-nav" style="padding:0;border:none">
+      <div class="back-btn" onclick="switchTab('changan')">←</div>
+      <div class="action-btn" onclick="showPage('form')">编辑行程</div>
+    </div>
+    <h1 class="schedule-top-title" id="scheduleTitle">西安深度游</h1>
+    <p class="schedule-top-desc" id="scheduleSub">智能定制真实旅行行程</p>
+  </div>
+
+  <div class="date-tab-wrap" id="dateTabWrap"></div>
+  <div class="day-theme" id="dayTheme"></div>
+  <div id="scheduleList">
+    <div class="schedule-empty">
+      <div class="empty-icon">🗺️</div>
+      <p>还没有生成行程</p>
+      <button onclick="switchTab('changan')">去创建行程</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 3. 探索页 ===== -->
+<div id="page-explore" class="page explore-page">
+  <div class="explore-header" id="exploreTitle">发现西安</div>
+  
+  <!-- 地图区域 -->
+  <div class="explore-map-wrap" id="explore-map-wrap">
+    <div class="map-placeholder" id="map-placeholder">🗺️ 加载地图中…</div>
+  </div>
+  
+  <div class="explore-tab-wrap">
+    <div class="explore-tab active" data-type="scenic" onclick="switchExploreTab('scenic',this)">景点</div>
+    <div class="explore-tab" data-type="food" onclick="switchExploreTab('food',this)">美食</div>
+    <div class="explore-tab" data-type="drink" onclick="switchExploreTab('drink',this)">饮品</div>
+    <div class="explore-tab" data-type="shop" onclick="switchExploreTab('shop',this)">购物</div>
+    <div class="explore-tab" data-type="hotel" onclick="switchExploreTab('hotel',this)">住宿</div>
+  </div>
+  <div id="exploreList">
+    <div style="text-align:center;padding:40px;color:#c7c7cc">选择分类开始探索…</div>
+  </div>
+</div>
+
+<!-- ===== 详情弹窗 ===== -->
+<div class="mask" id="detailMask" onclick="closeDetailMask(event)">
+  <div class="popup" onclick="event.stopPropagation()">
+    <div class="popup-header">
+      <div class="popup-title-row">
+        <div class="popup-title" id="popupName"></div>
+        <div class="popup-sub" id="popupSubTxt"></div>
+      </div>
+      <button class="popup-close" onclick="closeDetailPopup()">✕</button>
+    </div>
+    <div class="popup-gallery" id="popup-gallery"></div>
+    <div class="popup-desc" id="popupDesc"></div>
+    <div class="comment-block">
+      <div class="comment-title">游玩参考</div>
+      <div class="good-comment" id="goodComment"></div>
+      <div class="bad-comment" id="badComment"></div>
+    </div>
+    <div class="popup-btn-group">
+      <button class="popup-btn" onclick="openAddPlanPopup()"><span class="popup-btn-icon">➕</span>加入行程</button>
+      <button class="popup-btn"><span class="popup-btn-icon">❤️</span>收藏</button>
+      <button class="popup-btn"><span class="popup-btn-icon">✅</span>打卡</button>
+      <button class="popup-btn primary"><span class="popup-btn-icon">🧭</span>导航</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 添加至行程弹窗 ===== -->
+<div class="mask" id="addPlanMask" onclick="closeAddPlanMask(event)">
+  <div class="popup" onclick="event.stopPropagation()">
+    <div class="popup-header">
+      <div class="popup-title">添加至行程</div>
+      <button class="popup-close" onclick="closeAddPlanPopup()">✕</button>
+    </div>
+    <div class="add-plan-item active">
+      <div class="plan-check">✓</div>
+      <div>
+        <div style="font-weight:500" id="addPlanName">西安深度游</div>
+        <div style="font-size:12px;color:#8e8e93;margin-top:4px" id="addPlanDate">自定义行程</div>
+      </div>
+    </div>
+    <button class="confirm-btn" onclick="successAddPlan()">确认添加</button>
+  </div>
+</div>
+
+<!-- ===== 底部导航 ===== -->
+<div class="tab-bar">
+  <div class="tab-item active" id="tabChangan" onclick="switchTab('changan')">
+    <span class="tab-icon">🏯</span><span>长安伴游</span>
+  </div>
+  <div class="tab-item" id="tabFood" onclick="switchTab('food')">
+    <span class="tab-icon">🍜</span><span>美食</span>
+  </div>
+  <div class="tab-item" id="tabHotel" onclick="switchTab('hotel')">
+    <span class="tab-icon">🏨</span><span>酒店</span>
+  </div>
+  <div class="tab-item" id="tabSpots" onclick="switchTab('spots')">
+    <span class="tab-icon">🏛️</span><span>景点</span>
+  </div>
+  <div class="tab-item" id="tabAIChat" onclick="switchTab('aichat')">
+    <span class="tab-icon">🤖</span><span>AI对话</span>
+  </div>
+  <div class="tab-item" id="tabMine" onclick="switchTab('mine')">
+    <span class="tab-icon">👤</span><span>我的</span>
+  </div>
+</div>
+<!-- ===== FORM ===== -->
+<div id="page-form" class="page">
+  <div class="form-topbar">
+    <button class="back-btn" onclick="switchTab('changan')">←</button>
+    <div><h2>告诉小长安你的需求</h2><p>勾选就行，不用打字</p></div>
+  </div>
+
+  <!-- 出行信息 -->
+  <div class="section sec-transport">
+    <div class="section-header">
+      <div class="section-icon">🚫</div><h3>出行信息</h3><span class="s-tag">必填</span>
+    </div>
+    <div class="field-group">
+      <div class="field-label">出发城市 <span class="req">*</span></div>
+      <input class="field-input" id="f-from" type="text" placeholder="例如：北京 / 上海 / 成都">
+    </div>
+    <div class="field-group">
+      <div class="field-label">出行日期</div>
+      <div class="date-row">
+        <input type="date" id="f-depart" onchange="onDateChange()">
+        <input type="date" id="f-return" onchange="onDateChange()">
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">交通方式</div>
+      <div class="chip-group">
+        <div class="chip selected" onclick="selChip('transport','公共交通',this)">🚞 公共交通</div>
+        <div class="chip" onclick="selChip('transport','自驾',this)">🚭 自驾</div>
+        <div class="chip" onclick="selChip('transport','专车+司机',this)">🚬 专车+司机</div>
+        <div class="chip" onclick="selChip('transport','打车+公交',this)">🚨 打车+公交</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 同伴 -->
+  <div class="section sec-play">
+    <div class="section-header">
+      <div class="section-icon">👃</div><h3>出行同伴</h3><span class="s-tag">必填</span>
+    </div>
+    <div class="field-group">
+      <div class="field-label">和谁来？ <span class="req">*</span></div>
+      <div class="chip-group">
+        <div class="chip" onclick="selChip('who','独自出行',this)">🧒 独自出行</div>
+        <div class="chip" onclick="selChip('who','情侣出游',this)">💐 情侣出游</div>
+        <div class="chip" onclick="selChip('who','朋友结伴',this)">👌 朋友结伴</div>
+        <div class="chip" onclick="selChip('who','带娃家庭',this)">👆‍👩‍👧 带娃家庭</div>
+        <div class="chip" onclick="selChip('who','带父母',this)">👘 带父母</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">出行人数 <span class="req">*</span></div>
+      <div class="person-picker">
+        <div class="person-row">
+          <div class="person-info">
+            <span class="person-emoji">🧑</span>
+            <div><div class="person-label">成人</div><div class="person-sub">12岁以上</div></div>
+          </div>
+          <div class="person-counter">
+            <button class="person-count-btn" onclick="adjPersonForm('adult',-1)">−</button>
+            <span class="person-count-num" id="f-cnt-adult">2</span>
+            <button class="person-count-btn" onclick="adjPersonForm('adult',1)">+</button>
+          </div>
+        </div>
+        <div class="person-row">
+          <div class="person-info">
+            <span class="person-emoji">🧒</span>
+            <div><div class="person-label">儿童</div><div class="person-sub">3~12岁</div></div>
+          </div>
+          <div class="person-counter">
+            <button class="person-count-btn" onclick="adjPersonForm('child',-1)">−</button>
+            <span class="person-count-num" id="f-cnt-child">0</span>
+            <button class="person-count-btn" onclick="adjPersonForm('child',1)">+</button>
+          </div>
+        </div>
+        <div class="person-row">
+          <div class="person-info">
+            <span class="person-emoji">👴</span>
+            <div><div class="person-label">老人</div><div class="person-sub">65岁以上</div></div>
+          </div>
+          <div class="person-counter">
+            <button class="person-count-btn" onclick="adjPersonForm('elder',-1)">−</button>
+            <span class="person-count-num" id="f-cnt-elder">0</span>
+            <button class="person-count-btn" onclick="adjPersonForm('elder',1)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">人均预算 <span class="req">*</span></div>
+      <div class="chip-group">
+        <div class="chip" onclick="selChip('budget','800元以下',this)">800以下</div>
+        <div class="chip" onclick="selChip('budget','800-1500元',this)">800-1500</div>
+        <div class="chip" onclick="selChip('budget','1500-3000元',this)">1500-3000</div>
+        <div class="chip" onclick="selChip('budget','3000元以上',this)">3000+不限</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 住 -->
+  <div class="section sec-stay">
+    <div class="section-header">
+      <div class="section-icon">🏣</div><h3>住宿需求</h3>
+    </div>
+    <div class="field-group">
+      <div class="field-label">每晚预算</div>
+      <div class="chip-group">
+        <div class="chip" onclick="selChip('hotelBudget','200以下',this)">200以下</div>
+        <div class="chip selected" onclick="selChip('hotelBudget','200-400',this)">200-400</div>
+        <div class="chip" onclick="selChip('hotelBudget','400-600',this)">400-600</div>
+        <div class="chip" onclick="selChip('hotelBudget','600以上',this)">600以上</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">住宿类型</div>
+      <div class="chip-group">
+        <div class="chip" onclick="selChip('hotelType','经济连锁',this)">经济连锁</div>
+        <div class="chip selected" onclick="selChip('hotelType','舒适型',this)">舒适型</div>
+        <div class="chip" onclick="selChip('hotelType','高档酒店',this)">高档酒店</div>
+        <div class="chip" onclick="selChip('hotelType','特色民宿',this)">特色民宿</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 食 -->
+  <div class="section sec-food">
+    <div class="section-header">
+      <div class="section-icon">🍪</div><h3>美食偏好</h3>
+    </div>
+    <div class="field-group">
+      <div class="field-label">口味偏好（可多选）</div>
+      <div class="chip-group">
+        <div class="chip multi" onclick="this.classList.toggle('selected')">本地小吃</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">网红打卡</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">高档餐厅</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">苍蝇馆子</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">夜市路边摊</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">想吃啥？（可多选）</div>
+      <div class="chip-group">
+        <div class="chip multi" onclick="this.classList.toggle('selected')">肉夹馍</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">羊肉泡馍</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">凉皮</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">BiangBiang面</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">灌汤包</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">烤肉</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">胡辣汤</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">葫芦头</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">饮食禁忌</div>
+      <div class="chip-group">
+        <div class="chip" onclick="selChip('foodTaboo','无忌讳',this)">无忌讳</div>
+        <div class="chip" onclick="selChip('foodTaboo','清真',this)">清真</div>
+        <div class="chip" onclick="selChip('foodTaboo','不吃辣',this)">不吃辣</div>
+        <div class="chip" onclick="selChip('foodTaboo','素食',this)">素食</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 玩 -->
+  <div class="section sec-play">
+    <div class="section-header">
+      <div class="section-icon">🏆</div><h3>游玩偏好</h3><span class="s-tag">必填</span>
+    </div>
+    <div class="field-group">
+      <div class="field-label">旅行风格（可多选）<span class="req">*</span></div>
+      <div class="chip-group">
+        <div class="chip multi" onclick="this.classList.toggle('selected')">🏛️ 深度文化</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">📳 打卡拍照</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">🍪 美食为主</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">🌶 休闲放松</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">🏅️ 探险刺激</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">🛹️ 逛街购物</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">必去景点（可多选）</div>
+      <div class="chip-group" style="max-height:160px;overflow-y:auto;">
+        <div class="chip multi" onclick="this.classList.toggle('selected')">兵马俑</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">城墙</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">长恨歌</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">华山</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">大唐不夜城</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">陕历博</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">大雁塔</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">钟鼓楼</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">回民街</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">书院门</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">骊山</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">汉阳陵</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">每日节奏</div>
+      <div class="chip-group">
+        <div class="chip" onclick="selChip('pace','轻松型(3-4个地方)',this)">🐀 轻松型</div>
+        <div class="chip selected" onclick="selChip('pace','适中型(4-5个地方)',this)">🐛 适中型</div>
+        <div class="chip" onclick="selChip('pace','紧凑型(5-6个地方)',this)">🏮 紧凑型</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 备注 -->
+  <div class="section sec-note">
+    <div class="section-header">
+      <div class="section-icon">📑</div><h3>补充说明</h3>
+    </div>
+    <div class="field-group">
+      <div class="field-label">特殊需求（可多选）</div>
+      <div class="chip-group">
+        <div class="chip multi" onclick="this.classList.toggle('selected')">🎶 生日</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">💒 求婚/蜜月</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">📮 纪念日</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">🟉 无障碍需求</div>
+        <div class="chip multi" onclick="this.classList.toggle('selected')">👚 婴儿车友好</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">还有什么想说的？</div>
+      <textarea class="field-input" id="f-note" placeholder="比如：孩子4岁喜欢恐龙、老婆爱拍照发朋友圈、不想走太多楼梯、对花粉过敏……"></textarea>
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <button class="btn-submit" onclick="submitForm()">🗺️ 小长安，帮我规划路线！</button>
+    <p class="submit-hint">AI自动生成行程 · ¥9.9解锁专属规划</p>
+  </div>
+</div>
+
+<!-- ===== LOADING ===== -->
+<div id="page-loading" class="page">
+  <div class="load-avatar">🏯</div>
+  <h2 class="load-title">小长安正在给你写路线…</h2>
+  <p class="load-sub">根据你的喜好，AI正在规划最优行程</p>
+  <div class="load-progress"><div class="load-bar"></div></div>
+  <div class="load-tips">
+    <span>🗺️ 正在计算最优化景点顺序…</span>
+    <span>🍪 正在筛选私房美食推荐…</span>
+    <span>🧭 正在生成高德导航链接…</span>
+  </div>
+  <div id="load-log" style="margin-top:18px;font-size:12px;color:#999;text-align:left;max-width:320px;margin-left:auto;margin-right:auto;"></div>
+</div>
+
+<!-- ===== RESULT ===== -->
+<div id="page-result" class="page">
+  <div class="res-header">
+    <div class="res-tag">✅ 小长安专属路线</div>
+    <div class="res-title" id="res-title">西安定制游</div>
+    <div class="res-meta" id="res-meta"></div>
+  </div>
+  <div class="res-body" id="result-body"></div>
+  <div class="res-bar">
+    <button class="gallery-btn" onclick="openGallery()">&#x1F4F7; &#x56FE;&#x96C6;</button>
+    <button class="btn-share" onclick="shareResult()">📛 分享</button>
+    <button class="btn-newplan" onclick="switchTab('changan')">✅ 重新规划</button>
+  </div>
+</div>
+
+<!-- ===== 我的 ===== -->
+<div id="page-mine" class="page mine-page">
+  <div class="mine-card">
+    <span class="mine-avatar">🐴</span>
+    <div class="mine-name">小长安</div>
+    <div class="mine-desc">你的西安AI智能旅行伴侣</div>
+  </div>
+  <div class="mine-menu-item" onclick="switchTab('changan')">
+    <span class="mine-menu-icon">🏯</span><span>回到首页</span><span class="mine-menu-arrow">›</span>
+  </div>
+  <div class="mine-menu-item" onclick="switchTab('aichat')">
+    <span class="mine-menu-icon">💬</span><span>AI对话</span><span class="mine-menu-arrow">›</span>
+  </div>
+  <div class="mine-menu-item" onclick="location.reload()">
+    <span class="mine-menu-icon">🔄</span><span>刷新重试</span><span class="mine-menu-arrow">›</span>
+  </div>
+  <div class="mine-menu-item" onclick="toast('反馈已收到，感谢你！')">
+    <span class="mine-menu-icon">📝</span><span>意见反馈</span><span class="mine-menu-arrow">›</span>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Guide Modal -->
+<div class="guide-overlay" id="guide-overlay" onclick="closeGuide(event)">
+  <div class="guide-modal" id="guide-modal" onclick="event.stopPropagation()">
+    <div class="guide-close">
+      <strong style="font-size:16px;color:var(--text);" id="guide-title">景点攻略</strong>
+      <button class="guide-close-btn" onclick="closeGuide()">&#x2715;</button>
+    </div>
+    <img id="guide-hero-img" src="" alt="" style="width:100%;height:200px;object-fit:cover;border-radius:12px;display:block;" onerror="this.style.display='none'">
+    <p id="guide-intro-text" style="margin:14px 20px 0;font-size:13px;color:#555;line-height:1.8;"></p>
+    <div class="guide-photo-section">
+      <h4 style="padding:0 20px;margin:16px 0 10px;font-size:14px;color:var(--text);">&#x1F4F8; 最佳拍照机位</h4>
+      <div class="guide-photo-grid" id="guide-photo-grid"></div>
+    </div>
+    <div class="guide-tip-section" id="guide-tip-section"></div>
+  </div>
+</div>
+
+<!-- Gallery Modal -->
+<div class="gallery-overlay" id="gallery-overlay">
+  <div class="gallery-header">
+    <h3>&#x1F4F7; 我的旅行图集</h3>
+    <button class="guide-close-btn" style="background:#555;color:#fff;" onclick="closeGallery()">&#x2715;</button>
+  </div>
+  <div class="gallery-grid" id="gallery-grid"></div>
+  <div class="gallery-bar">
+    <button class="gallery-back-btn" onclick="closeGallery()">返回</button>
+    <button class="gallery-share-btn" id="gallery-share-btn" onclick="genSharePoster()">&#x1F3A8; 生成分享海报</button>
+  </div>
+</div>
+
+<input type="file" accept="image/*" id="photo-input" style="display:none" multiple onchange="handlePhotoUpload(event)">
+
+<!-- Poster Modal -->
+<div class="poster-overlay" id="poster-overlay" onclick="closePoster()">
+  <div class="poster-canvas-wrap" onclick="event.stopPropagation()">
+    <canvas id="poster-canvas" width="340" height="500"></canvas>
+  </div>
+  <p class="poster-hint">&#x1F446; 长按图片保存到相册，分享到朋友圈</p>
+  <button class="poster-close" onclick="closePoster()">关闭</button>
+</div>
+
+<!-- ===== FOOD MODAL ===== -->
+<div class="food-overlay" id="food-overlay" onclick="closeFoodModal(event)">
+  <div class="food-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeFoodModal()">✕</button>
+    <h3>🍜 小长安私藏 · 本地人美食</h3>
+    <p class="food-subtitle">都是额吃了十年以上的老店，绝对不坑</p>
+    <div class="cat-tabs" id="food-cat-tabs"></div>
+    <div id="food-list"></div>
+  </div>
+</div>
+
+<!-- ===== SPOTS MODAL ===== -->
+<div class="spots-overlay" id="spots-overlay" onclick="closeSpotsModal(event)">
+  <div class="spots-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeSpotsModal()">✕</button>
+    <h3>🧭 西安周边景点 · 按距离排序</h3>
+    <p class="spots-subtitle">以钟楼为中心，由近到远</p>
+    <div id="spots-list"></div>
+  </div>
+</div>
+
+<!-- ===== DRIVER MODAL ===== -->
+<div class="driver-overlay" id="driver-overlay" onclick="closeDriverModal(event)">
+  <div class="driver-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeDriverModal()">✕</button>
+    <h3>🚗 一人一车 · 本地司机全程托管</h3>
+    <p class="driver-subtitle">西安土著老司机，5座轿车，¥400/天</p>
+    <div id="driver-list"></div>
+  </div>
+</div>
+
+<!-- ===== HOTEL MODAL ===== -->
+<div class="hotel-overlay" id="hotel-overlay" onclick="closeHotelModal(event)">
+  <div class="food-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeHotelModal()">✕</button>
+    <h3>🏨 附近酒店 · 小长安精选</h3>
+    <p class="food-subtitle">以钟楼为中心，从近到远排序，点击团购链接查看优惠</p>
+    <div class="cat-tabs" id="hotel-cat-tabs"></div>
+    <div id="hotel-list"></div>
+  </div>
+</div>
+
+<!-- ===== AI CHATBOT MODAL ===== -->
+<div class="chat-overlay" id="chat-overlay" onclick="closeAIChat(event)">
+  <div class="chat-modal" onclick="event.stopPropagation()">
+    <div class="chat-header">
+      <div class="chat-avatar">🏯</div>
+      <div class="chat-header-info">
+        <div class="chat-name">小长安 AI智能体</div>
+        <div class="chat-status">在线 · 西安旅行专家</div>
+      </div>
+      <button class="modal-close" style="position:static;" onclick="closeAIChat()">✕</button>
+    </div>
+    <div class="chat-body" id="chat-body"></div>
+    <div class="chat-quick-qs" id="chat-quick-qs">
+      <button class="chat-quick" onclick="askQuick('3天亲子游怎么安排？')">3天亲子游</button>
+      <button class="chat-quick" onclick="askQuick('兵马俑门票多少钱？')">兵马俑门票</button>
+      <button class="chat-quick" onclick="askQuick('推荐回民街必吃的店')">回民街必吃</button>
+      <button class="chat-quick" onclick="askQuick('住哪个区域最方便？')">住哪最方便</button>
+      <button class="chat-quick" onclick="askQuick('给我一个3天情侣游行程')">情侣游行程</button>
+    </div>
+    <div class="chat-input-area">
+      <input id="chat-input" type="text" placeholder="输入你的问题，小长安随时回答…" onkeydown="if(event.key==='Enter')sendChatMsg()">
+      <button onclick="sendChatMsg()">➤</button>
+    </div>
+  </div>
+</div>
+
+<div id="debug-panel" style="
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;
+  max-height:40vh;overflow:auto;
+  background:#1a1a1a;color:#0f0;font-size:12px;
+  padding:10px;z-index:9999;
+  font-family:monospace;white-space:pre-wrap;
+  border-top:2px solid #f44;
+"></div>
+
+
+
+
+<script>
+// ===== 支付状态管理 =====
+let isPaid = false;
+let _pendingAction = null;
+try { isPaid = localStorage.getItem('changan_paid_v3') === 'true'; } catch(e) { isPaid = false; }
+
+function checkPayStatus() {
+  return isPaid;
+}
+
+function showPayModal(action) {
+  _pendingAction = action || 'createPlan';
+  document.getElementById('pay-overlay').classList.add('show');
+  setPayQR('wechat');
+}
+
+function switchPayTab(tab, el) {
+  document.querySelectorAll('.pay-tab').forEach(function(t) { t.classList.remove('active'); });
+  el.classList.add('active');
+  setPayQR(tab);
+}
+
+function setPayQR(tab) {
+  var qrImg = document.getElementById('pay-qrcode-img');
+  var tip = document.getElementById('pay-qrcode-tip');
+  var amount = '9.90';
+  var label = tab === 'wechat' ? '微信' : '支付宝';
+  
+  if (qrImg) {
+    var fallbackQR = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent('向长安游伴支付¥' + amount + '旅行规划费(' + label + ')');
+    var localQR = 'qrcode.png?' + Date.now();
+    qrImg.src = localQR;
+    qrImg.onerror = function() {
+      if (this.src.indexOf('api.qrserver.com') === -1) {
+        this.src = fallbackQR;
+        this.onerror = null;
+      }
+    };
+  }
+  if (tip) {
+    tip.textContent = '截图保存 → 打开' + label + '扫一扫 → 支付 ¥' + amount;
+  }
+}
+
+function closePayModal() {
+  document.getElementById('pay-overlay').classList.remove('show');
+}
+
+function startPay() {
+  const btn = document.getElementById('pay-btn');
+  btn.classList.add('disabled');
+  btn.innerHTML = '⏳ 正在确认支付…';
+  
+  setTimeout(() => {
+    isPaid = true;
+    localStorage.setItem('changan_paid_v3', 'true');
+    closePayModal();
+    
+    if (_pendingAction === 'createPlan') {
+      toast('✅ 支付成功！小长安正在为你规划专属路线…');
+      setTimeout(function() { doGenPlan(); }, 600);
+    } else if (_pendingAction === 'form') {
+      submitForm();
+    } else if (_pendingAction === 'chat') {
+      openAIChat();
+    } else {
+      toast('✅ 支付成功！');
+    }
+    _pendingAction = null;
+  }, 1500);
+}
+
+// ===== 全局错误捕获 =====
+window.onerror = function(msg, src, line, col, err) {
+  const panel = document.getElementById('debug-panel');
+  if (panel) {
+    panel.style.display = 'block';
+    panel.innerHTML += '[JS错误] ' + msg + '\n位置: ' + (src||'') + ':' + (line||'') + '\n' + (err&&err.stack||'') + '\n\n';
+    panel.scrollTop = panel.scrollHeight;
+  }
+  console.error('[全局捕获]', msg, err);
+};
+window.addEventListener('unhandledrejection', function(e) {
+  const panel = document.getElementById('debug-panel');
+  if (panel) {
+    panel.style.display = 'block';
+    panel.innerHTML += '[Promise未捕获] ' + (e.reason&&e.reason.message||e.reason) + '\n' + (e.reason&&e.reason.stack||'') + '\n\n';
+    panel.scrollTop = panel.scrollHeight;
+  }
+});
+
+// ===== 检测是否用 file:// 打开 =====
+(function(){
+  if (location.protocol === 'file:') {
+    document.addEventListener('DOMContentLoaded', function(){
+      document.body.innerHTML = '<div style="padding:40px;font-size:16px;color:#333;">' +
+        '<h2>⚠️ 请把页面通过代理打开</h2>' +
+        '<p>不能直接双击 HTML 文件打开（会导致 API 调用失败）。</p>' +
+        '<p style="margin-top:20px;">✅ 正确方式：</p>' +
+        '<ol style="text-align:left;display:inline-block;">' +
+        '<li>双击 <b>启动.bat</b></li>' +
+        '<li>或浏览器访问 <code>http://localhost:3457</code></li>' +
+        '</ol></div>';
+    });
+  }
+})();
+
+// ===== STATE =====
+const AMAP_KEY = 'bb7f0c78ad5530def46192c141edf568';
+const AMAP_BASE = 'https://restapi.amap.com/v3';
+const state = {
+  from:'', depart:'', return:'', transport:'公共交通',
+  who:'', count:2, budget:'', hotelBudget:'200-400', hotelType:'舒适型',
+  foodTaboo:'无忌讳', pace:'适中(4-5个地方)', note:'',
+  styles:[], mustSee:[], foodPref:[], foodWant:[], specials:[]
+};
+
+// ===== NAV =====
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function goToForm() {
+  document.getElementById('f-depart').value = '';
+  document.getElementById('f-return').value = '';
+  showPage('form');
+}
+
+// ===== CHIP SELECTION =====
+function toggleChip(el) {
+  var group = el.parentElement;
+  var isMulti = el.classList.contains('multi');
+  if (isMulti) {
+    el.classList.toggle('selected');
+  } else {
+    group.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+  }
+}
+
+function selChip(key, val, el) {
+  el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state[key] = val;
+}
+
+// ===== COUNT =====
+function adjCount(d) { 
+  state.count = Math.max(1, Math.min(10, state.count + d)); 
+  document.getElementById('count-num').textContent = state.count; 
+}
+
+// ===== DATE =====
+function onDateChange() {
+  var d1 = document.getElementById('startDate');
+  var d2 = document.getElementById('endDate');
+  if (d1) state.depart = d1.value;
+  if (d2) state['return'] = d2.value;
+}
+
+// ===== QUICK FILL =====
+function quickFill(note) { state._quickNote = note; goToForm(); }
+
+// ===== COLLECT MULTI-SELECT =====
+function collectMulti(key, parentSelector) {
+  const chips = document.querySelectorAll(parentSelector+' .multi.selected');
+  return Array.from(chips).map(c => c.textContent.trim().replace(/^[^\s]+\s/,''));
+}
+
+// ===== VALIDATE & SUBMIT =====
+function submitForm() {
+  state.from = document.getElementById('f-from').value.trim();
+  state.depart = document.getElementById('f-depart').value;
+  state.return = document.getElementById('f-return').value;
+  state.note = document.getElementById('f-note').value.trim();
+  
+  state.styles = collectMulti('style','.sec-play:last-of-type');
+  state.mustSee = collectMulti('must','.sec-play:last-of-type');
+  state.foodPref = collectMulti('food','.sec-food');
+  state.foodWant = collectMulti('food','.sec-food');
+  state.specials = collectMulti('special','.sec-note');
+  
+  if (!state.from) return toast('请填写出发城市');
+  if (!state.who) return toast('请选择出行同伴');
+  if (!state.budget) return toast('请选择人均预算');
+  
+  const days = calcDays();
+  if (days < 1) return toast('请选择出行日期（出发和返回）');
+  state._days = days;
+  
+  // 检查支付状态
+  if (!checkPayStatus()) {
+    // 保存表单数据到全局变量
+    window._pendingFormData = { ...state };
+    showPayModal('form');
+    return;
+  }
+  
+  showPage('loading');
+  startLoadingAnim();
+  callDeepSeek();
+}
+
+// ===== LOADING ANIMATION =====
+let _loadTimer = null;
+let _loadSafetyTimer = null;
+function startLoadingAnim() {
+  const tips = document.querySelectorAll('#page-loading .load-tips span');
+  const bar = document.querySelector('#page-loading .load-bar');
+  const sub = document.querySelector('#page-loading .load-sub');
+  let idx = 0;
+  let w = 0;
+  tips.forEach(t => t.style.display = 'none');
+  if (tips.length > 0) tips[0].style.display = 'inline-block';
+  _loadTimer = setInterval(() => {
+    idx = (idx + 1) % tips.length;
+    tips.forEach((t, i) => t.style.display = i === idx ? 'inline-block' : 'none');
+    w = Math.min(100, w + (100 - w) * 0.08 + Math.random() * 3);
+    bar.style.width = w + '%';
+    if (idx === 0 && w > 60) sub.textContent = '内容较多，AI正在仔细规划中\u2026';
+    if (idx === 1 && w > 75) sub.textContent = '快完成了，请稍等\u2026';
+  }, 1800);
+
+  _loadSafetyTimer = setTimeout(() => {
+    stopLoadingAnim();
+    document.getElementById('result-body').innerHTML = `
+      <div class="err-box">
+        <p>\u23F0 AI响应超时（已超过50秒）</p>
+        <p style="font-size:13px;color:#999;margin-top:8px;">
+          可能原因：<br>
+          1. DeepSeek API 响应慢，请稍后重试<br>
+          2. 网络不稳定，请检查连接<br>
+          3. 代理服务器未正常运行
+        </p>
+        <button class="btn-retry" onclick="switchTab('changan')">重新填写</button>
+      </div>`;
+    showPage('result');
+  }, 50000);
+}
+function stopLoadingAnim() {
+  if (_loadTimer) { clearInterval(_loadTimer); _loadTimer = null; }
+  if (_loadSafetyTimer) { clearTimeout(_loadSafetyTimer); _loadSafetyTimer = null; }
+  const bar = document.querySelector('#page-loading .load-bar');
+  if (bar) bar.style.width = '100%';
+}
+
+function calcDays() {
+  const d = document.getElementById('f-depart').value;
+  const r = document.getElementById('f-return').value;
+  if (!d || !r) return 0;
+  const dd = new Date(d), rd = new Date(r);
+  return Math.max(1, Math.round((rd - dd) / 86400000) + 1);
+}
+
+// ===== DEEPSEEK API =====
+const PROXY_URL = '/api/chat';
+
+async function callDeepSeek() {
+  const prompt = buildPrompt();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 40000);
+
+  try {
+    const resp = await fetch(PROXY_URL, {
+      method: 'POST', signal: controller.signal,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'deepseek-chat', max_tokens: 2500, temperature: 0.85,
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: prompt }
+        ]
+      })
+    });
+    clearTimeout(timeout);
+    if (!resp.ok) {
+      const ed = await resp.json().catch(()=>({}));
+      if (resp.status===401) throw new Error('API Key无效');
+      throw new Error(ed.message||ed.error||('服务器错误 '+resp.status));
+    }
+    const data = await resp.json();
+    stopLoadingAnim();
+    renderResult(data.choices[0].message.content);
+  } catch(e) {
+    clearTimeout(timeout);
+    stopLoadingAnim();
+    let msg = e.message;
+    if (e.name==='AbortError') msg = 'AI响应超时，请重试';
+    else if (msg==='Failed to fetch') msg = '代理未启动，请先运行 proxy.js';
+    renderError(msg);
+  }
+}
+
+function buildPrompt() {
+  const days = state._days || calcDays();
+  const parts = [
+    `\u51FA\u53D1\u57CE\u5E02\uFF1A${state.from}`,
+    `\u51FA\u884C\u65E5\u671F\uFF1A${state.depart||'\u672A\u6307\u5B9A'} \u81F3 ${state.return||'\u672A\u6307\u5B9A'}\uFF0C\u5171${days}\u5929`,
+    `\u51FA\u884C\u540C\u4F34\uFF1A${state.who||'\u672A\u9009'}\uFF0C\u5171${state.count}\u4EBA`,
+    `\u4EBA\u5747\u603B\u9884\u7B97\uFF1A${state.budget||'\u672A\u9009'}`,
+    `\u4F4F\u5BBF\u6BCF\u665A\uFF1A${state.hotelBudget||'200-400'}\uFF0C\u7C7B\u578B\uFF1A${state.hotelType||'\u8212\u9002\u578B'}`,
+    `\u4EA4\u901A\u65B9\u5F0F\uFF1A${state.transport||'\u516C\u5171\u4EA4\u901A'}`,
+    `\u53E3\u5473\u504F\u597D\uFF1A${state.foodPref.join('\u3001')||'\u4E0D\u9650'}`,
+    `\u60F3\u5403\uFF1A${state.foodWant.join('\u3001')||'\u4E0D\u9650'}`,
+    `\u996E\u98DF\u7981\u5FCC\uFF1A${state.foodTaboo||'\u65E0'}`,
+    `\u65C5\u884C\u98CE\u683C\uFF1A${state.styles.join('\u3001')||'\u7EFC\u5408\u4F53\u9A8C'}`,
+    `\u5FC5\u53BB\u666F\u70B9\uFF1A${state.mustSee.join('\u3001')||'\u65E0\u7279\u522B\u6307\u5B9A'}`,
+    `\u8282\u594F\uFF1A${state.pace||'\u9002\u4E2D'}`,
+    `\u7279\u6B8A\u9700\u6C42\uFF1A${state.specials.join('\u3001')||'\u65E0'}`,
+  ];
+  if (state.note) parts.push(`\u8865\u5145\u8BF4\u660E\uFF1A${state.note}`);
+  if (state._quickNote) parts.push(`\u5FEB\u6377\u5907\u6CE8\uFF1A${state._quickNote}`);
+  return `\u8BF7\u6839\u636E\u4EE5\u4E0B\u4FE1\u606F\u5236\u5B9A${days}\u5929\u897F\u5B89\u65C5\u884C\u8DEF\u7EBF\uFF08\u5305\u542B\u9AD8\u5FB7\u5730\u56FE\u5750\u6807\uFF09\uFF1A\n\n`+parts.join('\n');
+}
+
+const SYSTEM_PROMPT = `你是"小长安"，西安14年土著向导，陕西腔（额代替我），热情直爽。输出纯JSON（不含任何其他文字）：
+{
+  "title":"一行路线标题",
+  "xiaoba_say":"小长安开场白（100字内，有烟火气）",
+  "days":[{
+    "day":1,"theme":"当日主题",
+    "spots":[{"time":"08:00-10:00","name":"景点","tip":"小长安建议1-2句陕西话","coord":"lng,lat"}]
+  }],
+  "foods":[{"name":"美食","area":"区域","tip":"一句话","coord":"lng,lat"}],
+  "hotel":{"area":"推荐住宿区域","reason":"理由","budget":"价位"},
+  "budget":{"transport":"交通","tickets":"门票","food":"餐饮","hotel":"住宿","total":"合计"},
+  "tips":["避坑1","避坑2","避坑3"],
+  "car_suggest":true
+}
+
+坐标格式：西安兵马俑coord为"109.285,34.385"，大雁塔为"108.963,34.225"，钟楼为"108.948,34.267"，城墙南门为"108.948,34.254"，回民街为"108.944,34.270"，大唐不夜城为"108.967,34.217"，华山为"110.091,34.490"，陕历博为"108.955,34.225"，骊山为"109.214,34.366"。
+只输出JSON，字数精简。`;
+
+// ===== RENDER RESULT =====
+function renderResult(content) {
+  let plan;
+  try {
+    const m = content.match(/\{[\s\S]*\}/);
+    plan = JSON.parse(m?m[0]:content);
+  } catch(e) { plan = { title:'路线已生成', xiaoba_say:content.substring(0,400), days:[], foods:[], tips:['详细内容请截图'], budget:null, hotel:null, car_suggest:false }; }
+
+  document.getElementById('res-title').textContent = plan.title||'你的专属西安路线';
+  document.getElementById('res-meta').innerHTML = `
+    <span>\uD83D\uDCC5 ${state._days||calcDays()}\u5929</span>
+    <span>\uD83D\uDC64 ${state.count}\u4EBA</span>
+    <span>\uD83D\uDCB0 ${state.budget||'\u2014'}</span>
+    <span>${state.transport||'\u516C\u5171\u4EA4\u901A'}</span>
+  `;
+  let h = '';
+
+  if (plan.xiaoba_say) h += `<div class="rcard"><div class="xb-bubble">
+    <div class="xb-bub-head"><div class="xb-bub-avatar">🏯</div><span class="xb-bub-name">小长安说</span></div>
+    <div class="xb-bub-text">${plan.xiaoba_say}</div></div></div>`;
+
+  // 每日行程（带高德导航）
+  if (plan.days && plan.days.length) {
+    plan.days.forEach(d => {
+      const coords = (d.spots||[]).filter(s=>s.coord).map(s=>s.coord).join('|');
+      const navUrl = coords ? `https://uri.amap.com/navigation?to=${(d.spots[0]||{}).name||''}` : '#';
+
+      h += `<div class="rcard">
+        <div class="day-block">
+          <div class="day-head">
+            <div class="day-num">D${d.day}</div>
+          <div class="day-theme">${d.theme||'第'+d.day+'天'}</div>
+            <div class="day-nav">
+              <button class="btn-nav" onclick="openAmapDay('${encodeURIComponent(JSON.stringify((d.spots||[]).map(s=>({name:s.name,coord:s.coord}))))}')">\uD83E\uDDED \u9AD8\u5FB7\u5BFC\u822A</button>
+            </div>
+          </div>
+        </div>
+        <div class="tl">`;
+      (d.spots||[]).forEach(s => {
+        const navLink = s.coord ? `https://uri.amap.com/navigation?to=${encodeURIComponent(s.name)}` : '#';
+        h += `<div class="tl-item">
+          <div class="tl-dot"></div><div class="tl-info">
+            <div class="tl-time">${s.time||''}</div>
+            <div class="tl-name">${s.name||''}</div>
+            ${s.tip?`<div class="tl-tip">${s.tip}</div>`:''}
+            <div class="tl-nav">
+              <a href="${navLink}" target="_blank">&#x1F9ED; &#x4e00;&#x952e;&#x5bfc;&#x822a;</a>
+              <button class="tl-guide-btn" onclick="openGuide('${s.name}')">&#x1F4F8; &#x653b;&#x7565;</button>
+            </div>
+          </div></div>`;
+      });
+      h += `</div></div>`;
+    });
+  }
+
+  // 美食
+  if (plan.foods && plan.foods.length) {
+    h += `<div class="rcard"><div class="rcard-title">小长安私房美食单</div><div class="food-grid">`;
+    plan.foods.forEach(f => {
+      h += `<div class="food-card">
+        <div class="food-name">\uD83C\uDF5C ${f.name||''}</div>
+        <div class="food-area">\uD83D\uDCCD ${f.area||''}</div>
+        <div class="food-tip">${f.tip||''}</div>
+      </div>`;
+    });
+    h += `</div></div>`;
+  }
+
+  // 住宿
+  if (plan.hotel) {
+    h += `<div class="rcard"><div class="rcard-title">住宿推荐</div>
+      <div class="hotel-card"><div class="hotel-emoji">\uD83C\uDFE8</div><div class="hotel-info">
+        <div class="hotel-name">${plan.hotel.area||'推荐区域'}</div>
+        <div class="hotel-meta">${plan.hotel.reason||''}</div>
+        <div class="hotel-price"><span class="price-now">${plan.hotel.budget||''}</span><span class="rebate-tag">小长安专享</span></div>
+      </div></div></div>`;
+  }
+
+  // 预算
+  if (plan.budget) {
+    h += `<div class="rcard"><div class="rcard-title">预算参考（人均）</div>
+      <div class="budget-grid">
+        <div class="bg-item"><div class="bg-label">\uD83D\uDE8C 交通</div><div class="bg-val">${plan.budget.transport||'\u2014'}</div></div>
+        <div class="bg-item"><div class="bg-label">\uD83C\uDFAB 门票</div><div class="bg-val">${plan.budget.tickets||'\u2014'}</div></div>
+        <div class="bg-item"><div class="bg-label">\uD83C\uDF5C 餐饮</div><div class="bg-val">${plan.budget.food||'\u2014'}</div></div>
+        <div class="bg-item"><div class="bg-label">\uD83C\uDFE8 住宿</div><div class="bg-val">${plan.budget.hotel||'\u2014'}</div></div>
+      </div>
+      <div class="bg-total"><span class="bg-total-label">合计（人均）</span><span class="bg-total-val">${plan.budget.total||'\u2014'}</span></div></div>`;
+  }
+
+  // 专车
+  if (plan.car_suggest || state.transport==='专车+司机') {
+    h += `<div class="rcard"><div class="rcard-title">一人一车 · 全程托管</div>
+      <div class="car-card">
+        <div class="car-title">西安本地司机+车辆 · 不绕路不宰客</div>
+        <div class="car-price">\u00A5400 <s>\u00A5600</s> /天</div>
+        <div class="car-tags"><span class="car-tag">8h/200km</span><span class="car-tag">接送站</span><span class="car-tag">随时等候</span><span class="car-tag">私房美食带路</span><span class="car-tag">行李随车</span></div>
+        <button class="car-book" onclick="openDriverService()">\uD83D\uDCF1 预约专车</button>
+      </div></div>`;
+  }
+
+  // 避坑
+  if (plan.tips && plan.tips.length) {
+    h += `<div class="rcard"><div class="rcard-title">\u26A0\uFE0F 避坑指南</div><div class="tips-list">`;
+    plan.tips.forEach(t => h += `<div class="tips-item">${t}</div>`);
+    h += `</div></div>`;
+  }
+
+  document.getElementById('result-body').innerHTML = h;
+  showPage('result');
+}
+
+// 高德地图：打开当日全部景点导航
+function openAmapDay(spotsJson) {
+  try {
+    const spots = JSON.parse(decodeURIComponent(spotsJson));
+    if (!spots.length) return toast('暂无导航信息');
+    if (spots.length === 1) {
+      window.open(`https://uri.amap.com/navigation?to=${encodeURIComponent(spots[0].name)}`, '_blank');
+    } else {
+      const names = spots.map(s => s.name).join(' \u2192 ');
+      toast('路线：' + names + '\n请逐个点击各站"一键导航"');
+    }
+  } catch(e) { toast('导航信息解析失败'); }
+}
+
+function renderError(msg) {
+  let hint = '';
+  if (msg.includes('API Key')) hint = '在 proxy.js 中填入 DeepSeek API Key';
+  else if (msg.includes('代理') || msg.includes('fetch')) hint = '终端运行：node proxy.js';
+  document.getElementById('result-body').innerHTML = `<div class="err-box">
+    <p>\uD83D\uDE14 ${msg}</p><div class="hint">${hint}</div>
+    <button class="btn-retry" onclick="switchTab('changan')">重新填写</button></div>`;
+  showPage('result');
+}
+
+function shareResult() {
+  if (navigator.share) navigator.share({ title:'我用AI规划了西安路线', text:'小长安帮我规划的，超详细！', url:location.href });
+  else toast('截图分享给朋友吧！');
+}
+
+function toast(m) {
+  const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// =============================================
+// SPOT GUIDE DATA
+// =============================================
+const SPOT_GUIDES = {
+  "钟楼": {
+    intro: "西安钟楼建于明洪武十七年（1384年），是中国现存规模最大、保存最完整的钟楼。位于古城中心，四条大街以它为轴心放射展开。登楼可俯瞰东西南北四条大街，金色琉璃顶在夕阳下熠熠生辉。",
+    image: "https://pixabay.com/get/g30566490cf940b751205246088fd6af46623b01ac78a0a815e774e8e46575542ca6e2523cc494f0f17fedaebd734dfae_1920.jpg",
+    photos: [
+      { emoji: "🌅", title: "东南角黄昏侧光", desc: "下午4-5点从钟楼东南角拍摄，金色阳光打在楼体侧面，琉璃瓦反光极美。手机用2x变焦压缩透视" },
+      { emoji: "🌃", title: "十字路口夜景对称", desc: "日落后30分钟蓝调时刻，站在钟楼环岛东南角斑马线处，等红灯车流作前景，对称构图绝佳" },
+      { emoji: "📐", title: "南大街纵深透视", desc: "站在钟楼南侧地下通道出口，用南大街作引导线，钟楼居中。广角模式拍出街道延伸感" },
+      { emoji: "🎯", title: "二楼斗拱特写", desc: "登钟楼二楼，用3x长焦拍斗拱与彩绘细节，逆光时剪影效果充满古韵" }
+    ],
+    tips: [
+      "🎫门票30元，开放9:00-21:30，最晚入场21:00",
+      "📸最佳时段：傍晚6-7点金色阳光+日落后蓝调双拍",
+      "🏮钟楼+鼓楼联票50元更划算，步行3分钟即到",
+      "👗穿汉服上钟楼拍照超有氛围，附近有多家汉服租赁"
+    ]
+  },
+  "鼓楼": {
+    intro: "鼓楼建于明洪武十三年（1380年），比钟楼还早4年。楼上悬挂着全国最大的鼓，每天有仿唐乐舞表演。登楼可北望回民街的烟火气，南眺钟楼的巍峨身姿。",
+    image: "https://pixabay.com/get/ga6d3376f1181975920c4b3a1c855fa1cb28b116f60f4fb3acf4ee7406b8ab070438772249d643e5d57985b9d458e13d8_1920.jpg",
+    photos: [
+      { emoji: "🏮", title: "鼓楼北面红灯笼", desc: "从鼓楼北侧广场拍摄，红灯笼为前景，鼓楼居中。下午3-5点顺光拍摄色彩最鲜艳" },
+      { emoji: "↔️", title: "钟鼓同框经典位", desc: "站在钟楼与鼓楼之间的广场正中，两楼左右对称入镜，广角0.5x双楼同框" },
+      { emoji: "🌙", title: "南面夜景长曝光", desc: "晚上8点后从南侧拍鼓楼，'文武盛地'牌匾发金光，手机夜景模式3秒手持即可" },
+      { emoji: "🥁", title: "鼓乐表演抓拍", desc: "整点鼓乐表演时，在二楼栏杆处俯拍，鼓手与二十四节气鼓同框，动感十足" }
+    ],
+    tips: [
+      "🎫门票30元，鼓乐表演整点演出，值得等一场",
+      "🍜鼓楼北面就是回民街，逛完直接去吃",
+      "📷钟鼓楼夜景是西安明信片级画面，必拍"
+    ]
+  },
+  "大雁塔": {
+    intro: "大雁塔是西安最著名的地标，建于唐永徽三年（652年），玄奘法师为保存天竺经卷而建。七层方塔高64.5米，北广场有亚洲最大矩阵音乐喷泉，夜景尤为壮观。",
+    image: "https://pixabay.com/get/ged47591e8734c409ddd0ef343fc3695f45fe6c3cc8b43d17039227873ef32acfd8a14040896787c7c0c8b2196a7f5e9f_1920.jpg",
+    photos: [
+      { emoji: "🔭", title: "北广场喷泉倒影", desc: "北广场喷泉池边低机位拍摄，利用水面倒影拍出塔身对称镜像。喷泉表演时更有层次感" },
+      { emoji: "📸", title: "大慈恩寺正门框景", desc: "站在大慈恩寺南门内，用门洞做框取景大雁塔，形成天然画框构图" },
+      { emoji: "🌄", title: "西南角黄昏剪影", desc: "日落时分在大雁塔西南角，让塔身形成漂亮剪影，天空橙蓝渐变作背景" },
+      { emoji: "✨", title: "大唐不夜城远眺", desc: "从大雁塔南广场向大唐不夜城方向拍，塔身与步行街灯光呼应，夜景绝美" }
+    ],
+    tips: [
+      "🎫大慈恩寺门票40元（登塔另加25元），北广场免费",
+      "⛲喷泉时间：12:00/16:00/19:00/21:00，周末加场",
+      "🌙建议下午4点到，先拍白天再等喷泉夜景，一气呵成",
+      "🚇地铁3号线大雁塔站C口出即到"
+    ]
+  },
+  "兵马俑": {
+    intro: "兵马俑是世界第八大奇迹，秦始皇陵的大型陪葬坑，1974年被农民打井时意外发现。已出土陶俑8000余件，每个俑面部表情各异、千人千面。1987年列入世界文化遗产。",
+    image: "https://pixabay.com/get/g6ea267a95b57410d71c8252778715b6626cf6e0a7add702b1889110ade779340667244df966bb9d714d8fb3a38a39398_1920.jpg",
+    photos: [
+      { emoji: "🏟️", title: "一号坑东南角全景", desc: "进门后走右侧通道到东南角高台，这是拍一号坑最经典的角度，俯拍千军万马的震撼" },
+      { emoji: "🔍", title: "前排陶俑面部特写", desc: "在一号坑前排栏杆处，用3x-5x长焦拍陶俑面部细节，找表情独特的俑更有故事感" },
+      { emoji: "⚔️", title: "二号坑将军俑", desc: "二号坑展柜光线较好，将军俑铠甲纹理清晰，侧面拍展现战袍飘逸感" },
+      { emoji: "🏺", title: "铜车马展馆细节", desc: "铜车马展厅光线较暗，手机夜景模式拍铜车马的精细纹饰，金色细节非常震撼" }
+    ],
+    tips: [
+      "🎫门票120元，旺季建议提前网上购票，游览需3-4小时",
+      "🚌西安火车站东广场坐游5/306路直达，约1小时",
+      "📸博物馆内禁止闪光灯和三脚架，手机拍摄完全OK",
+      "🎧强烈建议请导游或租讲解器，了解背后故事体验翻倍"
+    ]
+  },
+  "华山": {
+    intro: "华山是五岳之西岳，以险峻闻名天下。'奇险天下第一山'，南峰海拔2154.9米为五岳最高。'长空栈道''鹞子翻身'等险关考验胆量。也是道教圣山，云雾缭绕时如临仙境。",
+    image: "https://pixabay.com/get/g62e97ab7e5cb9ca391ce735557a2a67cfd0774671a2d0f57a616b70d9811ef119e88c80bd25183fd183beb1f24ed1e15_1920.jpg",
+    photos: [
+      { emoji: "🌄", title: "东峰观日台日出", desc: "凌晨4:30从北峰出发，5:30前到达东峰观日台。日出前30分钟蓝调拍云海，日出时拍金光穿云" },
+      { emoji: "⛰️", title: "苍龙岭脊背航拍感", desc: "在苍龙岭中段找安全位置，手机举高俯拍山脊步道，人在山脊上如行画中" },
+      { emoji: "🧗", title: "长空栈道极限视角", desc: "系好安全带后，让人在栈道上走，从入口平台侧拍，悬崖+人的对比张力满格" },
+      { emoji: "🏯", title: "西峰莲花峰道观", desc: "西峰顶道观与云海同框，下午2-4点云海出现概率最高，用全景模式拍出壮阔" }
+    ],
+    tips: [
+      "🎫门票180元，西峰索道140元，北上西下最经典",
+      "🧥山顶温差大，带冲锋衣，凌晨山顶可能低于10度",
+      "🥾穿防滑登山鞋！华山台阶陡峭安全第一",
+      "📱山顶信号不稳定，提前下载离线地图"
+    ]
+  },
+  "回民街": {
+    intro: "回民街由北院门、西羊市、大皮院等多条古街组成，已有上千年历史。白天古朴安静，夜晚灯火通明、摩肩接踵。数百种清真小吃荟萃于此，是西安的美食心脏。",
+    image: "https://pixabay.com/get/g2bf415f15e7724c701c9a8ee1616494dd47c66b565439b95382f22e3a51fb3a551ec4a62f2e5d903ebdfda61843cede6_1920.jpg",
+    photos: [
+      { emoji: "🏮", title: "北院门牌坊夜景", desc: "晚7点亮灯后站在北院门入口牌坊前，低角度仰拍牌坊+灯笼阵列，人物居中走拍更有烟火气" },
+      { emoji: "🍢", title: "西羊市美食摊位", desc: "西羊市中段最热闹，站到摊位侧面用1x拍食物特写，让店主操作的手入镜增加生动感" },
+      { emoji: "🎎", title: "大皮院古巷人文", desc: "大皮院上午人少，青砖灰瓦+老人在门口晒太阳，用黑白滤镜拍出老西安的静谧时光" },
+      { emoji: "🎪", title: "化觉巷清真大寺", desc: "隐藏在回坊深处的明代清真寺，融合中式建筑风格，庭院对称构图+光影斑驳极出片" }
+    ],
+    tips: [
+      "🕐最佳时间：下午4-7点光线好、人不太挤",
+      "🍜必吃：老米家泡馍、定家小酥肉、东南亚甑糕",
+      "⚠️注意：街口揽客的毛笔酥店大多是坑，往里走找老店"
+    ]
+  },
+  "西安城墙": {
+    intro: "西安城墙是中国现存规模最大、保存最完整的古代城垣，全长13.74公里。建于明洪武年间，距今600余年。城墙上可以骑行、跑步，俯瞰古城内外截然不同的风貌。",
+    image: "https://pixabay.com/get/g4005597eecfab5f09c13960db6b81ee063aa60231241ba6696974e2cadd20c7cbf3fe639a5ae4480dcab297a6f9a45af_1920.jpg",
+    photos: [
+      { emoji: "🚲", title: "永宁门城楼骑行位", desc: "在南门（永宁门）段租自行车，让同伴在城楼前骑行，用追焦模式拍出动态感" },
+      { emoji: "🌇", title: "南门日落全景", desc: "傍晚在永宁门西侧城墙上，拍夕阳下的钟楼+南大街天际线，城市新旧同框" },
+      { emoji: "🏮", title: "城墙新春灯会", desc: "春节期间城墙有大型灯会，红灯笼+城墙夜拍，从南门外广场长焦拍城楼+灯组" },
+      { emoji: "📐", title: "城墙角楼对称", desc: "城墙四角角楼飞檐翘角，站护城河对岸用广角拍角楼倒映水中的对称画面" }
+    ],
+    tips: [
+      "🎫门票54元，学生半价，多个城门可登城",
+      "🚲租自行车单人45元/双人90元，骑行一圈约1.5小时",
+      "🌅推荐南门（永宁门）登城，下午4点上去拍日落",
+      "👟建议从南门骑到西门段，人少风景好"
+    ]
+  },
+  "华清宫": {
+    intro: "华清宫背靠骊山，建于唐玄宗时期，是杨贵妃沐浴的皇家温泉行宫。'春寒赐浴华清池，温泉水滑洗凝脂'说的就是这里。园内亭台楼阁依山而建，温泉雾气氤氲。",
+    image: "https://pixabay.com/get/gc6676050a5842d71722745aeb227a1b7ebf32b9f2eb4f5c77539244d7cf0875679923b6415f23abfb9ed3b1d0a78a3ec_1920.jpg",
+    photos: [
+      { emoji: "🏯", title: "九龙湖贵妃出浴雕像", desc: "九龙湖畔杨贵妃雕像前的荷花池，清晨薄雾+雕像倒影，手机用人像模式虚化背景" },
+      { emoji: "🌿", title: "芙蓉园汤池遗址", desc: "海棠汤（贵妃池）遗址，从高处俯拍温泉池的莲花形轮廓，光影交错有历史穿越感" },
+      { emoji: "⛰️", title: "骊山晚照全景", desc: "登上骊山半山腰，下午5点拍'骊山晚照'——夕阳把山体染成金色，山脚华清宫尽收眼底" },
+      { emoji: "🏮", title: "长生殿夜拍", desc: "晚上华清宫有《长恨歌》实景演出，长生殿灯光亮起时以骊山为背景，恢弘大气" }
+    ],
+    tips: [
+      "🎫门票120元，《长恨歌》演出另购票（约300元起）",
+      "🚌西安火车站东广场坐游5路直达，与兵马俑一条线",
+      "🌅建议上午去兵马俑，下午华清宫，傍晚看骊山晚照",
+      "♨️景区内有温泉体验区，可以真正泡一次皇家温泉"
+    ]
+  },
+  "大唐不夜城": {
+    intro: "大唐不夜城是以盛唐文化为主题的步行街，北起大雁塔南广场，全长2.1公里。华灯初上时，仿唐建筑金碧辉煌。不倒翁小姐姐、石头人、盛唐密盒等街头表演让这里成为夜西安的顶流。",
+    image: "https://pixabay.com/get/gdd79b39ac19a82832196f7a04184b8c183fe6d97a265371156be1df5f04409d316275598e94194a601635b64b8fbcf2b_1920.jpg",
+    photos: [
+      { emoji: "🌃", title: "中轴线对称全景", desc: "在大唐不夜城中段，站路中央安全岛拍南北对称轴线，两侧仿唐建筑+灯笼阵列纵深极强" },
+      { emoji: "🎭", title: "不倒翁小姐姐互动", desc: "演出时段（约晚7-9点），用连拍模式抓拍小姐姐与观众牵手瞬间，侧45度角动感最佳" },
+      { emoji: "🏛️", title: "贞观广场李世民像", desc: "从广场入口拍唐太宗骑马雕塑与远处大雁塔同框，广角仰拍增强气势" },
+      { emoji: "💡", title: "芙蓉园灯组色彩", desc: "靠近各主题灯组用1x拍色彩斑斓的装置细节，夜间色彩溢出效果极佳" }
+    ],
+    tips: [
+      "🌙晚上7点亮灯后才精彩，白天不要去！",
+      "🚇地铁3/4号线大雁塔站B口出，近北入口",
+      "👀必看：不倒翁、盛唐密盒、石头人（晚7-9点轮演）",
+      "👘沿街有汉服变装店，穿唐装逛不夜城出片率200%"
+    ]
+  },
+  "陕西历史博物馆": {
+    intro: "陕西历史博物馆被誉为「古都明珠，华夏宝库」，馆藏文物171万余件。商周青铜器、汉唐金银器、历代陶俑等举世闻名。基本陈列免费但需预约，是了解西安千年历史的最佳入口。",
+    image: "https://pixabay.com/get/gc7dd800f39ae014fb789785d2c6e860eea6c758641487adbc476b4262510a5678d0cdccc8f69228ca592f42e1cef99a7_1920.jpg",
+    photos: [
+      { emoji: "🏛️", title: "博物馆正门对称构图", desc: "陕博建筑本身是仿唐风格，正门前广场低角度广角拍摄，蓝天白云下气势恢宏" },
+      { emoji: "🏺", title: "何家村窖藏金银器", desc: "在何家村遗宝展厅，用3x拍金银器细节，展柜光线足，手机也能拍出金属质感" },
+      { emoji: "🐎", title: "唐三彩载乐骆驼", desc: "唐代展厅的镇馆之宝，从展柜侧面拍骆驼+乐俑全貌，避开反光是关键" },
+      { emoji: "🗿", title: "秦代兵马俑展厅", desc: "陕博也有兵马俑精品，展柜光线比兵马俑博物馆好，适合拍细节" }
+    ],
+    tips: [
+      "🎫免费但需提前预约！（微信搜'陕西历史博物馆'预约）",
+      "⏰火爆！建议提前3-7天预约，节假日尤其紧张",
+      "📷馆内可拍照但禁止闪光灯，手机静音拍摄",
+      "🎧租讲解器30元或下载三毛游APP自助导览"
+    ]
+  },
+  "小雁塔": {
+    intro: "小雁塔建于唐景龙年间（707年），比大雁塔晚55年。现存13层，因地震塔顶塌落两层面形成独特的残缺美感。园内古木参天，环境清幽，是游客较少的小众宝藏景点。",
+    image: "https://pixabay.com/get/gcdfe30989f7858ec2b8538a4ab3510cd0266653ea871f40f2e7c0f53bef03a138e34b9d3673fb177a67461027ca0bb0d_1920.jpg",
+    photos: [
+      { emoji: "🌳", title: "古槐掩映塔身", desc: "小雁塔东南侧有几棵千年古槐，用树叶作前景框架拍塔身，春夏绿意葱茏、秋冬色彩斑斓" },
+      { emoji: "🔔", title: "雁塔晨钟意境", desc: "园内有'关中八景'之一的雁塔晨钟，上午9点前光线柔和，古钟+塔同框意境悠远" },
+      { emoji: "🏚️", title: "塔顶残缺特写", desc: "从西南角仰拍塔顶断截面，逆光时残缺轮廓极具历史沧桑感" },
+      { emoji: "🌸", title: "春日樱花拱门", desc: "每年3月底-4月初园内樱花盛开，以樱花枝为前景拍塔身，小清新风格满分" }
+    ],
+    tips: [
+      "🎫免费！凭身份证领票，人比大雁塔少很多",
+      "🌸春天樱花季是最佳拍摄时间，游客少花又多",
+      "🏛️隔壁就是西安博物院，一并游览大约2小时",
+      "🚇地铁2号线南稍门站步行5分钟"
+    ]
+  },
+  "大明宫国家遗址公园": {
+    intro: "大明宫曾是唐代最宏伟的宫殿建筑群，面积是北京故宫的4.5倍。'九天阊阖开宫殿，万国衣冠拜冕旒'描绘的就是这里的盛况。如今遗址公园绿草如茵，微缩景观复原了当年的壮丽。",
+    image: "https://pixabay.com/get/g2932a587f15bbd3081aae15e19ee38ba87eda329983ad56c731775de25b9de08f43383f37e4a5dbc1da60b686bb00a26_1920.jpg",
+    photos: [
+      { emoji: "🏛️", title: "丹凤门遗址剪影", desc: "从丹凤门正面低角度仰拍，以天空为背景拍城门轮廓剪影，日落时分尤其壮美" },
+      { emoji: "🌿", title: "含元殿遗址草坪", desc: "含元殿遗址前的巨大草坪，用超广角拍人物走在草地上，与远处微缩宫殿呼应" },
+      { emoji: "🏗️", title: "微缩景观俯拍", desc: "大明宫微缩景观区，手机举高俯拍1:15的唐代宫殿模型，像无人机航拍大片" },
+      { emoji: "🌅", title: "太液池日落倒影", desc: "太液池边拍含凉殿倒影，黄昏时刻水面如镜，落日余晖染红宫殿轮廓" }
+    ],
+    tips: [
+      "🎫遗址公园免费，核心区+微缩景观60元",
+      "🚇地铁4号线含元殿站B口出即到丹凤门",
+      "🚲公园超大！建议租电瓶车或自行车游览",
+      "🌿适合野餐+拍照，带块野餐布在含元殿前草坪躺平"
+    ]
+  }
+};
+
+// Fallback guide for unknown spots
+function getSpotGuide(name) {
+  if (SPOT_GUIDES[name]) return SPOT_GUIDES[name];
+  for (const key of Object.keys(SPOT_GUIDES)) {
+    if (name.includes(key) || key.includes(name)) return SPOT_GUIDES[key];
+  }
+  // 尝试从高德缓存获取照片
+  let amapImg = '';
+  if (_cachedSpots) {
+    const match = _cachedSpots.find(s => s.name === name || name.includes(s.name) || s.name.includes(name));
+    if (match && match.photo && match.photo.length > 0) amapImg = match.photo[0];
+  }
+  return {
+    intro: name + '是西安值得一游的地方，无论是拍照打卡还是深度游览，都能感受到古城独有的魅力。建议提前做好攻略，合理安排时间。',
+    image: amapImg || '',
+    photos: [
+      { emoji: "\uD83D\uDCF8", title: "全景构图", desc: "站在景点正前方取全景，低角度仰拍能增加建筑的气势感，广角模式更出片" },
+      { emoji: "\uD83C\uDF05", title: "黄金时刻", desc: "日出后1小时或日落前1小时拍摄，光线最柔和，色彩最丰富，阴影也有层次" },
+      { emoji: "\uD83D\uDD0D", title: "细节特写", desc: "找有特色的纹理、图案或角落单独构图，一组细节照能大大丰富图集的可看性" },
+      { emoji: "\uD83D\uDC65", title: "人文互动", desc: "加入当地人的生活画面或自己的旅行身影，让照片有故事感而不是简单的打卡照" }
+    ],
+    tips: [
+      "\u5C0F\u516B\u5EFA\u8BAE\uFF1A\u65E9\u53BB\u4EBA\u5C11\uFF0C\u62CD\u7167\u4E0D\u6324\u8FD8\u5B89\u9759",
+      "\u8DDF\u7740\u5C0F\u516B\u7684\u653B\u7565\u670D\u52A1\uFF0C\u53D1\u73B0\u66F4\u591A\u9690\u85CF\u7F8E\u666F\u548C\u7F8E\u98DF",
+      "\u62CD\u5B8C\u8BB0\u5F97\u628A\u7167\u7247\u4E0A\u4F20\u5230\u56FE\u96C6\uFF0C\u4E00\u952E\u751F\u6210\u65C5\u884C\u6D77\u62A5"
+    ]
+  };
+}
+
+// =============================================
+// GUIDE MODAL
+// =============================================
+function openGuide(name) {
+  const guide = getSpotGuide(name);
+  document.getElementById('guide-title').textContent = name + ' · 打卡攻略';
+
+  var heroImg = document.getElementById('guide-hero-img');
+  if (guide.image) { heroImg.src = guide.image; heroImg.style.display = 'block'; } else { heroImg.style.display = 'none'; }
+  document.getElementById('guide-intro-text').textContent = guide.intro || '';
+
+  var grid = document.getElementById('guide-photo-grid');
+  grid.innerHTML = guide.photos.map(function(p) {
+    return '<div class="guide-photo-card"><div class="p-emoji">' + p.emoji + '</div><div class="p-title">' + p.title + '</div><div class="p-desc">' + p.desc + '</div></div>';
+  }).join('');
+  
+  const tipSec = document.getElementById('guide-tip-section');
+  tipSec.innerHTML = '<h4>\uD83D\uDCA1 \u5C0F\u516B\u7279\u522B\u63D0\u793A</h4>' + 
+    guide.tips.map((t, i) => `
+    <div class="guide-tip-item">
+      <div class="t-num">${i+1}</div>
+      <div>${t}</div>
+    </div>`).join('') +
+    `<div style="margin:16px 20px;padding:14px;background:#FFF8F0;border-radius:10px;font-size:12px;color:#666;">
+      <strong style="color:var(--primary);">\uD83D\uDCF7 \u62CD\u5B8C\u7167\u4E0A\u4F20\u5230\u56FE\u96C6</strong><br>
+      \u70B9\u4E0B\u65B9\u300C\u56FE\u96C6\u300D\u6309\u94AE\uFF0C\u628A\u4F60\u5728${name}\u62CD\u7684\u7167\u7247\u6DFB\u52A0\u8FDB\u6765\uFF0C\u6700\u540E\u751F\u6210\u4E13\u5C5E\u65C5\u884C\u6D77\u62A5\u5206\u4EAB\u670B\u53CB\u5708\uFF01
+    </div>`;
+  
+  document.getElementById('guide-overlay').classList.add('show');
+}
+
+function closeGuide(e) {
+  if (!e || e.target === document.getElementById('guide-overlay')) {
+    document.getElementById('guide-overlay').classList.remove('show');
+  }
+}
+
+// =============================================
+// GALLERY (local-only, saves to localStorage)
+// =============================================
+let galleryPhotos = JSON.parse(localStorage.getItem('xiaoba_gallery') || '[]');
+
+function openGallery() {
+  renderGalleryGrid();
+  document.getElementById('gallery-overlay').classList.add('show');
+}
+
+function closeGallery() {
+  document.getElementById('gallery-overlay').classList.remove('show');
+}
+
+function renderGalleryGrid() {
+  const grid = document.getElementById('gallery-grid');
+  let html = '';
+  
+  if (galleryPhotos.length === 0) {
+    html += '<div class="gallery-empty">\uD83D\uDCF7<br>\u8FD8\u6CA1\u6709\u7167\u7247<br>\u70B9\u51FB + \u4E0A\u4F20\u65C5\u884C\u7167\u7247</div>';
+  } else {
+    galleryPhotos.forEach((photo, i) => {
+      html += `<div class="gallery-item" id="gitem-${i}">
+        <img src="${photo.dataUrl}" alt="${photo.name||''}">
+        <button class="del-btn" onclick="deletePhoto(${i})">\u2715</button>
+      </div>`;
+    });
+  }
+  html += `<div class="gallery-upload" onclick="triggerPhotoUpload()">
+    <div class="plus">+</div>
+    <div>\u6DFB\u52A0\u7167\u7247</div>
+  </div>`;
+  
+  grid.innerHTML = html;
+}
+
+function triggerPhotoUpload() {
+  document.getElementById('photo-input').click();
+}
+
+function handlePhotoUpload(event) {
+  const files = Array.from(event.target.files);
+  if (!files.length) return;
+  
+  let loaded = 0;
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      galleryPhotos.push({
+        dataUrl: e.target.result,
+        name: file.name,
+        spot: '\u65C5\u9014\u4E2D',
+        time: new Date().toLocaleString('zh-CN')
+      });
+      loaded++;
+      if (loaded === files.length) {
+        localStorage.setItem('xiaoba_gallery', JSON.stringify(galleryPhotos));
+        renderGalleryGrid();
+        toast('\u5DF2\u6DFB\u52A0 ' + loaded + ' \u5F20\u7167\u7247');
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  event.target.value = '';
+}
+
+function deletePhoto(idx) {
+  galleryPhotos.splice(idx, 1);
+  localStorage.setItem('xiaoba_gallery', JSON.stringify(galleryPhotos));
+  renderGalleryGrid();
+}
+
+// =============================================
+// SHARE POSTER (Canvas)
+// =============================================
+function genSharePoster() {
+  if (galleryPhotos.length === 0) {
+    toast('\u8BF7\u5148\u6DFB\u52A0\u7167\u7247\uFF01');
+    return;
+  }
+  const canvas = document.getElementById('poster-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 340, H = 500;
+  canvas.width = W; canvas.height = H;
+  
+  const grad = ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0, '#1A0A06');
+  grad.addColorStop(1, '#4A2218');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+  
+  ctx.fillStyle = '#FFD700';
+  ctx.font = 'bold 18px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('\u5C0F\u516B\u5E26\u6211\u6E38\u897F\u5B89', W/2, 36);
+  
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.font = '12px sans-serif';
+  const planTitle = document.getElementById('res-title') ? document.getElementById('res-title').textContent : '\u4E13\u5C5E\u8DEF\u7EBF';
+  ctx.fillText(planTitle, W/2, 56);
+  
+  const photos = galleryPhotos.slice(0, 4);
+  const drawPhotos = () => {
+    const gridW = W - 32;
+    const cols = photos.length >= 2 ? 2 : 1;
+    const rows = Math.ceil(photos.length / cols);
+    const cellW = gridW / cols;
+    const cellH = 180 / rows;
+    
+    let loaded = 0;
+    photos.forEach((p, i) => {
+      const img = new Image();
+      img.onload = () => {
+        const col = i % cols, row = Math.floor(i / cols);
+        const x = 16 + col * cellW, y = 72 + row * cellH;
+        ctx.save();
+        ctx.beginPath();
+        ctx.roundRect(x+2, y+2, cellW-4, cellH-4, 6);
+        ctx.clip();
+        const scale = Math.max(cellW/img.width, cellH/img.height);
+        const dw = img.width*scale, dh = img.height*scale;
+        ctx.drawImage(img, x + (cellW-dw)/2, y + (cellH-dh)/2, dw, dh);
+        ctx.restore();
+        loaded++;
+        if (loaded === photos.length) drawPosterBottom();
+      };
+      img.onerror = () => { loaded++; if (loaded === photos.length) drawPosterBottom(); };
+      img.src = p.dataUrl;
+    });
+  };
+  
+  const drawPosterBottom = () => {
+    const yBase = 270;
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.beginPath();
+    ctx.roundRect(16, yBase, W-32, 110, 10);
+    ctx.fill();
+    
+    ctx.fillStyle = '#FFD700';
+    ctx.font = 'bold 14px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('\uD83D\uDDD3 \u884C\u7A0B\u4EAE\u70B9', 30, yBase+22);
+    
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.font = '11px sans-serif';
+    const metaEl = document.getElementById('res-meta');
+    const metaText = metaEl ? metaEl.innerText.replace(/\n/g, '  ') : '';
+    ctx.fillText(metaText.substring(0,40), 30, yBase+40);
+    
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.fillText('\uD83D\uDCF7 \u5171 ' + galleryPhotos.length + ' \u5F20\u65C5\u884C\u7167\u7247', 30, yBase+60);
+    
+    ctx.fillText('\uD83D\uDCC5 ' + new Date().toLocaleDateString('zh-CN'), 30, yBase+80);
+    
+    ctx.fillStyle = 'rgba(255,255,255,0.15)';
+    ctx.beginPath();
+    ctx.roundRect(W-80, yBase+5, 60, 60, 8);
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.font = '9px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('\u626B\u7801', W-50, yBase+35);
+    ctx.fillText('\u89C4\u5212\u8DEF\u7EBF', W-50, yBase+50);
+    
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('\u5C0F\u516B\u4F34\u6E38 \u00B7 \u897F\u5B8914\u5E74\u571F\u8457 \u00B7 AI\u4E13\u5C5E\u8DEF\u7EBF\u89C4\u5212', W/2, H-20);
+    
+    ctx.strokeStyle = 'rgba(255,215,0,0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(16, H-35);
+    ctx.lineTo(W-16, H-35);
+    ctx.stroke();
+    
+    document.getElementById('poster-overlay').classList.add('show');
+  };
+  
+  drawPhotos();
+}
+
+function closePoster() {
+  document.getElementById('poster-overlay').classList.remove('show');
+}
+
+// ===== GPS定位 + Haversine距离 + 高德API实时数据 =====
+let _userPosition = null;
+
+function getUserPosition() {
+  return new Promise((resolve) => {
+    if (_userPosition) { resolve(_userPosition); return; }
+    if (!navigator.geolocation) {
+      _userPosition = { lat: 34.2594, lng: 108.9480 }; // 默认钟楼
+      resolve(_userPosition);
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        _userPosition = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        resolve(_userPosition);
+      },
+      () => {
+        _userPosition = { lat: 34.2594, lng: 108.9480 };
+        resolve(_userPosition);
+      },
+      { timeout: 5000, enableHighAccuracy: true }
+    );
+  });
+}
+
+function haversineDistance(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+    Math.sin(dLng/2) * Math.sin(dLng/2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function formatDistance(km) {
+  if (km < 1) return Math.round(km * 1000) + 'm';
+  if (km < 10) return km.toFixed(1) + 'km';
+  return Math.round(km) + 'km';
+}
+
+// ===== 高德天气API =====
+async function fetchWeather() {
+  try {
+    const widget = document.getElementById('weather-widget');
+    if (!widget) return;
+    
+    // 先用预报(all)获取4天数据
+    let resp = await fetch(`${AMAP_BASE}/weather/weatherInfo?key=${AMAP_KEY}&city=610100&extensions=all`);
+    let data = await resp.json();
+    
+    if (data.status === '1' && data.forecasts && data.forecasts.length && data.forecasts[0].casts.length) {
+      const f = data.forecasts[0];
+      const today = f.casts[0];
+      const weatherIcon = {
+        '晴': '☀️', '少云': '🌤️', '晴间多云': '⛅', '多云': '☁️',
+        '阴': '☁️', '小雨': '🌧️', '中雨': '🌧️', '大雨': '⛈️', '暴雨': '⛈️',
+        '小雪': '🌨️', '中雪': '🌨️', '大雪': '❄️', '雨夹雪': '🌨️',
+        '雾': '🌫️', '霾': '🌫️', '风': '💨', '扬沙': '💨'
+      };
+      const icon = weatherIcon[today.dayweather] || '🌤️';
+      let fcHtml = '';
+      f.casts.slice(0, 4).forEach(d => {
+        fcHtml += `<div class="wf-day"><span class="wf-icon">${weatherIcon[d.dayweather]||'🌤️'}</span><span class="wf-temp">${d.nighttemp}~${d.daytemp}°</span>${d.date===today.date?'今天':d.week}</div>`;
+      });
+      widget.innerHTML = `
+        <div class="weather-main">
+          <span class="weather-icon">${icon}</span>
+          <div>
+            <span class="weather-temp">${today.daytemp}°</span>
+            <span class="weather-desc">${today.dayweather}转${today.nightweather} · ${today.daypower}级风</span>
+            <div class="weather-info">📍 ${f.province}${f.city} · 发布: ${(f.reporttime||'').split(' ')[1] || ''}</div>
+          </div>
+        </div>
+        <div class="weather-forecast">${fcHtml}</div>`;
+      return;
+    }
+    
+    // 降级到实时天气(base)
+    resp = await fetch(`${AMAP_BASE}/weather/weatherInfo?key=${AMAP_KEY}&city=610100&extensions=base`);
+    data = await resp.json();
+    if (data.status === '1' && data.lives && data.lives.length) {
+      const w = data.lives[0];
+      const weatherIcon = { '晴': '☀️', '少云': '🌤️', '多云': '☁️', '阴': '☁️', '雨': '🌧️', '雪': '❄️' };
+      let icon = '🌤️';
+      for (const [k, v] of Object.entries(weatherIcon)) { if (w.weather.includes(k)) { icon = v; break; } }
+      widget.innerHTML = `
+        <div class="weather-main">
+          <span class="weather-icon">${icon}</span>
+          <div>
+            <span class="weather-temp">${w.temperature}°</span>
+            <span class="weather-desc">${w.weather} · ${w.winddirection}风${w.windpower}级</span>
+            <div class="weather-info">📍 ${w.province}${w.city} · 💧 ${w.humidity}% · 实时</div>
+          </div>
+        </div>`;
+    }
+  } catch (e) { /* 静默 */ }
+}
+
+fetchWeather();
+
+async function fetchAmapPOIs(keywords, type, city, offset, needPhotos) {
+  const ext = needPhotos ? 'all' : 'base';
+  const kw = encodeURIComponent(keywords);
+  const ct = encodeURIComponent(city || '西安');
+  const apiUrl = `${AMAP_BASE}/place/text?key=${AMAP_KEY}&keywords=${kw}&city=${ct}&offset=${offset||15}&extensions=${ext}`;
+  if (type) apiUrl += '&types=' + encodeURIComponent(type);
+  
+  try {
+    const resp = await fetch(apiUrl);
+    const data = await resp.json();
+    if (data.status === '1' && data.pois && data.pois.length > 0) return data.pois;
+    return [];
+  } catch (e) {
+    console.error('高德API请求失败:', e);
+    return [];
+  }
+}
+
+async function fetchAmapAround(keywords, type, lat, lng, radius, offset, needPhotos) {
+  const ext = needPhotos ? 'all' : 'base';
+  const kw = encodeURIComponent(keywords);
+  const loc = `${lng},${lat}`;
+  let apiUrl = `${AMAP_BASE}/place/around?key=${AMAP_KEY}&keywords=${kw}&location=${loc}&radius=${radius||3000}&offset=${offset||20}&extensions=${ext}`;
+  if (type) apiUrl += '&types=' + encodeURIComponent(type);
+  
+  try {
+    const resp = await fetch(apiUrl);
+    const data = await resp.json();
+    if (data.status === '1' && data.pois && data.pois.length > 0) return data.pois;
+    return [];
+  } catch (e) {
+    console.error('高德周边搜索失败:', e);
+    return [];
+  }
+}
+
+function amapPoiToFoodItem(poi, userLat, userLng) {
+  const dist = haversineDistance(userLat, userLng, parseFloat(poi.location.split(',')[1]), parseFloat(poi.location.split(',')[0]));
+  const biz = poi.biz_ext || {};
+  return {
+    name: poi.name || '未知美食',
+    area: poi.address || poi.business_area || '附近',
+    desc: biz.recommend || poi.type || '高德推荐',
+    price: biz.cost ? '¥' + biz.cost + '/人' : '¥—',
+    coord: poi.location || '',
+    cat: typeNameToCat(poi.type || ''),
+    dist: formatDistance(dist),
+    amapId: poi.id || '',
+    rating: biz.rating || '',
+    photos: (poi.photos && poi.photos.length) ? poi.photos.map(p => p.url) : [],
+    tel: poi.tel || '',
+    openTime: biz.opentime2 || '',
+    website: safeWebsite(poi.website),
+    keytag: poi.keytag || '',
+    businessArea: poi.business_area || '',
+    recommend: poi.recommend || '',
+    discountNum: poi.discount_num || '0',
+    groupbuyNum: poi.groupbuy_num || '0',
+    cityname: poi.cityname || '',
+    adname: poi.adname || ''
+  };
+}
+
+function amapPoiToSpotItem(poi, userLat, userLng) {
+  const dist = haversineDistance(userLat, userLng, parseFloat(poi.location.split(',')[1]), parseFloat(poi.location.split(',')[0]));
+  const biz = poi.biz_ext || {};
+  return {
+    name: poi.name || '未知景点',
+    dist: formatDistance(dist),
+    desc: biz.introduction || poi.address || '高德推荐景点',
+    coord: poi.location || '',
+    gaodeUid: poi.id || '',
+    amapId: poi.id || '',
+    rating: biz.rating || '',
+    tel: poi.tel || '',
+    photos: (poi.photos && poi.photos.length) ? poi.photos.map(p => p.url) : [],
+    address: poi.address || '',
+    openTime: biz.opentime2 || '',
+    ticketOrdering: biz.ticket_ordering || '0',
+    website: safeWebsite(poi.website),
+    keytag: poi.keytag || '',
+    businessArea: poi.business_area || '',
+    recommend: poi.recommend || '',
+    discountNum: poi.discount_num || '0',
+    groupbuyNum: poi.groupbuy_num || '0',
+    cityname: poi.cityname || '',
+    adname: poi.adname || '',
+    bizType: poi.biz_type || '',
+    alias: poi.alias || ''
+  };
+}
+
+function amapPoiToHotelItem(poi, userLat, userLng) {
+  const dist = haversineDistance(userLat, userLng, parseFloat(poi.location.split(',')[1]), parseFloat(poi.location.split(',')[0]));
+  const biz = poi.biz_ext || {};
+  const cat = hotelTypeFromStar(biz.star || '');
+  return {
+    name: poi.name || '未知酒店',
+    dist: formatDistance(dist),
+    desc: poi.address || '高德推荐酒店',
+    price: hotelPriceFromStar(biz.star || ''),
+    origPrice: hotelOrigPriceFromStar(biz.star || ''),
+    coord: poi.location || '',
+    cat: cat,
+    amapId: poi.id || '',
+    rating: biz.rating || '',
+    tel: poi.tel || '',
+    photos: (poi.photos && poi.photos.length) ? poi.photos.map(p => p.url) : [],
+    link: `https://uri.amap.com/detail?poiid=${poi.id || ''}`,
+    address: poi.address || '',
+    website: safeWebsite(poi.website),
+    keytag: poi.keytag || '',
+    businessArea: poi.business_area || '',
+    recommend: poi.recommend || '',
+    discountNum: poi.discount_num || '0',
+    groupbuyNum: poi.groupbuy_num || '0',
+    openTime: biz.opentime2 || '',
+    star: biz.star || '',
+    cityname: poi.cityname || '',
+    adname: poi.adname || ''
+  };
+}
+
+// 安全提取website字段（高德API可能返回数组或字符串）
+function safeWebsite(raw) {
+  if (!raw) return '';
+  if (typeof raw === 'string') return raw;
+  if (Array.isArray(raw)) return raw[0] || '';
+  return '';
+}
+
+// ===== 统一多图渲染辅助 =====
+function renderPhotoGallery(photos, fallbackSvg, name) {
+  if (!photos || photos.length === 0) return `<img src="${fallbackSvg}" alt="${name}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" onerror="this.src='${fallbackSvg}'">`;
+  if (photos.length === 1) return `<img src="${photos[0]}" alt="${name}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" onerror="this.src='${fallbackSvg}'">`;
+  // 多图：点选轮播
+  let dots = '', imgs = '';
+  photos.forEach((url, i) => {
+    const display = i === 0 ? 'block' : 'none';
+    imgs += `<img src="${url}" alt="${name}(${i+1})" class="gallery-img" data-idx="${i}" style="width:100%;height:100%;object-fit:cover;display:${display};position:absolute;top:0;left:0;" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.gallery-dot:nth-child(${i+1})')&&(this.parentElement.querySelector('.gallery-dot:nth-child(${i+1})').style.display='none')">`;
+    dots += `<span class="gallery-dot" data-idx="${i}" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${i===0?'#fff':'rgba(255,255,255,0.5)'};margin:0 2px;cursor:pointer;" onclick="switchGalleryPhoto(this,${i},'${name}')"></span>`;
+  });
+  return `<div style="position:relative;width:100%;height:100%;">${imgs}<div style="position:absolute;bottom:5px;left:0;right:0;text-align:center;z-index:2;">${dots}</div></div>`;
+}
+
+function switchGalleryPhoto(dot, idx, name) {
+  const container = dot.parentElement.parentElement;
+  const imgs = container.querySelectorAll('.gallery-img');
+  const dots = container.querySelectorAll('.gallery-dot');
+  imgs.forEach((img, i) => { img.style.display = i === idx ? 'block' : 'none'; });
+  dots.forEach((d, i) => { d.style.background = i === idx ? '#fff' : 'rgba(255,255,255,0.5)'; });
+}
+
+function typeNameToCat(type) {
+  const t = (type || '').toLowerCase();
+  if (t.includes('中餐') || t.includes('火锅') || t.includes('川菜') || t.includes('湘菜') || t.includes('粤菜') || t.includes('东北') || t.includes('西北') || t.includes('清真'))
+    return '陕菜经典';
+  if (t.includes('小吃') || t.includes('快餐') || t.includes('面食') || t.includes('米线') || t.includes('包子') || t.includes('饺子'))
+    return '回坊小吃';
+  if (t.includes('面包') || t.includes('咖啡') || t.includes('茶') || t.includes('甜点') || t.includes('糕点'))
+    return '面食天堂';
+  if (t.includes('烧烤') || t.includes('烤肉') || t.includes('串') || t.includes('夜市') || t.includes('大排档'))
+    return '夜市烧烤';
+  return '回坊小吃';
+}
+
+function hotelTypeFromStar(star) {
+  if (!star || star === '') return '经济连锁';
+  const s = parseInt(star) || 0;
+  if (s >= 5) return '高档型';
+  if (s >= 4) return '高档型';
+  if (s >= 3) return '舒适型';
+  return '经济连锁';
+}
+
+function hotelPriceFromStar(star) {
+  const prices = { '5': '688', '4': '388', '3': '258', '2': '168', '1': '128', '': '198' };
+  return prices[star] || '198';
+}
+
+function hotelOrigPriceFromStar(star) {
+  const prices = { '5': '1288', '4': '688', '3': '388', '2': '258', '1': '198', '': '288' };
+  return prices[star] || '288';
+}
+
+function fallbackFoodSVG(name) {
+  return foodSVG('回坊小吃');
+}
+
+function spotFallbackSVG(name) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs><linearGradient id="sfg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#E8453C"/><stop offset="100%" stop-color="#F09080"/></linearGradient></defs>
+  <rect width="200" height="200" rx="12" fill="url(#sfg)"/>
+  <text x="100" y="95" text-anchor="middle" font-size="52">🏛️</text>
+  <text x="100" y="150" text-anchor="middle" font-size="18" fill="white" font-weight="bold" style="text-shadow:0 1px 3px rgba(0,0,0,.3)">${name}</text>
+</svg>`;
+  return 'data:image/svg+xml,' + encodeURIComponent(svg);
+}
+
+function photoCellHtml(poi, fallbackSvg) {
+  const photoUrl = poi.photos && poi.photos.length ? poi.photos[0].url : null;
+  if (photoUrl) {
+    return `<img src="${photoUrl}" alt="${poi.name}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="photo-fallback" style="display:none;width:100%;height:100%"><img src="${fallbackSvg}" style="width:100%;height:100%;object-fit:cover"></div>`;
+  }
+  return `<img src="${fallbackSvg}" style="width:100%;height:100%;object-fit:cover">`;
+}
+
+// ===== 本地人美食弹窗（分类图片）=====
+const FOOD_CAT_STYLE = {
+  '陕菜经典': { icon:'🍲', c1:'#D4782F', c2:'#F0C080', emoji:'🥢' },
+  '回坊小吃': { icon:'🥙', c1:'#C84B31', c2:'#F09080', emoji:'🍢' },
+  '面食天堂': { icon:'🍜', c1:'#B8860B', c2:'#F0D878', emoji:'🫓' },
+  '夜市烧烤': { icon:'🍖', c1:'#5D4037', c2:'#A08070', emoji:'🔥' }
+};
+
+function foodSVG(cat) {
+  const s = FOOD_CAT_STYLE[cat] || { icon:'🍴', c1:'#9E9E9E', c2:'#E0E0E0', emoji:'🍽️' };
+  return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${s.c1}"/><stop offset="100%" stop-color="${s.c2}"/></linearGradient></defs><rect width="200" height="200" rx="12" fill="url(#fg)"/><text x="100" y="95" text-anchor="middle" font-size="52">${s.emoji}</text><text x="100" y="150" text-anchor="middle" font-size="20" fill="white" font-weight="bold" style="text-shadow:0 1px 3px rgba(0,0,0,.3)">${cat}</text></svg>`)}`;
+}
+
+const LOCAL_FOODS = [
+  // 陕菜经典
+  { cat:'陕菜经典', name:'德发长饺子宴', area:'钟楼附近', desc:'百年老字号，饺子花样上百种，本地人招待贵客首选', price:'¥60/人', coord:'108.948,34.261' },
+  { cat:'陕菜经典', name:'西安饭庄', area:'东大街', desc:'陕菜头牌，葫芦鸡一绝，周恩来总理曾在此宴请外宾', price:'¥90/人', coord:'108.957,34.260' },
+  { cat:'回坊小吃', name:'回坊老赵家腊牛肉夹馍', area:'回民街深处', desc:'肉多得往外掉，肥瘦相间，汁水多到滴一手，本地人排队常态', price:'¥18/人', coord:'108.946,34.265' },
+  { cat:'回坊小吃', name:'马家灌汤包子', area:'大皮院', desc:'皮薄汤多，先咬一小口吸汤再吃，烫嘴也舍不得停', price:'¥22/人', coord:'108.943,34.264' },
+  { cat:'回坊小吃', name:'杨家粉蒸肉', area:'北院门', desc:'牛肉裹粉蒸得软糯入味，夹在荷叶饼里一口闷，香得很', price:'¥20/人', coord:'108.942,34.267' },
+  { cat:'回坊小吃', name:'花奶奶酸梅汤', area:'回民街主街', desc:'熬出来的酸梅汤和冲调的不是一回事，加醪糟更是一绝', price:'¥8/人', coord:'108.945,34.263' },
+  { cat:'面食天堂', name:'老马家肉丸胡辣汤', area:'洒金桥', desc:'手打牛肉丸Q弹，麻辣味儿正，配上锅盔绝了，大清早就排长队', price:'¥12/人', coord:'108.940,34.268' },
+  { cat:'面食天堂', name:'秦镇米皮老店', area:'高新区秦镇', desc:'米皮薄如纸，红油辣子香而不燥，夏天来一碗爽翻', price:'¥10/人', coord:'108.845,34.196' },
+  { cat:'面食天堂', name:'刘记水盆羊肉', area:'南稍门', desc:'汤清肉烂，月牙饼掰碎了泡进去，再来瓣蒜，额能连吃三碗', price:'¥28/人', coord:'108.939,34.248' },
+  { cat:'夜市烧烤', name:'小东门梆梆肉', area:'朝阳门里', desc:'熏制大肠和猪肚，铁锅柴火熏得焦香四溢，配啤酒一绝', price:'¥35/人', coord:'108.960,34.266' },
+  { cat:'夜市烧烤', name:'马峰烤肉', area:'小南门', desc:'只在晚上出摊，羊肉串嫩到不行，排队半小时也值', price:'¥40/人', coord:'108.937,34.258' },
+];
+
+const FOOD_CATEGORIES = ['全部', '陕菜经典', '回坊小吃', '面食天堂', '夜市烧烤'];
+let foodActiveCat = '全部';
+
+function openLocalFood() {
+  // 免费功能：无需支付即可浏览
+  // 渲染分类标签
+  let catHtml = '';
+  FOOD_CATEGORIES.forEach(c => {
+    catHtml += `<div class="cat-tab${c===foodActiveCat?' active':''}" onclick="filterFoodCat('${c}')">${c}</div>`;
+  });
+  document.getElementById('food-cat-tabs').innerHTML = catHtml;
+  renderFoodList();
+  document.getElementById('food-overlay').classList.add('show');
+}
+
+function filterFoodCat(cat) {
+  foodActiveCat = cat;
+  document.querySelectorAll('#food-cat-tabs .cat-tab').forEach(t => {
+    t.classList.toggle('active', t.textContent === cat);
+  });
+  renderFoodList();
+}
+
+let _cachedFoods = null;
+
+async function renderFoodList() {
+  const list = document.getElementById('food-list');
+  list.innerHTML = '<p style="text-align:center;color:#999;padding:30px;">📡 正在从高德获取附近真实美食...</p>';
+  
+  try {
+    if (!_cachedFoods) {
+      const pos = await getUserPosition();
+      const rawPois = await fetchAmapAround('美食|小吃|陕菜|羊肉泡馍|肉夹馍', '餐饮服务', pos.lat, pos.lng, 5000, 30, true);
+      _cachedFoods = rawPois.map(p => amapPoiToFoodItem(p, pos.lat, pos.lng));
+    }
+  } catch (e) { /* fallback to static */ }
+  
+  const sourceData = (_cachedFoods && _cachedFoods.length > 0) ? _cachedFoods : LOCAL_FOODS;
+  const filtered = foodActiveCat === '全部' ? sourceData : sourceData.filter(f => f.cat === foodActiveCat);
+  
+  if (filtered.length === 0) {
+    list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">暂无该分类美食</p>';
+    return;
+  }
+  
+  let h = '';
+  filtered.forEach((f, i) => {
+    const fallbackSvg = foodSVG(f.cat);
+    const isAmapData = f.photos !== undefined; // 高德数据有photos数组
+    const photoGallery = isAmapData ? renderPhotoGallery(f.photos, fallbackSvg, f.name) : `<img src="${f.photo || f.img || fallbackSvg}" alt="${f.name}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.src='${fallbackSvg}'">`;
+    const descText = f.desc || '';
+    const ratingHtml = f.rating ? `<span style="color:#FF9800;">⭐${f.rating}</span>` : '';
+    const distHtml = f.dist ? ` · 📏 ${f.dist}` : '';
+    const telHtml = f.tel ? `<span style="font-size:11px;color:#888;"> · 📞 ${f.tel}</span>` : '';
+    const openHtml = f.openTime ? `<div style="font-size:11px;color:#888;margin-top:2px;">🕐 ${f.openTime}</div>` : '';
+    const tagsHtml = [];
+    if (f.cat) tagsHtml.push(`<span class="list-tag">${f.cat}</span>`);
+    if (f.keytag) tagsHtml.push(`<span class="list-tag" style="background:#FFF3E0;color:#E65100;">${f.keytag}</span>`);
+    if (parseInt(f.discountNum) > 0) tagsHtml.push(`<span class="list-tag" style="background:#FFF8E1;color:#FF6F00;">🎫 ${f.discountNum}优惠</span>`);
+    if (parseInt(f.groupbuyNum) > 0) tagsHtml.push(`<span class="list-tag" style="background:#EDE7F6;color:#4527A0;">🛒 ${f.groupbuyNum}团购</span>`);
+    const bizAreaHtml = f.businessArea ? ` · 🏘️ ${f.businessArea}` : '';
+    h += `<div class="list-item">
+      <div class="list-photo" style="overflow:hidden;flex-shrink:0;">${photoGallery}</div>
+      <div class="list-info">
+        <div class="list-name">${f.name} <span class="list-price">${f.price || ''}</span>${ratingHtml}</div>
+        <div class="list-addr">📍 ${f.area || ''}${bizAreaHtml}${distHtml}${telHtml}</div>
+        <div class="list-desc">${descText}</div>
+        ${openHtml}
+        <div class="list-tags">${tagsHtml.join('')}</div>
+        <div class="list-btn-row">
+          <a class="list-nav" href="https://uri.amap.com/navigation?to=${f.coord}&mode=car&callnative=1" target="_blank">🧭 导航</a>
+          <a class="list-nav blue" href="https://uri.amap.com/detail?poiid=${f.amapId || ''}" target="_blank">📋 详情</a>
+          ${f.website ? `<a class="list-nav" href="${f.website.startsWith('http')?f.website:'https://'+f.website}" target="_blank" style="background:#f5f5f5;color:#333;">🌐 官网</a>` : ''}
+        </div>
+      </div>
+    </div>`;
+  });
+  list.innerHTML = h;
+}
+
+function closeFoodModal(e) {
+  if (!e || e.target === document.getElementById('food-overlay')) {
+    document.getElementById('food-overlay').classList.remove('show');
+  }
+}
+
+// ===== 西安周边景点（按距离排序+内嵌SVG插图）=====
+const NEARBY_SPOTS = [
+  { name:'钟楼', dist:'0km', desc:'西安正中心，600年历史，登楼俯瞰四条大街，建议傍晚去看亮灯。始建于明洪武十七年（1384年），是中国现存钟楼中形制最大、保存最完整的一座。', icon:'🔔', c1:'#C62828', c2:'#E53935', rank:1, coord:'108.9480,34.2608', gaodeUid:'B001B0K5VE', photo:'https://data.travelchinaguide.com/photo/xian-bell-tower-s.jpg' },
+  { name:'鼓楼', dist:'0.2km', desc:'和钟楼隔广场相望，上面有全国最大的鼓，整点敲鼓很震撼。建于明洪武十三年（1380年），比钟楼早4年。', icon:'🥁', c1:'#AD1457', c2:'#E91E63', rank:2, coord:'108.9470,34.2618', gaodeUid:'B001B0K5VF', photo:'https://data.travelchinaguide.com/photo/xian-drum-tower-s.jpg' },
+  { name:'回民街', dist:'0.3km', desc:'西安最火的美食街，主街热闹，巷子里才是本地人的正确打开方式。北院门、西羊市、大皮院三条主巷各有特色。', icon:'🏮', c1:'#E65100', c2:'#FF9800', rank:3, coord:'108.9430,34.2640', gaodeUid:'B001B0K5V2', photo:'https://data.travelchinaguide.com/photo/2019/08300014s.jpg' },
+  { name:'碑林博物馆', dist:'1.5km', desc:'中国四大碑林之首，颜真卿柳公权真迹都在，书法爱好者必去。收藏碑石墓志4000余方，被誉为"书法艺术的殿堂"。', icon:'📜', c1:'#4E342E', c2:'#795548', rank:4, coord:'108.9550,34.2530', gaodeUid:'B001B0K5VG', photo:'https://data.travelchinaguide.com/photo/xian-stone-steles-museum-s.jpg' },
+  { name:'城墙(南门)', dist:'1.8km', desc:'全世界最完整的古城墙，周长13.74公里，租辆自行车骑一圈约2小时，夜景绝美。永宁门（南门）是最雄伟的城门。', icon:'🏰', c1:'#37474F', c2:'#607D8B', rank:5, coord:'108.9520,34.2470', gaodeUid:'B001B0K5V3', photo:'https://data.travelchinaguide.com/photo/2010/12020022.jpg' },
+  { name:'小雁塔', dist:'2.5km', desc:'比大雁塔更清静古朴，免费入园，适合慢慢逛拍照。建于唐中宗景龙年间（707年），是唐代佛教建筑艺术遗产。', icon:'🛕', c1:'#827717', c2:'#9E9D24', rank:6, coord:'108.9420,34.2390', gaodeUid:'B001B0K5V4', photo:'https://data.travelchinaguide.com/photo/xian-small-goose-pagoda-s.jpg' },
+  { name:'大雁塔', dist:'5km', desc:'玄奘取经归来建塔，北广场音乐喷泉亚洲最大，晚上必看。塔高64.5米，七层，内藏贝叶经等珍贵文物。', icon:'🗼', c1:'#F57F17', c2:'#FFB300', rank:7, coord:'108.9640,34.2190', gaodeUid:'B001B0K5V5', photo:'https://data.travelchinaguide.com/photo/2008/03170234.jpg' },
+  { name:'大唐不夜城', dist:'5.5km', desc:'晚上来！穿汉服拍照美哭，「不倒翁小姐姐」和「盛唐密盒」都在这里。全长2100米，以盛唐文化为背景的步行街。', icon:'🎭', c1:'#4A148C', c2:'#7B1FA2', rank:8, coord:'108.9660,34.2150', gaodeUid:'B001B0K5V6', photo:'https://data.travelchinaguide.com/photo/xian-tang-paradise-s.jpg' },
+  { name:'陕西历史博物馆', dist:'5.8km', desc:'全中国最牛的省博之一，免费但需预约，珍宝多到逛不完。馆藏文物171万余件，其中一级文物762件。', icon:'🏛️', c1:'#BF360C', c2:'#E64A19', rank:9, coord:'108.9570,34.2130', gaodeUid:'B001B0K5V7', photo:'https://data.travelchinaguide.com/photo/tang-dynasty-relics.jpg' },
+  { name:'华清宫', dist:'30km', desc:'杨贵妃泡温泉的地方，冬天来看「长恨歌」实景演出震撼到哭。骊山脚下，唐代帝王游幸的离宫别苑。', icon:'♨️', c1:'#00695C', c2:'#26A69A', rank:10, coord:'109.2110,34.3670', gaodeUid:'B001B0K5V8', photo:'https://data.travelchinaguide.com/photo/xian-huaqing-hotspring-s.jpg' },
+  { name:'兵马俑', dist:'35km', desc:'世界第八大奇迹不用多说了吧？来西安不去兵马俑等于没来。秦始皇陵陪葬坑，已出土陶俑8000余件。', icon:'🗿', c1:'#D84315', c2:'#FF7043', rank:11, coord:'109.2750,34.3840', gaodeUid:'B001B0K5V9', photo:'https://data.travelchinaguide.com/photo/terracotta-chariots-horses.jpg' },
+  { name:'华山', dist:'120km', desc:'五岳最险，鹞子翻身和长空栈道够胆才上，建议单独安排一天。南峰海拔2154.9米，是五岳最高峰。', icon:'⛰️', c1:'#01579B', c2:'#29B6F6', rank:12, coord:'110.0870,34.4760', gaodeUid:'B001B0K5VA', photo:'https://data.travelchinaguide.com/photo/2014/06050026.jpg' },
+];
+
+function spotSVG(name, icon, c1, c2) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/></linearGradient></defs>
+  <rect width="200" height="200" rx="12" fill="url(#sg)"/>
+  <text x="100" y="105" text-anchor="middle" font-size="64">${icon}</text>
+  <text x="100" y="155" text-anchor="middle" font-size="22" fill="white" font-weight="bold" style="text-shadow:0 1px 3px rgba(0,0,0,.3)">${name}</text>
+</svg>`;
+  return 'data:image/svg+xml,' + encodeURIComponent(svg);
+}
+
+let _cachedSpots = null;
+
+async function openSpotsNearby() {
+  // 免费功能：无需支付即可浏览
+  const list = document.getElementById('spots-list');
+  list.innerHTML = '<p style="text-align:center;color:#999;padding:30px;">📡 正在从高德获取西安真实景点...</p>';
+  document.getElementById('spots-overlay').classList.add('show');
+  
+  try {
+    if (!_cachedSpots) {
+      const pos = await getUserPosition();
+      const rawPois = await fetchAmapPOIs('景点|博物馆|寺庙|遗址|公园', '风景名胜|科教文化服务|公园广场', '西安', 30, true);
+      _cachedSpots = rawPois.map(p => amapPoiToSpotItem(p, pos.lat, pos.lng));
+    }
+  } catch (e) { /* fallback */ }
+  
+  const sourceData = (_cachedSpots && _cachedSpots.length > 0) ? _cachedSpots : NEARBY_SPOTS;
+  const isAmapData = _cachedSpots && _cachedSpots.length > 0;
+  
+  let h = '';
+  let rank = 0;
+  sourceData.forEach(s => {
+    rank++;
+    const rcClass = rank === 1 ? ' gold' : rank === 2 ? ' silver' : rank === 3 ? ' bronze' : ' normal';
+    const rcIcon = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    const distLabel = s.dist || '—';
+    
+    if (isAmapData) {
+      const fallbackSvg = spotFallbackSVG(s.name);
+      const photoGallery = renderPhotoGallery(s.photos, fallbackSvg, s.name);
+      const ticketHtml = s.ticketOrdering === '1' ? '<span class="list-tag" style="background:#FFF3E0;color:#E65100;">🎫 可购票</span>' : '';
+      const ratingHtml = s.rating ? `<span>⭐${s.rating}</span>` : '';
+      const telHtml = s.tel ? `<span style="font-size:11px;color:#888;">📞 ${s.tel}</span>` : '';
+      const keytagHtml = s.keytag ? `<span class="list-tag" style="background:#FFF3E0;color:#E65100;">${s.keytag}</span>` : '';
+      const bizAreaHtml = s.businessArea ? `<span style="font-size:11px;color:#888;">🏘️ ${s.businessArea}</span>` : '';
+      const recHtml = s.recommend ? `<span style="font-size:10px;color:#4CAF50;">👍 推荐度${s.recommend}/5</span>` : '';
+      const aliasHtml = s.alias ? `<span style="font-size:11px;color:#888;">(又名: ${s.alias})</span>` : '';
+      const discHtml = parseInt(s.discountNum) > 0 ? `<span class="list-tag" style="background:#FFF8E1;color:#FF6F00;">🎫 ${s.discountNum}优惠</span>` : '';
+      const grpHtml = parseInt(s.groupbuyNum) > 0 ? `<span class="list-tag" style="background:#EDE7F6;color:#4527A0;">🛒 ${s.groupbuyNum}团购</span>` : '';
+      h += `<div class="list-item">
+        <div class="list-photo" style="border-radius:10px;overflow:hidden;flex-shrink:0;background:#f5f5f5;position:relative;">${photoGallery}<div class="photo-tag">${distLabel}</div></div>
+        <div class="list-info">
+          <div class="list-name">${s.name} <span class="spot-rank-badge${rcClass}">${rcIcon}</span>${ratingHtml}${aliasHtml}</div>
+          <div class="list-addr">📍 ${s.address || ''} · 📏 ${distLabel} · ${s.adname || '西安'}${telHtml}</div>
+          <div class="list-desc">${s.desc || ''}${recHtml}</div>
+          ${s.openTime ? `<div style="font-size:11px;color:#888;margin:2px 0;">🕐 ${s.openTime}</div>` : ''}
+          <div class="list-tags">${keytagHtml}${ticketHtml}${discHtml}${grpHtml}</div>
+          <div class="list-btn-row">
+            <a class="list-nav" href="https://uri.amap.com/navigation?to=${s.coord},${encodeURIComponent(s.name)}&mode=car&callnative=1" target="_blank">🧭 一键导航</a>
+            <a class="list-nav blue" href="https://uri.amap.com/detail?poiid=${s.amapId || ''}" target="_blank">📋 高德详情</a>
+            <span class="list-nav blue" onclick="openGuide('${s.name}')" style="cursor:pointer;">📸 攻略</span>
+            ${s.website ? `<a class="list-nav" href="${s.website.startsWith('http')?s.website:'https://'+s.website}" target="_blank" style="background:#f5f5f5;color:#333;">🌐 官网</a>` : ''}
+          </div>
+        </div>
+      </div>`;
+    } else {
+      // Fallback to static data
+      const fallbackSvg = spotSVG(s.name, s.icon, s.c1, s.c2);
+      const imgSrc = s.photo || fallbackSvg;
+      h += `<div class="list-item">
+        <div class="list-photo" style="border-radius:10px;overflow:hidden;flex-shrink:0;background:#f5f5f5;"><img src="${imgSrc}" alt="${s.name}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" onerror="this.src='${fallbackSvg}'"><div class="photo-tag">${s.dist}</div></div>
+        <div class="list-info">
+          <div class="list-name">${s.name} <span class="spot-rank-badge${rcClass}">${rcIcon}</span></div>
+          <div class="list-addr">📏 距钟楼约 ${s.dist}</div>
+          <div class="list-desc">${s.desc}</div>
+          <div class="list-btn-row">
+            <a class="list-nav" href="https://uri.amap.com/navigation?to=${s.gaodeUid},${s.name}&mode=car&callnative=1" target="_blank">🧭 一键导航</a>
+            <span class="list-nav blue" onclick="openGuide('${s.name}')" style="cursor:pointer;">📸 拍照攻略</span>
+          </div>
+        </div>
+      </div>`;
+    }
+  });
+  list.innerHTML = h;
+  document.getElementById('spots-overlay').classList.add('show');
+}
+
+function closeSpotsModal(e) {
+  if (!e || e.target === document.getElementById('spots-overlay')) {
+    document.getElementById('spots-overlay').classList.remove('show');
+  }
+}
+
+// ===== 一人一车 · 司机弹窗（含免责条款）=====
+const DRIVERS = [
+  { name:'老王', avatar:'👨‍🦰', age:42, stars:4.9, tags:['土著14年','摄影爱好者'], car:'大众迈腾', color:'黑色', seat:5, plate:'陕A·8X21K', wx:'请通过客服匹配真实司机', phone:'请通过客服匹配', desc:'（示例）当过兵，开车稳，车上备热水和充电线，还免费帮拍照' },
+  { name:'张哥', avatar:'👨', age:38, stars:4.8, tags:['回民街长大','美食通'], car:'丰田凯美瑞', color:'白色', seat:5, plate:'陕A·3M56Y', wx:'请通过客服匹配真实司机', phone:'请通过客服匹配', desc:'（示例）回坊土著，坐他的车等于带了个美食导游' },
+  { name:'小李', avatar:'👦', age:29, stars:4.7, tags:['95后','英语流利'], car:'比亚迪汉', color:'红色', seat:5, plate:'陕A·9H78L', wx:'请通过客服匹配真实司机', phone:'请通过客服匹配', desc:'（示例）英语专业毕业，带过很多外国游客，车内有Wi-Fi和翻译机' },
+];
+
+function openDriverService() {
+  const list = document.getElementById('driver-list');
+  let h = '<div class="disclaimer-box"><strong>⚠️ 重要提示</strong><br>以下为示例司机画像，真实司机需通过客服匹配合规营运车辆。页面内微信号和手机号为占位信息，请勿直接拨打。<br><span style="color:#1A8A7D;font-weight:700;">预约请添加客服微信，我们为您一对一匹配。</span></div>';
+  h += '<p style="text-align:center;color:#1A8A7D;font-weight:700;margin-bottom:12px;"><span style="font-size:22px;">¥400</span><span style="font-size:13px;color:#666;"> /天 · 8小时 · 200公里 · 5座轿车</span></p>';
+  h += '<p style="font-size:11px;color:#999;text-align:center;margin-bottom:16px;">超时¥60/h，超里程¥2/km · 请私下联系司机沟通行程</p>';
+  DRIVERS.forEach(d => {
+    h += `<div class="driver-card">
+      <div class="driver-header">
+        <div class="driver-avatar">${d.avatar}</div>
+        <div>
+          <div class="driver-name">${d.name} <span class="driver-stars">★ ${d.stars}</span>${d.tags.map(t => '<span class="driver-tag">'+t+'</span>').join('')}</div>
+          <div style="font-size:11px;color:#999;">${d.age}岁 · ${d.desc}</div>
+        </div>
+      </div>
+      <div class="driver-info-row">
+        <span>🚗 ${d.car}</span><span>🎨 ${d.color}</span><span>🪑 ${d.seat}座</span><span>🚘 ${d.plate}</span>
+      </div>
+      <div class="driver-contact">
+        <button class="driver-wx-btn" onclick="toast('请添加客服微信预约真实司机匹配服务')">💬 预约匹配服务</button>
+        <button class="driver-call-btn" onclick="toast('请添加客服微信预约真实司机匹配服务')">📞 预约匹配服务</button>
+      </div>
+    </div>`;
+  });
+  list.innerHTML = h;
+  document.getElementById('driver-overlay').classList.add('show');
+}
+
+function closeDriverModal(e) {
+  if (!e || e.target === document.getElementById('driver-overlay')) {
+    document.getElementById('driver-overlay').classList.remove('show');
+  }
+}
+
+function copyWx(wxid) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(wxid).then(() => toast('微信号已复制：' + wxid));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = wxid; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    toast('微信号已复制：' + wxid);
+  }
+}
+
+// ===== 附近酒店 =====
+const HOTEL_CAT_STYLE = {
+  '经济连锁': { icon:'🏨', c1:'#FF8F00', c2:'#FFB74D', emoji:'💰' },
+  '舒适型':    { icon:'🏨', c1:'#1565C0', c2:'#64B5F6', emoji:'🛏️' },
+  '高档型':    { icon:'🏨', c1:'#4E342E', c2:'#8D6E63', emoji:'✨' },
+  '特色民宿':  { icon:'🏨', c1:'#00695C', c2:'#80CBC4', emoji:'🏡' }
+};
+
+function hotelSVG(cat) {
+  const s = HOTEL_CAT_STYLE[cat] || { icon:'🏨', c1:'#9E9E9E', c2:'#E0E0E0', emoji:'🏨' };
+  return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${s.c1}"/><stop offset="100%" stop-color="${s.c2}"/></linearGradient></defs><rect width="200" height="200" rx="12" fill="url(#hg)"/><text x="100" y="100" text-anchor="middle" font-size="52">${s.emoji}</text><text x="100" y="150" text-anchor="middle" font-size="22" fill="white" font-weight="bold" style="text-shadow:0 1px 3px rgba(0,0,0,.3)">${cat}</text></svg>`)}`;
+}
+
+const HOTELS = [
+  { name:'钟楼饭店', dist:'0.3km', desc:'老牌四星，钟楼旁位置绝佳，俯瞰钟楼夜景', price:'388', origPrice:'588', photo:'https://dimg04.c-ctrip.com/images/1mc0m12000amb30aeA2BA_W_1280_853_R5_Q70.jpg', link:'https://hotels.ctrip.com/hotel/375609.html', coord:'108.947,34.260', cat:'高档型' },
+  { name:'西安美居酒店(钟楼店)', dist:'0.5km', desc:'法式风格，地铁口零距离，性价比超高', price:'258', origPrice:'398', photo:'https://dimg04.c-ctrip.com/images/200d14000000vwonq3B33_W_1280_853_R5_Q70.jpg', link:'https://hotels.ctrip.com/hotel/435167.html', coord:'108.952,34.263', cat:'舒适型' },
+  { name:'汉庭酒店(钟楼东大街店)', dist:'0.8km', desc:'经济实惠，干净卫生，连锁品牌有保障', price:'168', origPrice:'258', photo:'https://dimg04.c-ctrip.com/images/200k11000000qfcid5959_C_360_360_Q50.jpg', link:'https://hotels.ctrip.com/hotel/153210.html', coord:'108.957,34.262', cat:'经济连锁' },
+  { name:'西安索菲特传奇酒店', dist:'1.2km', desc:'人民大厦内，法式奢华，带行政酒廊', price:'988', origPrice:'1588', photo:'https://dimg04.c-ctrip.com/images/20060k000000b971iEA9A_C_360_360_Q50.jpg', link:'https://hotels.ctrip.com/hotel/435608.html', coord:'108.955,34.270', cat:'高档型' },
+  { name:'西安W酒店', dist:'3.5km', desc:'网红潮牌酒店，曲江池畔，设计感炸裂', price:'1288', origPrice:'1888', photo:'https://dimg04.c-ctrip.com/images/0222o12000cfl2yy2186E_R_960_660_R5_D.jpg', link:'https://hotels.ctrip.com/hotel/6892125.html', coord:'108.980,34.208', cat:'高档型' },
+  { name:'全季酒店(大雁塔店)', dist:'4.8km', desc:'新中式风格，距大雁塔步行10分钟', price:'298', origPrice:'428', photo:'https://dimg04.c-ctrip.com/images//1mc6a12000rye09u4001B_R_1080_808_Q90.jpg', link:'https://hotels.ctrip.com/hotel/298713.html', coord:'108.960,34.222', cat:'舒适型' },
+  { name:'如家精选(回民街店)', dist:'0.4km', desc:'就在回民街口，下楼就开吃，吃货首选', price:'188', origPrice:'288', photo:'https://dimg04.c-ctrip.com/images/1mc2a12000sferil0B2ED_W_1280_853_R5_Q70.jpg', link:'https://hotels.ctrip.com/hotel/852361.html', coord:'108.945,34.266', cat:'经济连锁' },
+  { name:'花间堂·与鹿(诗经里)', dist:'21km', desc:'诗经里景区内，温泉私汤，唐风庭院园林', price:'598', origPrice:'898', photo:'https://dimg04.c-ctrip.com/images/1mc2p12000ntca9bmD529_W_1280_853_R5_Q70.jpg', link:'https://hotels.ctrip.com/hotel/54895140.html', coord:'108.764,34.215', cat:'特色民宿' },
+];
+
+const HOTEL_CATEGORIES = ['全部', '经济连锁', '舒适型', '高档型', '特色民宿'];
+let hotelActiveCat = '全部';
+
+let _cachedHotels = null;
+
+function openHotelsNearby() {
+  // 免费功能：无需支付即可浏览
+  let catHtml = '';
+  HOTEL_CATEGORIES.forEach(c => {
+    catHtml += `<div class="cat-tab${c===hotelActiveCat?' active':''}" onclick="filterHotelCat('${c}')">${c}</div>`;
+  });
+  document.getElementById('hotel-cat-tabs').innerHTML = catHtml;
+  renderHotelList();
+  document.getElementById('hotel-overlay').classList.add('show');
+}
+
+function filterHotelCat(cat) {
+  hotelActiveCat = cat;
+  document.querySelectorAll('#hotel-cat-tabs .cat-tab').forEach(t => {
+    t.classList.toggle('active', t.textContent === cat);
+  });
+  renderHotelList();
+}
+
+async function renderHotelList() {
+  const list = document.getElementById('hotel-list');
+  list.innerHTML = '<p style="text-align:center;color:#999;padding:30px;">📡 正在从高德获取附近真实酒店...</p>';
+  
+  try {
+    if (!_cachedHotels) {
+      const pos = await getUserPosition();
+      // 搜索多种类型的酒店
+      const rawPois1 = await fetchAmapAround('酒店', '住宿服务', pos.lat, pos.lng, 10000, 15, true);
+      const rawPois2 = await fetchAmapAround('宾馆|旅馆|民宿|客栈', '住宿服务', pos.lat, pos.lng, 10000, 15, true);
+      const allRaw = [...rawPois1];
+      // 合并去重
+      const seen = new Set(rawPois1.map(p => p.id));
+      rawPois2.forEach(p => { if (!seen.has(p.id)) { allRaw.push(p); seen.add(p.id); } });
+      _cachedHotels = allRaw.map(p => amapPoiToHotelItem(p, pos.lat, pos.lng));
+    }
+  } catch (e) { /* fallback */ }
+  
+  const sourceData = (_cachedHotels && _cachedHotels.length > 0) ? _cachedHotels : HOTELS;
+  const isAmapData = _cachedHotels && _cachedHotels.length > 0;
+  const filtered = hotelActiveCat === '全部' ? sourceData : sourceData.filter(h => h.cat === hotelActiveCat);
+  
+  if (filtered.length === 0) {
+    list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">暂无该类型酒店</p>';
+    return;
+  }
+  
+  let h = '';
+  filtered.forEach(hotel => {
+    if (isAmapData) {
+      const fallbackSvg = hotelSVG(hotel.cat);
+      const photoGallery = renderPhotoGallery(hotel.photos, fallbackSvg, hotel.name);
+      const ratingHtml = hotel.rating ? `<span style="color:#FF9800;"> ⭐${hotel.rating}</span>` : '';
+      const keytagHtml = hotel.keytag ? `<span class="list-tag" style="background:#EDE7F6;color:#4527A0;">${hotel.keytag}</span>` : '';
+      const starHtml = hotel.star ? `<span style="font-size:11px;color:#FF9800;">${'⭐'.repeat(Math.min(5, hotel.star.length))}</span>` : '';
+      const bizAreaHtml = hotel.businessArea ? `<span style="font-size:11px;color:#888;"> · 🏘️ ${hotel.businessArea}</span>` : '';
+      const telHtml = hotel.tel ? `<span style="font-size:11px;color:#888;"> · 📞 ${hotel.tel}</span>` : '';
+      const openHtml = hotel.openTime ? `<div style="font-size:11px;color:#888;margin-top:2px;">🕐 ${hotel.openTime}</div>` : '';
+      const discHtml = parseInt(hotel.discountNum) > 0 ? `<span class="list-tag" style="background:#FFF8E1;color:#FF6F00;">🎫 ${hotel.discountNum}优惠</span>` : '';
+      const grpHtml = parseInt(hotel.groupbuyNum) > 0 ? `<span class="list-tag" style="background:#EDE7F6;color:#4527A0;">🛒 ${hotel.groupbuyNum}团购</span>` : '';
+      h += `<div class="hotel-list-item">
+        <div class="hotel-photo" style="overflow:hidden;">${photoGallery}</div>
+        <div class="hotel-detail">
+          <div class="h-name">${hotel.name}${ratingHtml}${starHtml}</div>
+          <div class="h-dist">📍 ${hotel.dist} · ${hotel.cat} · ${hotel.adname || '西安'}${bizAreaHtml}${telHtml}</div>
+          <div class="h-price-row"><span class="h-price">¥${hotel.price}<s>¥${hotel.origPrice}</s></span><span class="h-rebate">参考价</span></div>
+          <div class="list-desc">${hotel.address || hotel.desc || ''}</div>
+          ${openHtml}
+          <div class="list-tags" style="margin:4px 0;">${keytagHtml}${discHtml}${grpHtml}</div>
+          <div class="hotel-btn-row">
+            <a class="hotel-btn buy" href="${hotel.link}" target="_blank">📋 高德详情</a>
+            <a class="hotel-btn nav" href="https://uri.amap.com/navigation?to=${hotel.coord}&mode=car" target="_blank">🧭 导航</a>
+            ${hotel.website ? `<a class="hotel-btn" href="${hotel.website.startsWith('http')?hotel.website:'https://'+hotel.website}" target="_blank" style="background:#f5f5f5;color:#333;">🌐 官网</a>` : ''}
+          </div>
+        </div>
+      </div>`;
+    } else {
+      // Fallback
+      h += `<div class="hotel-list-item">
+        <div class="hotel-photo"><img src="${hotel.photo || hotelSVG(hotel.cat)}" alt="${hotel.name}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.src='${hotelSVG(hotel.cat)}'"></div>
+        <div class="hotel-detail">
+          <div class="h-name">${hotel.name}</div>
+          <div class="h-dist">📍 距钟楼约 ${hotel.dist} · ${hotel.cat}</div>
+          <div class="h-price-row"><span class="h-price">¥${hotel.price}<s>¥${hotel.origPrice}</s></span><span class="h-rebate">小长安专享</span></div>
+          <div class="list-desc">${hotel.desc}</div>
+          <div class="hotel-btn-row">
+            <a class="hotel-btn buy" href="${hotel.link}" target="_blank">🛒 去团购</a>
+            <a class="hotel-btn nav" href="https://uri.amap.com/navigation?to=${hotel.coord}&mode=car" target="_blank">🧭 导航</a>
+          </div>
+        </div>
+      </div>`;
+    }
+  });
+  list.innerHTML = h;
+}
+
+function closeHotelModal(e) {
+  if (!e || e.target === document.getElementById('hotel-overlay')) {
+    document.getElementById('hotel-overlay').classList.remove('show');
+  }
+}
+
+// ===== AI 智能体对话 =====
+const CHAT_SYSTEM_PROMPT = `你是"小长安"，西安14年土著导游，陕西口音（用"额"代替"我"），性格热情直爽、幽默风趣。你是西安旅行专家，能回答关于西安的任何问题：景点、美食、交通、住宿、历史、文化、天气、路线规划等。
+
+回复要求：
+1. 用口语化的、接地气的方式回答，陕西味十足
+2. 如果用户问行程规划，给出具体的天数和路线安排
+3. 如果是美食推荐，给店名、位置、人均价格
+4. 如果是景点问题，给门票、开放时间、攻略建议
+5. 保持高情商，让游客感觉在和西安本地老朋友聊天
+6. 回答控制在200-400字，除非需要详细行程规划
+7. 安全第一，不推荐危险行为
+8. 如果用户问非西安旅行相关的问题，友好地把话题引回西安旅行
+
+你是长安伴游的AI智能体，要为游客提供最优质、最准确、最高情商的旅行服务。`;
+
+let chatMessages = [];
+
+function openAIChat() {
+  if (chatMessages.length === 0) {
+    chatMessages.push({ role:'bot', text:'嘿！额是小长安，西安土著活了14年！\\n\\n你想问啥都行——景点、美食、住宿、路线，额都能给你安排得明明白白的。\\n\\n来，说说你有啥需求？带娃？情侣？还是一个人独闯长安城？', time:getTimeStr() });
+  }
+  renderChatMessages();
+  document.getElementById('chat-overlay').classList.add('show');
+  setTimeout(() => document.getElementById('chat-input').focus(), 400);
+}
+
+function getTimeStr() {
+  const now = new Date();
+  return now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+}
+
+function renderChatMessages() {
+  const body = document.getElementById('chat-body');
+  let h = '';
+  chatMessages.forEach(m => {
+    if (m.role === 'bot') {
+      h += `<div class="chat-msg bot">${m.text.replace(/\\n/g,'<br>')}<div class="msg-time">${m.time||''}</div></div>`;
+    } else {
+      h += `<div class="chat-msg user">${m.text}<div class="msg-time">${m.time||''}</div></div>`;
+    }
+  });
+  body.innerHTML = h;
+  body.scrollTop = body.scrollHeight;
+}
+
+function addTyping() {
+  const body = document.getElementById('chat-body');
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'chat-typing';
+  typingDiv.id = 'typing-indicator';
+  typingDiv.innerHTML = '<span></span><span></span><span></span>';
+  body.appendChild(typingDiv);
+  body.scrollTop = body.scrollHeight;
+}
+
+function removeTyping() {
+  const el = document.getElementById('typing-indicator');
+  if (el) el.remove();
+}
+
+function sendChatMsg() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  chatMessages.push({ role:'user', text, time:getTimeStr() });
+  renderChatMessages();
+  addTyping();
+  
+  // Call DeepSeek API
+  (async () => {
+    try {
+      const resp = await fetch(PROXY_URL, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'deepseek-chat',
+          max_tokens:800,
+          temperature:0.9,
+          messages:[
+            {role:'system',content:CHAT_SYSTEM_PROMPT},
+            {role:'user',content:text}
+          ]
+        })
+      });
+      if (!resp.ok) throw new Error('API错误');
+      const data = await resp.json();
+      removeTyping();
+      chatMessages.push({ role:'bot', text:data.choices[0].message.content, time:getTimeStr() });
+      renderChatMessages();
+    } catch(e) {
+      removeTyping();
+      // Fallback response if API fails
+      const fallback = getFallbackResponse(text);
+      chatMessages.push({ role:'bot', text:fallback, time:getTimeStr() });
+      renderChatMessages();
+    }
+  })();
+}
+
+function getFallbackResponse(q) {
+  const ql = q.toLowerCase();
+  if (ql.includes('兵马俑') || ql.includes('门票')) return '兵马俑门票120元/人，学生半价60元。旺季（3月-11月）8:30-17:00，淡季8:30-16:30。建议提前网上购票，现场排队太费劲。额建议找个导游讲解，比自己瞎看强多了！';
+  if (ql.includes('住') || ql.includes('酒店') || ql.includes('住宿')) return '住的话额推荐钟楼附近，去哪都方便。经济型168起，舒适型258起，高档型388起。打开"附近酒店"标签能看到详细列表，还有团购链接！';
+  if (ql.includes('吃') || ql.includes('美食') || ql.includes('推荐')) return '额私藏的美食单在"本地人美食"标签里，分成了陕菜经典、回坊小吃、面食天堂、夜市烧烤四个分类。回民街的灌汤包子和肉夹馍是必吃的，别去主街，钻进巷子里找老店！';
+  if (ql.includes('行程') || ql.includes('路线') || ql.includes('规划') || ql.includes('天')) return '想要定制行程的话，回到首页点"开始规划我的西安之旅"，告诉额你的天数、人数、偏好，额用AI给你生成详细到每小时的路线，连导航都配好了！';
+  return '这个问题额得查一下最新信息，不过关于西安的景点、美食、住宿、路线这些事儿，你尽管问！或者试试快捷提问，额都能给你安排得妥妥的。';
+}
+
+function askQuick(q) {
+  document.getElementById('chat-input').value = q;
+  sendChatMsg();
+}
+
+function closeAIChat(e) {
+  if (!e || e.target === document.getElementById('chat-overlay')) {
+    document.getElementById('chat-overlay').classList.remove('show');
+  }
+}
+
+// ===== 语音播报（首次登录自动用陕西话介绍）=====
+let voicePlayed = false;
+
+function toggleVoiceIntro() {
+  const btn = document.getElementById('voice-big-btn');
+  if (!btn) return;
+  if (btn.classList.contains('playing')) {
+    stopVoice();
+    return;
+  }
+  playVoiceIntro();
+}
+
+function playVoiceIntro() {
+  if (!('speechSynthesis' in window)) {
+    toast('你的浏览器不支持语音播报');
+    return;
+  }
+  const btn = document.getElementById('voice-big-btn');
+  if (!btn) return;
+  btn.classList.add('playing');
+  btn.textContent = '🔊 额正在说…';
+
+  const text = '嘿！你好！额是小长安，你在西安的土著老朋友。额在西安活了14年，比任何一个攻略APP都懂这座城。额能帮你规划旅行路线、推荐本地人私藏的美食、陪你聊天解答任何关于西安的问题。想规划行程就在下面填地点和时间，想找好吃的、找酒店、找景点，点下面导航栏就行。有任何问题点开AI智能体问额！祝你在西安耍得开心！';
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'zh-CN';
+  utterance.rate = 0.95;
+  utterance.pitch = 1.05;
+
+  const voices = speechSynthesis.getVoices();
+  const zhVoice = voices.find(v => v.lang.startsWith('zh')) || voices.find(v => v.lang.includes('Chinese'));
+  if (zhVoice) utterance.voice = zhVoice;
+
+  utterance.onend = () => {
+    btn.classList.remove('playing');
+    btn.textContent = '🔊 听额用陕西话给你说两句';
+    voicePlayed = true;
+  };
+  utterance.onerror = () => {
+    btn.classList.remove('playing');
+    btn.textContent = '🔊 听额用陕西话给你说两句';
+  };
+
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utterance);
+}
+
+function stopVoice() {
+  speechSynthesis.cancel();
+  const btn = document.getElementById('voice-big-btn');
+  if (btn) {
+    btn.classList.remove('playing');
+    btn.textContent = '🔊 听额用陕西话给你说两句';
+  }
+}
+
+// 预加载语音列表并首次访问自动播报
+if ('speechSynthesis' in window) {
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = function() {
+    speechSynthesis.getVoices();
+    if (!voicePlayed && !sessionStorage.getItem('cb_voiced')) {
+      sessionStorage.setItem('cb_voiced', '1');
+      setTimeout(function() {
+        var btn = document.getElementById('voice-big-btn');
+        if (btn) playVoiceIntro();
+      }, 1500);
+    }
+  };
+}
+
+// ===== 人数选择器（主页）=====
+var personCounts = { adult: 2, child: 0, elder: 0 };
+
+function adjPerson(type, delta) {
+  var newVal = personCounts[type] + delta;
+  if (newVal < 0) return;
+  if (newVal > 20) return;
+  // 至少一个成人
+  if (type === 'adult' && newVal < 1) return;
+  personCounts[type] = newVal;
+  document.getElementById('cnt-' + type).textContent = newVal;
+  // 更新按钮disabled状态
+  var minusBtn = document.getElementById('btn-' + type + '-minus');
+  if (minusBtn) {
+    if ((type === 'adult' && newVal <= 1) || (type !== 'adult' && newVal <= 0)) {
+      minusBtn.classList.add('disabled');
+    } else {
+      minusBtn.classList.remove('disabled');
+    }
+  }
+}
+
+// ===== 人数选择器（form页面）=====
+var formPersonCounts = { adult: 2, child: 0, elder: 0 };
+
+function adjPersonForm(type, delta) {
+  var newVal = formPersonCounts[type] + delta;
+  if (newVal < 0) return;
+  if (newVal > 20) return;
+  if (type === 'adult' && newVal < 1) return;
+  formPersonCounts[type] = newVal;
+  document.getElementById('f-cnt-' + type).textContent = newVal;
+}
+
+// ===== 智能规划（主页直达·结果内嵌展示）=====
+var _planAbortController = null;
+
+function genPlan() {
+  var from = (document.getElementById('fromCity')||{}).value && document.getElementById('fromCity').value.trim() || '北京';
+  var startDate = document.getElementById('startDate').value;
+  var endDate = document.getElementById('endDate').value;
+  var adult = personCounts.adult || 0;
+  var child = personCounts.child || 0;
+  var elder = personCounts.elder || 0;
+  var total = adult + child + elder;
+  
+  if (!startDate || !endDate) {
+    toast('请选择出行日期');
+    return;
+  }
+  if (new Date(endDate) <= new Date(startDate)) {
+    toast('结束日期要晚于开始日期');
+    return;
+  }
+  if (total === 0) {
+    toast('请至少选择1位出行人');
+    return;
+  }
+
+  var days = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
+
+  // 收集所有chip选中的值
+  function getSelectedChip(sectionIdx, groupIdx) {
+    var sections = document.querySelectorAll('.main-form .section');
+    var s = sections[sectionIdx];
+    if (!s) return '';
+    var groups = s.querySelectorAll('.chip-group');
+    var g = groups[groupIdx];
+    if (!g) return '';
+    var sel = g.querySelector('.chip.selected');
+    return sel ? sel.textContent.trim() : '';
+  }
+  function getMultiChips(sectionIdx, groupIdx) {
+    var sections = document.querySelectorAll('.main-form .section');
+    var s = sections[sectionIdx];
+    if (!s) return [];
+    var groups = s.querySelectorAll('.chip-group');
+    var g = groups[groupIdx];
+    if (!g) return [];
+    var chips = g.querySelectorAll('.chip.selected');
+    var result = [];
+    chips.forEach(function(c) { result.push(c.textContent.trim()); });
+    return result;
+  }
+
+  // Section 0: 出行信息
+  var transport = getSelectedChip(0, 2) || '公共交通';
+  
+  // Section 1: 同伴
+  var who = getSelectedChip(1, 0) || '朋友结伴';
+  var budget = getSelectedChip(1, 2) || '1500-3000';
+
+  // Section 2: 住宿
+  var hotelBudget = getSelectedChip(2, 0) || '200-400';
+  var hotelType = getSelectedChip(2, 1) || '舒适型';
+
+  // Section 3: 美食
+  var foodPref = getMultiChips(3, 0);
+  var foodWant = getMultiChips(3, 1);
+  var foodTaboo = getSelectedChip(3, 2) || '无忌讳';
+
+  // Section 4: 游玩
+  var styles = getMultiChips(4, 0);
+  var mustSee = getMultiChips(4, 1);
+  var pace = getSelectedChip(4, 2) || '适中型';
+
+  // Section 5: 备注
+  var specials = getMultiChips(5, 0);
+  var note = (document.getElementById('f-note')||{}).value && document.getElementById('f-note').value.trim() || '';
+
+  // 填充state
+  state.from = from;
+  state.depart = startDate;
+  state['return'] = endDate;
+  state.count = total;
+  state._days = days;
+  state.transport = transport;
+  state.who = who;
+  state.budget = budget;
+  state.hotelBudget = hotelBudget;
+  state.hotelType = hotelType;
+  state.foodPref = foodPref;
+  state.foodWant = foodWant;
+  state.foodTaboo = foodTaboo;
+  state.styles = styles;
+  state.mustSee = mustSee;
+  state.pace = pace;
+  state.specials = specials;
+  state.note = note;
+
+  // 人数描述
+  var parts = [];
+  if (adult > 0) parts.push(adult + '位成人');
+  if (child > 0) parts.push(child + '位儿童');
+  if (elder > 0) parts.push(elder + '位老人');
+  state._whoDesc = parts.join('，');
+
+  // ===== 支付检查 =====
+  if (!checkPayStatus()) {
+    showPayModal('createPlan');
+    return;
+  }
+
+  doGenPlan();
+}
+
+// 实际执行AI规划（支付通过后调用）
+function doGenPlan() {
+  document.querySelector('.main-form').style.display = 'none';
+  document.getElementById('create-result').classList.remove('show');
+  document.getElementById('weather-widget').style.display = 'none';
+  document.getElementById('loadingTxt').style.display = 'block';
+  document.getElementById('genBtn').disabled = true;
+  document.getElementById('genBtn').textContent = '⏳ 小长安正在规划中…';
+
+  callDeepSeekForCreate();
+}
+
+function callDeepSeekForCreate() {
+  var prompt = buildPrompt();
+  _planAbortController = new AbortController();
+  var timeout = setTimeout(function() { _planAbortController.abort(); }, 40000);
+
+  fetch('/api/chat', {
+    method: 'POST', signal: _planAbortController.signal,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'deepseek-chat', max_tokens: 2500, temperature: 0.85,
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: prompt }
+      ]
+    })
+  }).then(function(resp) {
+    clearTimeout(timeout);
+    if (!resp.ok) { return resp.json().catch(function(){return{}}).then(function(e){throw new Error(e.message||e.error||('服务器错误 '+resp.status))}); }
+    return resp.json();
+  }).then(function(data) {
+    renderCreateResult(data.choices[0].message.content);
+  }).catch(function(e) {
+    clearTimeout(timeout);
+    renderCreateError(e.message);
+  });
+}
+
+function renderCreateResult(content) {
+  var plan;
+  try {
+    var m = content.match(/\{[\s\S]*\}/);
+    plan = JSON.parse(m ? m[0] : content);
+  } catch(e) { plan = { title: '路线已生成', xiaoba_say: content.substring(0,400), days: [], foods: [], tips: [], budget: null, hotel: null, car_suggest: false }; }
+
+  document.getElementById('loadingTxt').style.display = 'none';
+  document.getElementById('genBtn').style.display = 'none';
+  document.getElementById('create-result').classList.add('show');
+
+  document.getElementById('cr-title').textContent = plan.title || '你的专属西安路线';
+  document.getElementById('cr-meta').innerHTML = (function(){
+    var m = [];
+    m.push('<span>📅 ' + (state._days||'?') + '天</span>');
+    m.push('<span>👥 ' + state.count + '人</span>');
+    m.push('<span>💰 ' + (state.budget||'—') + '</span>');
+    m.push('<span>🚌 ' + (state.transport||'公共交通') + '</span>');
+    return m.join('');
+  })();
+
+  var h = '';
+
+  if (plan.xiaoba_say) {
+    h += '<div class="rcard"><div class="xb-bubble"><div class="xb-bub-head"><div class="xb-bub-avatar">🏯</div><span class="xb-bub-name">小长安说</span></div><div class="xb-bub-text">' + plan.xiaoba_say + '</div></div></div>';
+  }
+
+  if (plan.days && plan.days.length) {
+    plan.days.forEach(function(d) {
+      var coords = (d.spots||[]).filter(function(s){return s.coord;}).map(function(s){return s.coord;}).join('|');
+      h += '<div class="rcard"><div class="day-block"><div class="day-head"><div class="day-num">D' + d.day + '</div><div class="day-theme">' + (d.theme||'第'+d.day+'天') + '</div><div class="day-nav"><button class="btn-nav" onclick="openAmapDay(\'' + encodeURIComponent(JSON.stringify((d.spots||[]).map(function(s){return {name:s.name,coord:s.coord};}))) + '\')">🧭 高德导航</button></div></div></div><div class="tl">';
+      (d.spots||[]).forEach(function(s) {
+        var navLink = s.coord ? 'https://uri.amap.com/navigation?to=' + encodeURIComponent(s.name) : '#';
+        h += '<div class="tl-item"><div class="tl-dot"></div><div class="tl-info"><div class="tl-time">' + (s.time||'') + '</div><div class="tl-name">' + (s.name||'') + '</div>' + (s.tip ? '<div class="tl-tip">' + s.tip + '</div>' : '') + '<div class="tl-nav"><a href="' + navLink + '" target="_blank">🧭 一键导航</a><button class="tl-guide-btn" onclick="openGuide(\'' + (s.name||'').replace(/'/g,"\\'") + '\')">📸 攻略</button></div></div></div>';
+      });
+      h += '</div></div>';
+    });
+  }
+
+  if (plan.foods && plan.foods.length) {
+    h += '<div class="rcard"><div class="rcard-title">🍜 小长安私房美食单</div><div class="food-grid">';
+    plan.foods.forEach(function(f) {
+      h += '<div class="food-card"><div class="food-name">🍜 ' + (f.name||'') + '</div><div class="food-area">📍 ' + (f.area||'') + '</div><div class="food-tip">' + (f.tip||'') + '</div></div>';
+    });
+    h += '</div></div>';
+  }
+
+  if (plan.hotel) {
+    h += '<div class="rcard"><div class="rcard-title">🏨 住宿推荐</div><div class="hotel-card"><div class="hotel-emoji">🏨</div><div class="hotel-info"><div class="hotel-name">' + (plan.hotel.area||'推荐区域') + '</div><div class="hotel-meta">' + (plan.hotel.reason||'') + '</div><div class="hotel-price"><span class="price-now">' + (plan.hotel.budget||'') + '</span><span class="rebate-tag">小长安专享</span></div></div></div></div>';
+  }
+
+  if (plan.budget) {
+    h += '<div class="rcard"><div class="rcard-title">💰 预算参考（人均）</div><div class="budget-grid"><div class="bg-item"><div class="bg-label">🚌 交通</div><div class="bg-val">' + (plan.budget.transport||'—') + '</div></div><div class="bg-item"><div class="bg-label">🎫 门票</div><div class="bg-val">' + (plan.budget.tickets||'—') + '</div></div><div class="bg-item"><div class="bg-label">🍜 餐饮</div><div class="bg-val">' + (plan.budget.food||'—') + '</div></div><div class="bg-item"><div class="bg-label">🏨 住宿</div><div class="bg-val">' + (plan.budget.hotel||'—') + '</div></div></div><div class="bg-total"><span class="bg-total-label">合计（人均）</span><span class="bg-total-val">' + (plan.budget.total||'—') + '</span></div></div>';
+  }
+
+  if (plan.tips && plan.tips.length) {
+    h += '<div class="rcard"><div class="rcard-title">⚠️ 避坑指南</div><div class="tips-list">';
+    plan.tips.forEach(function(t) { h += '<div class="tips-item">' + t + '</div>'; });
+    h += '</div></div>';
+  }
+
+  document.getElementById('cr-body').innerHTML = h;
+  window.scrollTo(0, 0);
+}
+
+function renderCreateError(msg) {
+  document.getElementById('loadingTxt').style.display = 'none';
+  document.getElementById('genBtn').style.display = 'block';
+  document.getElementById('genBtn').disabled = false;
+  document.getElementById('genBtn').textContent = '🚀 开始智能规划';
+  document.getElementById('create-result').classList.add('show');
+  var errorText = msg;
+  if (msg === 'Failed to fetch') errorText = '代理未启动，请先运行 proxy.js';
+  else if (msg.indexOf('AbortError') >= 0 || msg.indexOf('abort') >= 0) errorText = 'AI响应超时，请重试';
+  document.getElementById('cr-body').innerHTML = '<div class="rcard" style="text-align:center;padding:30px 16px;"><p style="font-size:34px;margin-bottom:12px;">😞</p><p style="font-size:15px;color:#1d1d1f;font-weight:600;">规划遇到点问题</p><p style="font-size:13px;color:#8e8e93;margin:8px 0;">' + errorText + '</p><button class="btn-retry" onclick="backToForm()">返回修改重试</button></div>';
+}
+
+function backToForm() {
+  document.querySelector('.main-form').style.display = 'block';
+  document.getElementById('create-result').classList.remove('show');
+  document.getElementById('cr-body').innerHTML = '';
+  document.getElementById('genBtn').style.display = 'block';
+  document.getElementById('genBtn').disabled = false;
+  document.getElementById('genBtn').textContent = '🚀 开始智能规划';
+  document.getElementById('loadingTxt').style.display = 'none';
+  document.getElementById('weather-widget').style.display = 'flex';
+  if (_planAbortController) { _planAbortController.abort(); _planAbortController = null; }
+  window.scrollTo(0, 0);
+}
+
+// ===== 页面导航（6Tab版） =====
+var _currentTab = 'changan';
+
+function switchTab(tab) {
+  _currentTab = tab;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  
+  // 先关闭chat-overlay
+  var chatOv = document.getElementById('chat-overlay');
+  if (chatOv) chatOv.classList.remove('show');
+
+  if (tab === 'changan') {
+    document.getElementById('page-create').classList.add('active');
+    document.getElementById('tabChangan').classList.add('active');
+  } else if (tab === 'food') {
+    document.getElementById('page-explore').classList.add('active');
+    document.getElementById('tabFood').classList.add('active');
+    switchExploreTab('food');
+  } else if (tab === 'hotel') {
+    document.getElementById('page-explore').classList.add('active');
+    document.getElementById('tabHotel').classList.add('active');
+    switchExploreTab('hotel');
+  } else if (tab === 'spots') {
+    document.getElementById('page-explore').classList.add('active');
+    document.getElementById('tabSpots').classList.add('active');
+    switchExploreTab('scenic');
+  } else if (tab === 'aichat') {
+    var chatOv2 = document.getElementById('chat-overlay');
+    if (chatOv2) chatOv2.classList.add('show');
+    document.getElementById('tabAIChat').classList.add('active');
+    return;
+  } else if (tab === 'mine') {
+    document.getElementById('page-mine').classList.add('active');
+    document.getElementById('tabMine').classList.add('active');
+  }
+  window.scrollTo(0, 0);
+}
+
+var _origShowPage = showPage || function(){};
+showPage = function(id) {
+  if (id === 'create' || id === 'changan') { switchTab('changan'); return; }
+  if (id === 'schedule') { switchTab('schedule'); return; }
+  if (id === 'explore') { switchTab('explore'); return; }
+  _origShowPage(id);
+};
+
+// goToForm也需要更新tab
+var _origGoToForm = goToForm;
+goToForm = function() {
+  _origGoToForm();
+};
+
+// ===== 探索页数据加载 =====
+async function switchExploreTab(type, el) {
+  // 更新active状态
+  if (el) {
+    document.querySelectorAll('.explore-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+  
+  const city = document.getElementById('cityInput')?.value || '西安';
+  document.getElementById('exploreTitle').innerText = '发现' + city;
+  
+  const typeMap = {
+    scenic: { types: '110101|110102|110103', label: '景点' },
+    food: { types: '050000', label: '美食' },
+    drink: { types: '060000', label: '饮品' },
+    shop: { types: '080000', label: '购物' },
+    hotel: { types: '140100', label: '住宿' }
+  };
+  
+  const cfg = typeMap[type];
+  if (!cfg) return;
+  
+  document.getElementById('exploreList').innerHTML = '<div style="text-align:center;padding:40px;color:#c7c7cc">加载中…</div>';
+  document.getElementById('exploreList').dataset.loaded = 'true';
+  
+  try {
+    const url = 'https://restapi.amap.com/v3/place/text?key=' + AMAP_KEY + '&city=' + encodeURIComponent(city) + '&types=' + cfg.types + '&offset=15&page=1&extensions=all';
+    const resp = await fetch(url);
+    const data = await resp.json();
+    const pois = data.pois || [];
+    
+    if (pois.length === 0) {
+      document.getElementById('exploreList').innerHTML = '<div style="text-align:center;padding:40px;color:#c7c7cc">暂无数据</div>';
+      return;
+    }
+    
+    // 获取GPS距离
+    let userLat = 34.267, userLng = 108.948;
+    try {
+      const pos = await getUserPosition();
+      userLat = pos.lat;
+      userLng = pos.lng;
+    } catch(e) {}
+    
+    let html = '';
+    pois.forEach((item, i) => {
+      const loc = item.location ? item.location.split(',') : ['0', '0'];
+      const dist = haversineDistance(userLat, userLng, parseFloat(loc[1]), parseFloat(loc[0]));
+      const distStr = formatDistance(dist);
+      const imgUrl = item.photos && item.photos[0] ? item.photos[0].url : '';
+      const rating = item.biz_ext?.rating || item.rating || '';
+      const typeName = item.type ? item.type.split(';')[0] : cfg.label;
+      
+      html += '<div class="list-item" onclick="openExploreDetail(\'' + item.id + '\',\'' + type + '\')">';
+      html += '<img class="list-img" src="' + imgUrl + '" alt="' + item.name + '" onerror="this.style.display=\'none\'">';
+      html += '<div class="list-info">';
+      html += '<div class="list-title">' + item.name + '</div>';
+      if (typeName) html += '<span class="list-tag">' + typeName + '</span>';
+      if (rating) html += '<span style="font-size:11px;color:#FF9500;margin-left:4px">★' + rating + '</span>';
+      html += '<div class="list-desc">' + distStr + ' · ' + (item.address || '') + '</div>';
+      html += '</div>';
+      html += '<span class="list-arrow">›</span>';
+      html += '</div>';
+    });
+    
+    document.getElementById('exploreList').innerHTML = html;
+    
+    // 尝试加载地图标记
+    try { initExploreMap(pois); } catch(e) {}
+    
+  } catch(e) {
+    document.getElementById('exploreList').innerHTML = '<div style="text-align:center;padding:40px;color:#c7c7cc">加载失败，请重试</div>';
+  }
+}
+
+// 探索页详情弹窗
+function openExploreDetail(id, type) {
+  // 根据type打开对应的弹窗
+  if (type === 'food') { openLocalFood(); return; }
+  if (type === 'hotel') { openHotelsNearby(); return; }
+  if (type === 'scenic') { openSpotsNearby(); return; }
+  // 通用弹窗
+  document.getElementById('popupName').innerText = '详情';
+  document.getElementById('detailMask').classList.add('show');
+}
+
+// 详情弹窗操作
+function closeDetailMask(e) {
+  if (e.target === document.getElementById('detailMask')) {
+    document.getElementById('detailMask').classList.remove('show');
+  }
+}
+function closeDetailPopup() {
+  document.getElementById('detailMask').classList.remove('show');
+}
+function openAddPlanPopup() {
+  document.getElementById('addPlanMask').classList.add('show');
+}
+function closeAddPlanPopup() {
+  document.getElementById('addPlanMask').classList.remove('show');
+}
+function closeAddPlanMask(e) {
+  if (e.target === document.getElementById('addPlanMask')) {
+    document.getElementById('addPlanMask').classList.remove('show');
+  }
+}
+function successAddPlan() {
+  alert('✅ 已添加到行程！');
+  document.getElementById('addPlanMask').classList.remove('show');
+}
+
+// 简易地图初始化
+function initExploreMap(pois) {
+  var wrap = document.getElementById('explore-map-wrap');
+  if (!wrap || typeof AMap === 'undefined') return;
+  
+  wrap.innerHTML = '';
+  wrap.style.height = '180px';
+  
+  var map = new AMap.Map(wrap, {
+    zoom: 12,
+    center: [108.948, 34.267],
+    mapStyle: 'amap://styles/light'
+  });
+  
+  pois.forEach(function(p) {
+    if (!p.location) return;
+    var loc = p.location.split(',');
+    var marker = new AMap.Marker({
+      position: [parseFloat(loc[0]), parseFloat(loc[1])],
+      title: p.name
+    });
+    map.add(marker);
+  });
+}
+
+// ===== 页面初始化：加载天气 + 自动语音 =====
+(function() {
+  // 确保只有tabChangan是active
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  document.getElementById('tabChangan')?.classList.add('active');
+})();
+</script>
+</body>
+</html>
