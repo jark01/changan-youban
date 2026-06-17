@@ -1655,40 +1655,73 @@ function calcDays() {
 }
 
 // ===== DEEPSEEK API =====
-const PROXY_URL = '/api/chat';
+var PROXY_URL = '/api/chat';
+var IS_LOCAL = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+var DEEPSEEK_BASE = 'https://api.deepseek.com/v1/chat/completions';
+var DEEPSEEK_KEY = 'sk-2061c4530730466589b025bd975a7bed';
+// 公网部署时通过CORS代理调用DeepSeek（代理不转发路径时才用）
+if (!IS_LOCAL) {
+  // 优先尝试直连，如CORS拦截则用代理
+  PROXY_URL = DEEPSEEK_BASE;
+}
+
+function _aiFetchOpts(body) {
+  var hdrs = { 'Content-Type': 'application/json' };
+  // 直连DeepSeek需带Authorization；本地代理不需要（proxy.js自带）
+  if (!IS_LOCAL || PROXY_URL === DEEPSEEK_BASE) {
+    hdrs['Authorization'] = 'Bearer ' + DEEPSEEK_KEY;
+  }
+  return { method: 'POST', headers: hdrs, body: JSON.stringify(body) };
+}
+
+function _aiFetch(body, signal) {
+  var opts = _aiFetchOpts(body);
+  if (signal) opts.signal = signal;
+  return fetch(PROXY_URL, opts);
+}
+
+// 带CORS兜底的AI调用
+function _fetchDeepSeek(body, signal) {
+  return _aiFetch(body, signal).catch(function(err) {
+    // 直连失败（可能是CORS），尝试用免费CORS代理
+    if (!IS_LOCAL && PROXY_URL === DEEPSEEK_BASE) {
+      var proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(DEEPSEEK_BASE);
+      var opts = _aiFetchOpts(body);
+      if (signal) opts.signal = signal;
+      return fetch(proxyUrl, opts);
+    }
+    throw err;
+  });
+}
 
 async function callDeepSeek() {
-  const prompt = buildPrompt();
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 40000);
+  var prompt = buildPrompt();
+  var controller = new AbortController();
+  var timeout = setTimeout(function() { controller.abort(); }, 40000);
 
   try {
-    const resp = await fetch(PROXY_URL, {
-      method: 'POST', signal: controller.signal,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'deepseek-chat', max_tokens: 2500, temperature: 0.85,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: prompt }
-        ]
-      })
-    });
+    var resp = await _fetchDeepSeek({
+      model: 'deepseek-chat', max_tokens: 2500, temperature: 0.85,
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: prompt }
+      ]
+    }, controller.signal);
     clearTimeout(timeout);
     if (!resp.ok) {
-      const ed = await resp.json().catch(()=>({}));
+      var ed = await resp.json().catch(function(){return{}});
       if (resp.status===401) throw new Error('API Key无效');
       throw new Error(ed.message||ed.error||('服务器错误 '+resp.status));
     }
-    const data = await resp.json();
+    var data = await resp.json();
     stopLoadingAnim();
     renderResult(data.choices[0].message.content);
   } catch(e) {
     clearTimeout(timeout);
     stopLoadingAnim();
-    let msg = e.message;
+    var msg = e.message;
     if (e.name==='AbortError') msg = 'AI响应超时，请重试';
-    else if (msg==='Failed to fetch') msg = '代理未启动，请先运行 proxy.js';
+    else if (msg==='Failed to fetch') msg = IS_LOCAL ? '代理未启动，请先运行 proxy.js' : '网络连接失败，请检查网络后重试';
     renderError(msg);
   }
 }
@@ -3395,17 +3428,13 @@ function callDeepSeekForCreate() {
   _planAbortController = new AbortController();
   var timeout = setTimeout(function() { _planAbortController.abort(); }, 40000);
 
-  fetch('/api/chat', {
-    method: 'POST', signal: _planAbortController.signal,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'deepseek-chat', max_tokens: 2500, temperature: 0.85,
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: prompt }
-      ]
-    })
-  }).then(function(resp) {
+  _fetchDeepSeek({
+    model: 'deepseek-chat', max_tokens: 2500, temperature: 0.85,
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user', content: prompt }
+    ]
+  }, _planAbortController.signal).then(function(resp) {
     clearTimeout(timeout);
     if (!resp.ok) { return resp.json().catch(function(){return{}}).then(function(e){throw new Error(e.message||e.error||('服务器错误 '+resp.status))}); }
     return resp.json();
@@ -3413,7 +3442,10 @@ function callDeepSeekForCreate() {
     renderCreateResult(data.choices[0].message.content);
   }).catch(function(e) {
     clearTimeout(timeout);
-    renderCreateError(e.message);
+    var msg = e.message;
+    if (e.name==='AbortError') msg = 'AI响应超时，请重试';
+    else if (msg==='Failed to fetch') msg = IS_LOCAL ? '代理未启动，请先运行 proxy.js' : '网络连接失败，请检查网络后重试';
+    renderCreateError(msg);
   });
 }
 
