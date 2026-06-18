@@ -16,6 +16,10 @@ body{font-family:-apple-system,'PingFang SC','Helvetica Neue',sans-serif;backgro
 .hero-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,.55) 70%,rgba(0,0,0,.75) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
 .hero-title{font-size:24px;font-weight:800;color:#fff;letter-spacing:2px;text-shadow:0 2px 8px rgba(0,0,0,.5)}
 .hero-sub{font-size:13px;color:rgba(255,255,255,.8);margin-top:6px;letter-spacing:1px}
+.hero-voice-btn{display:inline-block;margin-top:12px;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:8px 20px;font-size:13px;cursor:pointer;transition:all .2s}
+.hero-voice-btn:hover{background:rgba(255,255,255,.3)}
+.hero-voice-btn.playing{background:rgba(232,69,60,.5);border-color:rgba(232,69,60,.7);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 
 /* ===== AI Intro Section ===== */
 .intro-section{padding:20px 16px 16px;background:#fff;text-align:center}
@@ -220,6 +224,14 @@ body{font-family:-apple-system,'PingFang SC','Helvetica Neue',sans-serif;backgro
 .pay-orig{font-size:14px;color:#8e8e93;text-decoration:line-through;margin-left:8px}
 .pay-qrcode-section{text-align:center;margin-bottom:16px}
 .pay-qrcode-title{font-size:14px;font-weight:600;color:#1d1d1f;margin-bottom:14px}
+.pay-qrcode-dual{display:flex;gap:10px;justify-content:center;margin-bottom:8px}
+.pay-qrcode-item{flex:1;max-width:160px;background:#f8f8f8;border-radius:16px;padding:12px 8px 8px;text-align:center}
+.pay-qrcode-item.wechat{border:2px dashed #07C160}
+.pay-qrcode-item.alipay{border:2px dashed #1677FF}
+.pay-qrcode-label{font-size:12px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:4px}
+.pay-qrcode-item.wechat .pay-qrcode-label{color:#07C160}
+.pay-qrcode-item.alipay .pay-qrcode-label{color:#1677FF}
+.pay-qrcode-img-s{width:130px;height:130px;border-radius:8px;background:#fff;display:block;margin:0 auto}
 .pay-qrcode-box{display:inline-block;background:#f8f8f8;border-radius:16px;padding:16px;border:2px dashed #07C160}
 .pay-qrcode-img{width:180px;height:180px;border-radius:8px;background:#fff;display:block}
 .pay-qrcode-amount{font-size:22px;font-weight:800;color:#1d1d1f;margin-top:10px}
@@ -334,6 +346,54 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
 .cat-tabs::-webkit-scrollbar{display:none}
 .cat-tab{padding:6px 14px;border-radius:20px;border:1.5px solid #d1d1d6;background:#fff;font-size:12px;color:#1d1d1f;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s}
 .cat-tab.active{background:#1d1d1f;color:#fff;border-color:#1d1d1f;font-weight:600}
+
+/* 美食/酒店/景点 独立页面 */
+.food-page,.hotel-page,.spots-page{background:#F5F5F5;min-height:100vh}
+.food-page-header{background:linear-gradient(135deg,#1d1d1f 0%,#3a3a3c 100%);color:#fff;padding:44px 20px 20px}
+.food-page-header h2{font-size:22px;font-weight:700;margin-bottom:6px}
+.food-page-header p{font-size:13px;opacity:.7;margin:0}
+.food-page-list{padding:12px 16px 100px;display:flex;flex-direction:column;gap:10px}
+.food-page-list .loading-msg{text-align:center;color:#999;padding:40px 0}
+
+/* Food card (page version) */
+.food-page-card{background:#fff;border-radius:16px;padding:14px;display:flex;gap:12px;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.food-page-card:active{transform:scale(.98);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.food-page-card .fp-photo{width:80px;height:80px;border-radius:12px;flex-shrink:0;overflow:hidden;background:#f0f0f0}
+.food-page-card .fp-photo img{width:100%;height:100%;object-fit:cover}
+.food-page-card .fp-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.food-page-card .fp-name{font-size:15px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.food-page-card .fp-desc{font-size:12px;color:#8e8e93;line-height:1.5;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.food-page-card .fp-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:#8e8e93}
+.food-page-card .fp-price{font-weight:700;color:#E8453C;font-size:14px}
+.food-page-card .fp-dist{display:flex;align-items:center;gap:2px}
+.food-page-card .fp-nav{flex-shrink:0;display:flex;align-items:center}
+.food-page-card .fp-nav-btn{background:#1d1d1f;color:#fff;border:none;border-radius:20px;padding:8px 14px;font-size:12px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:4px}
+
+/* Hotel card (page version) */
+.hotel-page-card{background:#fff;border-radius:16px;padding:14px;display:flex;gap:12px;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.hotel-page-card:active{transform:scale(.98);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.hotel-page-card .hp-photo{width:100px;height:80px;border-radius:12px;flex-shrink:0;overflow:hidden;background:#f0f0f0}
+.hotel-page-card .hp-photo img{width:100%;height:100%;object-fit:cover}
+.hotel-page-card .hp-info{flex:1;min-width:0}
+.hotel-page-card .hp-name{font-size:15px;font-weight:700;margin-bottom:4px}
+.hotel-page-card .hp-meta{font-size:12px;color:#8e8e93;margin-bottom:6px}
+.hotel-page-card .hp-bottom{display:flex;align-items:center;justify-content:space-between}
+.hotel-page-card .hp-price{font-weight:700;color:#E8453C;font-size:16px}
+.hotel-page-card .hp-price span{font-size:11px;font-weight:400;color:#8e8e93}
+.hotel-page-card .hp-nav-btn{background:#3B82F6;color:#fff;border:none;border-radius:20px;padding:8px 14px;font-size:12px;cursor:pointer;white-space:nowrap}
+
+/* Spots card (page version) */
+.spot-page-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.spot-page-card:active{transform:scale(.98);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.spot-page-card .sp-photo-wrap{width:100%;height:160px;overflow:hidden;background:#f0f0f0;position:relative}
+.spot-page-card .sp-photo-wrap img{width:100%;height:100%;object-fit:cover}
+.spot-page-card .sp-dist-tag{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:4px 10px;border-radius:12px}
+.spot-page-card .sp-info{padding:14px}
+.spot-page-card .sp-name{font-size:16px;font-weight:700;margin-bottom:4px}
+.spot-page-card .sp-desc{font-size:12px;color:#8e8e93;line-height:1.5;margin-bottom:8px}
+.spot-page-card .sp-bottom{display:flex;align-items:center;justify-content:space-between}
+.spot-page-card .sp-meta{font-size:11px;color:#8e8e93}
+.spot-page-card .sp-nav-btn{background:#E8453C;color:#fff;border:none;border-radius:20px;padding:8px 14px;font-size:12px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:4px}
 
 /* Hotel items */
 .hotel-list-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid #f0f0f0;align-items:flex-start}
@@ -599,6 +659,93 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
 .msg-time{font-size:10px;color:#C7C7CC;margin-top:4px;text-align:right}
 
 #page-hero{display:none!important}
+
+/* 攻略和避坑指南 */
+.popup-guide-block {
+  margin-top: 16px;
+  padding: 16px;
+  background: #f8f8fa;
+  border-radius: 12px;
+  border-left: 4px solid #E8453C;
+}
+
+.popup-guide-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.popup-guide-content {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+.popup-guide-content ul,
+.popup-guide-content ol {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.popup-guide-content li {
+  margin-bottom: 6px;
+}
+
+.popup-guide-loading {
+  text-align: center;
+  padding: 20px;
+  color: #8e8e93;
+  font-size: 13px;
+}
+
+.popup-guide-error {
+  text-align: center;
+  padding: 16px;
+  color: #ff3b30;
+  font-size: 13px;
+}
+.xb-play-btn {
+  background: none; border: 1px solid #ddd; border-radius: 14px;
+  padding: 2px 10px; font-size: 12px; cursor: pointer;
+  color: #666; margin-left: auto;
+}
+.xb-play-btn:hover { background: #f5f5f5; }
+.share-action-btn { transition: transform 0.15s; }
+.share-action-btn:active { transform: scale(0.95); }
+.mine-section-title {
+  font-size: 14px; font-weight: 600; color: #1D1D1F;
+  padding: 16px 16px 8px;
+}
+.mine-plan-list { padding: 0 16px 20px; }
+.mine-plan-item {
+  background: #fff; border-radius: 12px; padding: 14px;
+  margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  cursor: pointer; transition: transform 0.15s;
+}
+.mine-plan-item:active { transform: scale(0.98); }
+.mine-plan-item .plan-title { font-size: 14px; font-weight: 600; color: #1D1D1F; }
+.mine-plan-item .plan-meta { font-size: 11px; color: #999; margin-top: 4px; }
+.mine-plan-item .plan-days { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.mine-plan-item .plan-day-tag {
+  font-size: 10px; background: #FEF2F1; color: #E8453C;
+  padding: 2px 8px; border-radius: 10px;
+}
+.mine-voice-btn {
+  margin-top: 6px; background: #FEF2F1; color: #E8453C;
+  border: none; border-radius: 16px; padding: 4px 14px;
+  font-size: 12px; cursor: pointer; display: inline-block;
+}
+.feedback-form { margin-top: 16px; }
+.feedback-form .btn-submit { margin: 16px 0; }
+.advice-blk { background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+.advice-blk-title { font-size: 14px; font-weight: 600; color: #1D1D1F; margin-bottom: 6px; }
+.advice-blk-text { font-size: 13px; color: #555; line-height: 1.7; }
+@media (min-width: 768px) { .main-form, .create-result-wrap { max-width: 500px; } }
 </style>
 </head>
 <body>
@@ -619,16 +766,19 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
         <span class="pay-price">¥9.9 <small>/ 全程</small></span>
         <span class="pay-orig">¥29.9</span>
       </div>
-      <div class="pay-tabs">
-        <button class="pay-tab active" onclick="switchPayTab('wechat',this)">💚 微信支付</button>
-        <button class="pay-tab ali" onclick="switchPayTab('alipay',this)">💙 支付宝</button>
-      </div>
       <div class="pay-qrcode-section">
-        <div class="pay-qrcode-box">
-          <img class="pay-qrcode-img" id="pay-qrcode-img" src="" alt="付款二维码">
-          <div class="pay-qrcode-amount">¥9.90</div>
+        <div class="pay-qrcode-dual">
+          <div class="pay-qrcode-item wechat">
+            <div class="pay-qrcode-label">💚 微信支付</div>
+            <img class="pay-qrcode-img-s" id="pay-qr-wechat" src="wechat-qr.png" alt="微信收款码" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent('changanyouban')">
+          </div>
+          <div class="pay-qrcode-item alipay">
+            <div class="pay-qrcode-label">💙 支付宝</div>
+            <img class="pay-qrcode-img-s" id="pay-qr-alipay" src="alipay-qr.png" alt="支付宝收款码" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent('changanyouban')">
+          </div>
         </div>
-        <div class="pay-qrcode-tip" id="pay-qrcode-tip">截图保存 → 打开微信扫一扫 → 支付 ¥9.90</div>
+        <div class="pay-qrcode-amount">¥9.90</div>
+        <div class="pay-qrcode-tip">截图保存 → 打开微信/支付宝扫一扫 → 支付 ¥9.90</div>
       </div>
       <div class="pay-divider"><span>支付完成后</span></div>
       <button class="pay-btn" id="pay-btn" onclick="startPay()">✅ 已完成支付 · 点击解锁行程</button>
@@ -641,15 +791,20 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
 <div id="page-create" class="page active">
   <!-- Hero: 钟楼实景 -->
   <div class="hero-section">
-    <img class="hero-bg" src="https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800&q=80" alt="西安钟楼" onerror="this.style.display='none';this.nextElementSibling.style.background='linear-gradient(135deg,#1d1d1f 0%,#3d1a1a 100%)'">
+    <img class="hero-bg" src="https://images.unsplash.com/photo-1698307227259-a31eb39b9944?w=1000&q=80" alt="西安钟楼" onerror="this.src='https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800&q=80';this.onerror=function(){this.style.display='none';this.nextElementSibling.style.background='linear-gradient(135deg,#1d1d1f 0%,#3d1a1a 100%)';}">
     <div class="hero-overlay">
       <div class="hero-title">长安伴游</div>
-      <div class="hero-sub">你的西安AI智能旅行伴侣</div>
+      <div class="hero-sub">你的西安AI智能旅行伴侣 · 点我说话</div>
+      <button class="hero-voice-btn" id="voice-big-btn" onclick="toggleVoiceIntro()">🔊 听额用陕西话给你说两句</button>
     </div>
   </div>
 
   <!-- 直达表单 -->
   <div class="main-form">
+    <!-- 天气小部件 -->
+    <div class="weather-widget" id="weather-widget" style="margin:0 16px 12px;">
+      <span class="weather-loading">🌤 加载天气中…</span>
+    </div>
     <!-- 出行信息 -->
     <div class="section">
       <div class="section-header">
@@ -657,7 +812,7 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
       </div>
       <div class="field-group">
         <div class="field-label">出发城市 <span class="req">*</span></div>
-        <input class="field-input" id="fromCity" type="text" placeholder="例如：北京 / 上海 / 成都" value="北京">
+        <input class="field-input" id="fromCity" type="text" placeholder="例如：西安 / 上海 / 成都" value="西安">
       </div>
       <div class="field-group">
         <div class="field-label">出行日期</div>
@@ -669,10 +824,9 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
       <div class="field-group">
         <div class="field-label">交通方式</div>
         <div class="chip-group">
-          <div class="chip selected" onclick="toggleChip(this)">🚌 公共交通</div>
+          <div class="chip selected" onclick="toggleChip(this)">🚌 公共交通+打车</div>
           <div class="chip" onclick="toggleChip(this)">🚗 自驾</div>
           <div class="chip" onclick="toggleChip(this)">🚙 专车+司机</div>
-          <div class="chip" onclick="toggleChip(this)">🚕 打车+公交</div>
         </div>
       </div>
     </div>
@@ -813,6 +967,8 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
           <div class="chip multi" onclick="this.classList.toggle('selected')">📸 打卡拍照</div>
           <div class="chip multi" onclick="this.classList.toggle('selected')">🍜 美食为主</div>
           <div class="chip multi" onclick="this.classList.toggle('selected')">🌿 休闲放松</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">👘 汉服装造</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">🎭 沉浸式表演</div>
           <div class="chip multi" onclick="this.classList.toggle('selected')">🎯 探险刺激</div>
           <div class="chip multi" onclick="this.classList.toggle('selected')">🛍 逛街购物</div>
         </div>
@@ -832,6 +988,9 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
           <div class="chip multi" onclick="this.classList.toggle('selected')">书院门</div>
           <div class="chip multi" onclick="this.classList.toggle('selected')">骊山</div>
           <div class="chip multi" onclick="this.classList.toggle('selected')">汉阳陵</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">汉服馆</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">赳赳大秦</div>
+          <div class="chip multi" onclick="this.classList.toggle('selected')">西安千古情</div>
         </div>
       </div>
       <div class="field-group">
@@ -865,13 +1024,8 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
       </div>
     </div>
 
-    <div class="loading-text" id="loadingTxt">🧭 正在调取高德真实数据，小长安也在思考中…</div>
+    <div class="loading-text" id="loadingTxt">🧭 正在调取高德真实数据，长安伴游也在思考中…</div>
     <button class="submit-btn" id="genBtn" onclick="genPlan()">🚀 开始智能规划</button>
-  </div>
-
-  <!-- 天气小部件 -->
-  <div class="weather-widget" id="weather-widget">
-    <span class="weather-loading">🌤 加载天气中…</span>
   </div>
 
   <!-- 规划结果（内嵌显示） -->
@@ -925,6 +1079,54 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
   </div>
   <div id="exploreList">
     <div style="text-align:center;padding:40px;color:#c7c7cc">选择分类开始探索…</div>
+  </div>
+</div>
+
+<!-- ===== 美食页 ===== -->
+<div id="page-food" class="page food-page">
+  <div class="food-page-header">
+    <h2>🍜 长安伴游私藏 · 本地人美食</h2>
+    <p>都是额吃了十年以上的老店，绝对不坑。按你当前位置由近到远排的~</p>
+  </div>
+  <div class="cat-tabs" id="food-page-cat-tabs"></div>
+  <div id="food-page-list" class="food-page-list">
+    <p style="text-align:center;color:#999;padding:30px;">📡 加载中…</p>
+  </div>
+</div>
+
+<!-- ===== 酒店页 ===== -->
+<div id="page-hotel" class="page hotel-page">
+  <div class="food-page-header">
+    <h2>🏨 附近酒店 · 长安伴游精选</h2>
+    <p>按你当前位置从近到远排序，点团购链接看优惠~</p>
+  </div>
+  <div class="cat-tabs" id="hotel-page-cat-tabs"></div>
+  <div id="hotel-page-list" class="food-page-list">
+    <p style="text-align:center;color:#999;padding:30px;">📡 加载中…</p>
+  </div>
+</div>
+
+<!-- ===== 景点页 ===== -->
+<div id="page-spots" class="page spots-page">
+  <div class="food-page-header">
+    <h2>🏛️ 西安周边景点</h2>
+    <p>以钟楼为中心，由近到远。点导航直接开高德地图~</p>
+  </div>
+  <div class="cat-tabs" id="spots-page-cat-tabs"></div>
+  <div id="spots-page-list" class="food-page-list">
+    <p style="text-align:center;color:#999;padding:30px;">📡 加载中…</p>
+  </div>
+</div>
+
+<!-- ===== 潮流体验页 ===== -->
+<div id="page-experience" class="page food-page">
+  <div class="food-page-header">
+    <h2>👘 潮流体验 · 西安新玩法</h2>
+    <p>汉服装造、茶艺陶艺、皮影非遗，按距离排序，一键导航~</p>
+  </div>
+  <div class="cat-tabs" id="exp-cat-tabs"></div>
+  <div id="exp-page-list" class="food-page-list">
+    <p style="text-align:center;color:#999;padding:30px;">📡 加载中…</p>
   </div>
 </div>
 
@@ -989,6 +1191,9 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
   <div class="tab-item" id="tabAIChat" onclick="switchTab('aichat')">
     <span class="tab-icon">🤖</span><span>AI对话</span>
   </div>
+  <div class="tab-item" id="tabExperience" onclick="switchTab('experience')">
+    <span class="tab-icon">👘</span><span>潮流体验</span>
+  </div>
   <div class="tab-item" id="tabMine" onclick="switchTab('mine')">
     <span class="tab-icon">👤</span><span>我的</span>
   </div>
@@ -997,7 +1202,7 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
 <div id="page-form" class="page">
   <div class="form-topbar">
     <button class="back-btn" onclick="switchTab('changan')">←</button>
-    <div><h2>告诉小长安你的需求</h2><p>勾选就行，不用打字</p></div>
+    <div><h2>告诉长安伴游你的需求</h2><p>勾选就行，不用打字</p></div>
   </div>
 
   <!-- 出行信息 -->
@@ -1220,7 +1425,7 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
   </div>
 
   <div class="submit-area">
-    <button class="btn-submit" onclick="submitForm()">🗺️ 小长安，帮我规划路线！</button>
+    <button class="btn-submit" onclick="submitForm()">🗺️ 长安伴游，帮我规划路线！</button>
     <p class="submit-hint">AI自动生成行程 · ¥9.9解锁专属规划</p>
   </div>
 </div>
@@ -1228,7 +1433,7 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
 <!-- ===== LOADING ===== -->
 <div id="page-loading" class="page">
   <div class="load-avatar">🏯</div>
-  <h2 class="load-title">小长安正在给你写路线…</h2>
+  <h2 class="load-title">长安伴游正在给你写路线…</h2>
   <p class="load-sub">根据你的喜好，AI正在规划最优行程</p>
   <div class="load-progress"><div class="load-bar"></div></div>
   <div class="load-tips">
@@ -1242,7 +1447,7 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
 <!-- ===== RESULT ===== -->
 <div id="page-result" class="page">
   <div class="res-header">
-    <div class="res-tag">✅ 小长安专属路线</div>
+    <div class="res-tag">✅ 长安伴游专属路线</div>
     <div class="res-title" id="res-title">西安定制游</div>
     <div class="res-meta" id="res-meta"></div>
   </div>
@@ -1256,10 +1461,15 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
 
 <!-- ===== 我的 ===== -->
 <div id="page-mine" class="page mine-page">
-  <div class="mine-card">
-    <span class="mine-avatar">🐴</span>
-    <div class="mine-name">小长安</div>
-    <div class="mine-desc">你的西安AI智能旅行伴侣</div>
+  <div class="mine-card" onclick="playChangAnIntro()">
+    <span class="mine-avatar">🏯</span>
+    <div class="mine-name">长安伴游</div>
+    <div class="mine-desc">你的西安AI智能旅行伴侣 · 点击听介绍</div>
+    <div class="mine-voice-btn">🔊 语音介绍</div>
+  </div>
+  <div class="mine-section-title">📋 已生成的旅行攻略</div>
+  <div id="mine-plan-list" class="mine-plan-list">
+    <div style="text-align:center;padding:30px;color:#c7c7cc;font-size:14px;">还没有生成过攻略<br>去首页生成你的专属路线吧~</div>
   </div>
   <div class="mine-menu-item" onclick="switchTab('changan')">
     <span class="mine-menu-icon">🏯</span><span>回到首页</span><span class="mine-menu-arrow">›</span>
@@ -1267,11 +1477,75 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
   <div class="mine-menu-item" onclick="switchTab('aichat')">
     <span class="mine-menu-icon">💬</span><span>AI对话</span><span class="mine-menu-arrow">›</span>
   </div>
-  <div class="mine-menu-item" onclick="location.reload()">
-    <span class="mine-menu-icon">🔄</span><span>刷新重试</span><span class="mine-menu-arrow">›</span>
-  </div>
-  <div class="mine-menu-item" onclick="toast('反馈已收到，感谢你！')">
+  <div class="mine-menu-item" onclick="switchTab('feedback')">
     <span class="mine-menu-icon">📝</span><span>意见反馈</span><span class="mine-menu-arrow">›</span>
+  </div>
+  <div class="mine-menu-item" onclick="switchTab('advice')">
+    <span class="mine-menu-icon">💡</span><span>旅行建议</span><span class="mine-menu-arrow">›</span>
+  </div>
+  <div class="mine-menu-item" onclick="switchTab('about')">
+    <span class="mine-menu-icon">ℹ️</span><span>关于长安伴游</span><span class="mine-menu-arrow">›</span>
+  </div>
+</div>
+
+<!-- ===== 意见反馈页 ===== -->
+<div id="page-feedback" class="page feedback-page" style="padding:20px 16px 100px;">
+  <div class="food-page-header">
+    <h2>📝 意见反馈</h2>
+    <p>你的建议是长安伴游进步的最大动力~</p>
+  </div>
+  <div class="feedback-form">
+    <div class="field-group">
+      <div class="field-label">反馈类型</div>
+      <div class="chip-group">
+        <div class="chip selected" onclick="toggleChip(this)">功能建议</div>
+        <div class="chip" onclick="toggleChip(this)">Bug反馈</div>
+        <div class="chip" onclick="toggleChip(this)">体验优化</div>
+        <div class="chip" onclick="toggleChip(this)">其他</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">联系方式（选填，方便回复你）</div>
+      <input class="field-input" id="fb-contact" type="text" placeholder="手机号 / 微信号 / 邮箱">
+    </div>
+    <div class="field-group">
+      <div class="field-label">详细描述 <span class="req">*</span></div>
+      <textarea class="field-input" id="fb-content" rows="5" placeholder="请详细描述你的建议或遇到的问题…"></textarea>
+    </div>
+    <button class="btn-submit" onclick="submitFeedback()" style="margin:0;width:100%;">📤 提交反馈</button>
+    <p style="text-align:center;font-size:12px;color:#999;margin-top:8px;">感谢你的宝贵意见，我们会认真对待每一条反馈 ❤️</p>
+  </div>
+</div>
+
+<!-- ===== 旅行建议页 ===== -->
+<div id="page-advice" class="page" style="padding:20px 16px 100px;">
+  <div class="food-page-header">
+    <h2>💡 旅行建议</h2>
+    <p>基于你的规划，长安伴游给你贴心建议~</p>
+  </div>
+  <div class="field-group" style="text-align:center;">
+    <button class="btn-submit" style="flex:none;width:auto;padding:10px 20px;margin:0;border-radius:12px;" onclick="genTravelAdvice()">🎯 生成贴心建议</button>
+  </div>
+  <div id="advice-result" style="margin-top:16px;">
+    <div style="text-align:center;padding:40px;color:#c7c7cc;font-size:14px;">点击按钮<br>长安伴游基于你最近的规划<br>给出衣食住行全面建议~</div>
+  </div>
+</div>
+
+<!-- ===== 关于页 ===== -->
+<div id="page-about" class="page" style="padding:20px 16px 100px;">
+  <div class="food-page-header">
+    <h2>ℹ️ 关于长安伴游</h2>
+    <p>你的西安AI智能旅行伴侣</p>
+  </div>
+  <div class="mine-card" onclick="playChangAnIntro()">
+    <span class="mine-avatar">🏯</span>
+    <div class="mine-name">长安伴游</div>
+    <div class="mine-desc">西安土著AI向导 · 点击听介绍</div>
+    <div class="mine-voice-btn">🔊 播放介绍</div>
+  </div>
+  <div class="rcard" style="margin:16px 0;">
+    <p style="font-size:14px;color:#555;line-height:1.8;">长安伴游是一款专为西安旅行打造的AI智能助手，集成DeepSeek大模型与高德地图LBS能力，为游客提供个性化的行程规划、美食推荐、景点导航、酒店筛选等一站式服务。</p>
+    <p style="font-size:13px;color:#999;margin-top:12px;">版本 v3.0 · 2026年6月</p>
   </div>
 </div>
 
@@ -1322,7 +1596,7 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
 <div class="food-overlay" id="food-overlay" onclick="closeFoodModal(event)">
   <div class="food-modal" onclick="event.stopPropagation()">
     <button class="modal-close" onclick="closeFoodModal()">✕</button>
-    <h3>🍜 小长安私藏 · 本地人美食</h3>
+    <h3>🍜 长安伴游私藏 · 本地人美食</h3>
     <p class="food-subtitle">都是额吃了十年以上的老店，绝对不坑</p>
     <div class="cat-tabs" id="food-cat-tabs"></div>
     <div id="food-list"></div>
@@ -1353,7 +1627,7 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
 <div class="hotel-overlay" id="hotel-overlay" onclick="closeHotelModal(event)">
   <div class="food-modal" onclick="event.stopPropagation()">
     <button class="modal-close" onclick="closeHotelModal()">✕</button>
-    <h3>🏨 附近酒店 · 小长安精选</h3>
+    <h3>🏨 附近酒店 · 长安伴游精选</h3>
     <p class="food-subtitle">以钟楼为中心，从近到远排序，点击团购链接查看优惠</p>
     <div class="cat-tabs" id="hotel-cat-tabs"></div>
     <div id="hotel-list"></div>
@@ -1366,7 +1640,7 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
     <div class="chat-header">
       <div class="chat-avatar">🏯</div>
       <div class="chat-header-info">
-        <div class="chat-name">小长安 AI智能体</div>
+        <div class="chat-name">长安伴游 AI智能体</div>
         <div class="chat-status">在线 · 西安旅行专家</div>
       </div>
       <button class="modal-close" style="position:static;" onclick="closeAIChat()">✕</button>
@@ -1380,7 +1654,7 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
       <button class="chat-quick" onclick="askQuick('给我一个3天情侣游行程')">情侣游行程</button>
     </div>
     <div class="chat-input-area">
-      <input id="chat-input" type="text" placeholder="输入你的问题，小长安随时回答…" onkeydown="if(event.key==='Enter')sendChatMsg()">
+      <input id="chat-input" type="text" placeholder="输入你的问题，长安伴游随时回答…" onkeydown="if(event.key==='Enter')sendChatMsg()">
       <button onclick="sendChatMsg()">➤</button>
     </div>
   </div>
@@ -1396,14 +1670,141 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
   border-top:2px solid #f44;
 "></div>
 
-
-
-
 <script>
+// 加载html2canvas（用于保存图片）
+document.write('<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"><\/script>');
+</script>
+
+<script src="local-db.js"></script>
+<script>
+// ===== 导航辅助函数 =====
+function navigateTo(lat, lng, name) {
+  if (!lat || !lng) return;
+  window.open('https://uri.amap.com/navigation?to=' + encodeURIComponent(name) + '&mode=car&callnative=1', '_blank');
+}
+
+// ===== 潮流体验页 =====
+var _expPageLoaded = false;
+var _cachedExp = null;
+var _expActiveCat = '全部';
+var _currentExpList = [];
+var EXP_CATEGORIES = ['全部', '汉服装造', '情景演出', '商业购物中心'];
+
+var SPOTS_CATEGORIES = ['全部', '历史文化', '地标建筑', '网红打卡', '自然风光', '户外体验'];
+var _spotsActiveCat = '全部';
+var _spotsPageLoaded = false;
+
+function loadExperiencePage() {
+  var catHtml = '';
+  EXP_CATEGORIES.forEach(function(c) {
+    catHtml += '<div class="cat-tab' + (c === _expActiveCat ? ' active' : '') + '" onclick="filterExpCat(\'' + c + '\')">' + c + '</div>';
+  });
+  var tabsEl = document.getElementById('exp-cat-tabs');
+  if (tabsEl) tabsEl.innerHTML = catHtml;
+  if (!_expPageLoaded) renderExperiencePageList();
+}
+
+function filterExpCat(cat) {
+  _expActiveCat = cat;
+  document.querySelectorAll('#exp-cat-tabs .cat-tab').forEach(function(t) {
+    t.classList.toggle('active', t.textContent === cat);
+  });
+  renderExperiencePageList();
+}
+
+async function renderExperiencePageList() {
+  var list = document.getElementById('exp-page-list');
+  if (!list) return;
+  list.innerHTML = '<p class="loading-msg">👘 正在加载潮流体验数据库...</p>';
+  try {
+    if (!_cachedExp) {
+      var pos = await getUserPosition();
+      var dbExp = await LocalDB.getExperience(pos.lat, pos.lng);
+      _cachedExp = dbExp;
+    }
+  } catch(e) { console.error('LocalDB加载体验失败：', e); }
+  var sourceData = (_cachedExp && _cachedExp.length > 0) ? _cachedExp : [];
+  var filtered = _expActiveCat === '全部' ? sourceData : sourceData.filter(function(e) {
+    if (e.cat === _expActiveCat) return true;
+    // 关键词匹配：DB中可能没有精确分类，按名称匹配
+    var n = (e.name || '').toLowerCase();
+    if (_expActiveCat === '情景演出' && (n.includes('演出') || n.includes('千古情') || n.includes('赳赳') || n.includes('长恨歌') || n.includes('驼铃') || n.includes('大唐'))) return true;
+    if (_expActiveCat === '商业购物中心' && (n.includes('商场') || n.includes('购物') || n.includes('赛格') || n.includes('skp') || n.includes('大悦城') || n.includes('万达') || n.includes('银泰'))) return true;
+    if (_expActiveCat === '文化体验' && (n.includes('文化') || n.includes('书院') || n.includes('博物') || n.includes('非遗'))) return true;
+    return false;
+  });
+  _currentExpList = filtered;
+  if (filtered.length === 0) {
+    // 为新分类提供兜底内容
+    if (_expActiveCat === '情景演出') {
+      filtered = [
+        { name: '《赳赳大秦》', mustTry: '国内首个秦文化大型沉浸式演艺，360度旋转观演，气势磅礴不容错过', lat: 34.321, lng: 108.928, dist: '8km', images: [] },
+        { name: '《长恨歌》', mustTry: '华清池实景演出，山水为幕，演绎唐玄宗杨贵妃爱情故事，中国最美实景演出之一', lat: 34.363, lng: 109.207, dist: '30km', images: [] },
+        { name: '《西安千古情》', mustTry: '一生必看的演出，用科技与艺术再现西安七千年历史，视听震撼', lat: 34.207, lng: 108.965, dist: '15km', images: [] },
+        { name: '《驼铃传奇》', mustTry: '实景+旋转观众席，再现丝绸之路传奇，狼群、骆驼真实上阵', lat: 34.328, lng: 108.985, dist: '12km', images: [] }
+      ];
+    } else if (_expActiveCat === '商业购物中心') {
+      filtered = [
+        { name: '赛格国际购物中心', mustTry: '西安最大商场，亚洲最长室内扶梯，B2层美食街必逛', lat: 34.230, lng: 108.946, dist: '5km', images: [] },
+        { name: '西安SKP', mustTry: '南门高端商业体，奢侈品集中地，一楼美妆区女生天堂', lat: 34.253, lng: 108.946, dist: '3km', images: [] },
+        { name: '大悦城(曲江)', mustTry: '大雁塔旁超大商业体，威斯汀对面，天台可看大雁塔夜景', lat: 34.218, lng: 108.960, dist: '7km', images: [] }
+      ];
+    } else if (_expActiveCat === '手工体验') {
+      filtered = [
+        { name: '书院门非遗手工坊', mustTry: '碑林旁书院门步行街，多家非遗体验馆，可以体验剪纸、皮影、泥塑等传统手工', lat: 34.253, lng: 108.950, dist: '2km', images: [] }
+      ];
+    } else {
+      list.innerHTML = '<p class="loading-msg">😔 暂无该类型的体验项目</p>'; return;
+    }
+    _currentExpList = filtered;
+  }
+  var h = '';
+  filtered.forEach(function(item, idx) {
+    var imgUrl = (item.images && item.images.length > 0) ? item.images[0] : '';
+    var fallbackSvg = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="160"><rect width="400" height="160" fill="#8B5CF6"/><text x="200" y="90" text-anchor="middle" fill="white" font-size="40">👘</text></svg>');
+    var photoHtml = imgUrl ? '<img src="' + imgUrl + '" alt="' + item.name + '" loading="lazy" onerror="this.src=\'' + fallbackSvg + '\'" style="width:100%;height:100%;object-fit:cover;">' : '<img src="' + fallbackSvg + '" alt="' + item.name + '" style="width:100%;height:100%;object-fit:cover;">';
+    var ratingHtml = item.rating && parseFloat(item.rating) > 0 ? ' <span style="font-size:11px;color:#FF9800;">⭐' + item.rating + '</span>' : '';
+    var distHtml = item.dist || '';
+    var priceHtml = item.price ? '¥' + item.price : '';
+    h += '<div class="food-page-card" onclick="showCardDetail(\'experience\',' + idx + ')">' +
+      '<div class="fp-photo">' + photoHtml + '</div>' +
+      '<div class="fp-info">' +
+        '<div class="fp-name">' + item.name + ratingHtml + '</div>' +
+        '<div class="fp-desc">' + ((item.mustTry || item.desc || '').substring(0, 80)) + '</div>' +
+        '<div class="fp-meta">' +
+          '<span class="fp-price">' + priceHtml + '</span>' +
+          (distHtml ? '<span class="fp-dist">📏 ' + distHtml + '</span>' : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="fp-nav"><button class="fp-nav-btn" onclick="event.stopPropagation();navigateTo(' + item.lat + ',' + item.lng + ',\'' + (item.name||'').replace(/'/g,'\\\'') + '\')">🧭</button></div>' +
+    '</div>';
+  });
+  list.innerHTML = h;
+  _expPageLoaded = true;
+}
+</script>
+<script>
+// ===== 本地数据库初始化 =====
+let _localDBReady = false;
+(async function initLocalDB() {
+  try {
+    // 预加载所有数据库
+    await Promise.all([
+      LocalDB.getAttractions(),
+      LocalDB.getFoods(),
+      LocalDB.getHotels(),
+      LocalDB.getExperience()
+    ]);
+    _localDBReady = true;
+    console.log('✅ 本地数据库加载完成');
+  } catch(e) {
+    console.error('⚠️ 本地数据库加载失败：', e);
+  }
+})();
+
 // ===== 支付状态管理 =====
 let isPaid = false;
 let _pendingAction = null;
-try { isPaid = localStorage.getItem('changan_paid_v3') === 'true'; } catch(e) { isPaid = false; }
 
 function checkPayStatus() {
   return isPaid;
@@ -1412,36 +1813,14 @@ function checkPayStatus() {
 function showPayModal(action) {
   _pendingAction = action || 'createPlan';
   document.getElementById('pay-overlay').classList.add('show');
-  setPayQR('wechat');
-}
-
-function switchPayTab(tab, el) {
-  document.querySelectorAll('.pay-tab').forEach(function(t) { t.classList.remove('active'); });
-  el.classList.add('active');
-  setPayQR(tab);
 }
 
 function setPayQR(tab) {
-  var qrImg = document.getElementById('pay-qrcode-img');
-  var tip = document.getElementById('pay-qrcode-tip');
-  var amount = '9.90';
-  var label = tab === 'wechat' ? '微信' : '支付宝';
-  
-  if (qrImg) {
-    // 优先加载对应支付方式的收款码图片
-    var localQR = (tab === 'wechat' ? 'wechat-qr.png' : 'alipay-qr.png');
-    var fallbackQR = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=07C160&data=' + encodeURIComponent('长安游伴旅行规划·' + label + '支付¥' + amount);
-    qrImg.src = localQR;
-    qrImg.onerror = function() {
-      if (this.src.indexOf('api.qrserver.com') === -1) {
-        this.src = fallbackQR;
-        this.onerror = null;
-      }
-    };
-  }
-  if (tip) {
-    tip.textContent = '截图保存 → 打开' + label + '扫一扫 → 支付 ¥' + amount;
-  }
+  // 双码并排，无需切换，两个码同时展示
+  var qrW = document.getElementById('pay-qr-wechat');
+  var qrA = document.getElementById('pay-qr-alipay');
+  if (qrW && !qrW.src) qrW.src = 'wechat-qr.png';
+  if (qrA && !qrA.src) qrA.src = 'alipay-qr.png';
 }
 
 function closePayModal() {
@@ -1455,11 +1834,10 @@ function startPay() {
   
   setTimeout(() => {
     isPaid = true;
-    localStorage.setItem('changan_paid_v3', 'true');
     closePayModal();
     
     if (_pendingAction === 'createPlan') {
-      toast('✅ 支付成功！小长安正在为你规划专属路线…');
+      toast('✅ 支付成功！长安伴游正在为你规划专属路线…');
       setTimeout(function() { doGenPlan(); }, 600);
     } else if (_pendingAction === 'form') {
       submitForm();
@@ -1660,9 +2038,8 @@ var PROXY_URL = '/api/chat';
 var IS_LOCAL = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 var DEEPSEEK_BASE = 'https://api.deepseek.com/v1/chat/completions';
 var DEEPSEEK_KEY = 'sk-2061c4530730466589b025bd975a7bed';
-// 公网部署时通过CORS代理调用DeepSeek（代理不转发路径时才用）
+// 公网部署时直连DeepSeek（API已支持CORS跨域）
 if (!IS_LOCAL) {
-  // 优先尝试直连，如CORS拦截则用代理
   PROXY_URL = DEEPSEEK_BASE;
 }
 
@@ -1681,18 +2058,9 @@ function _aiFetch(body, signal) {
   return fetch(PROXY_URL, opts);
 }
 
-// 带CORS兜底的AI调用
+// 带CORS兜底的AI调用（DeepSeek API 已支持CORS，直连即可）
 function _fetchDeepSeek(body, signal) {
-  return _aiFetch(body, signal).catch(function(err) {
-    // 直连失败（可能是CORS），尝试用免费CORS代理
-    if (!IS_LOCAL && PROXY_URL === DEEPSEEK_BASE) {
-      var proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(DEEPSEEK_BASE);
-      var opts = _aiFetchOpts(body);
-      if (signal) opts.signal = signal;
-      return fetch(proxyUrl, opts);
-    }
-    throw err;
-  });
+  return _aiFetch(body, signal);
 }
 
 async function callDeepSeek() {
@@ -1727,6 +2095,574 @@ async function callDeepSeek() {
   }
 }
 
+
+// ===== 增强版Prompt构建（含DB真实数据） =====
+function buildPromptEnhanced(formData, dbData) {
+  var parts = [
+    '出发城市：' + formData.from,
+    '出行日期：' + (formData.startDate||'未指定') + ' 至 ' + (formData.endDate||'未指定') + '，共' + formData.days + '天',
+    '出行同伴：' + (formData.who||'未选') + '，共' + formData.count + '人',
+    '人均总预算：' + (formData.budget||'未选'),
+    '住宿每晚：' + (formData.hotelBudget||'200-400') + '，类型：' + (formData.hotelType||'舒适型'),
+    '交通方式：' + (formData.transport||'公共交通'),
+    '口味偏好：' + (formData.foodPref.join('、')||'不限'),
+    '想吃：' + (formData.foodWant.join('、')||'不限'),
+    '饮食禁忌：' + (formData.foodTaboo||'无'),
+    '旅行风格：' + (formData.styles.join('、')||'综合体验'),
+    '必去景点：' + (formData.mustSee.join('、')||'无特别指定'),
+    '节奏：' + (formData.pace||'适中'),
+    '特殊需求：' + (formData.specials.join('、')||'无')
+  ];
+  if (formData.note) parts.push('补充说明：' + formData.note);
+  
+  var dbCtx = '';
+  if (dbData) {
+    dbCtx += '\n\n【本地数据库——只能从下面列表中选择推荐】\n';
+    if (dbData.attractions && dbData.attractions.length > 0) {
+      dbCtx += '\n🏛️ 景点（共' + dbData.attractions.length + '个）：\n';
+      dbData.attractions.slice(0, 20).forEach(function(a, i) {
+        dbCtx += (i+1) + '. ' + a.name + '（' + (a.cat||'景点') + '）| 坐标：' + a.lng + ',' + a.lat + '\n';
+      });
+    }
+    if (dbData.foods && dbData.foods.length > 0) {
+      dbCtx += '\n🍜 美食（共' + dbData.foods.length + '个）：\n';
+      dbData.foods.slice(0, 20).forEach(function(f, i) {
+        dbCtx += (i+1) + '. ' + f.name + '（' + (f.cat||'美食') + '）| 坐标：' + f.lng + ',' + f.lat + '\n';
+      });
+    }
+    if (dbData.hotels && dbData.hotels.length > 0) {
+      dbCtx += '\n🏨 酒店（共' + dbData.hotels.length + '个）：\n';
+      dbData.hotels.slice(0, 10).forEach(function(h, i) {
+        var hp = h.price || h.roomRate || '';
+        if (!hp) { hp = h.cat === '豪华型' ? '800-1500' : h.cat === '舒适型' ? '300-600' : h.cat === '经济型' ? '150-300' : '200-500'; }
+        dbCtx += (i+1) + '. ' + h.name + '（' + (h.cat||'酒店') + ' | ¥' + hp + '）\n';
+      });
+    }
+  }
+  
+  return '请根据以下信息制定' + formData.days + '天西安旅行路线：\n\n' + parts.join('\n') + dbCtx + '\n\n重要规则：\n1. 你只能从上面【本地数据库】列表中选择景点/美食/酒店\n2. 不要推荐数据库之外的任何内容\n3. 每个景点必须包含确切的GPS坐标\n4. 每天合理分配3-4个景点，考虑距离\n\n输出格式（纯JSON）：\n{\n  "title":"路线标题",\n  "xiaoba_say":"长安伴游开场白（100字内）",\n  "days":[{"day":1,"theme":"主题","spots":[{"time":"08:00-10:00","name":"景点名","tip":"建议1句","coord":"lng,lat"}]}],\n  "foods":[{"name":"美食名","area":"区域","tip":"建议","coord":"lng,lat"}],\n  "hotel":{"name":"酒店名（从上面列表选）","area":"钟楼附近","reason":"理由","budget":"价位"},\n  "budget":{"transport":"交通费","tickets":"门票","food":"餐饮","hotel":"住宿","total":"合计"},\n  "tips":["避坑1","避坑2","避坑3"]\n}';
+}
+
+// ===== 调用DeepSeek API =====
+async function callDeepSeekAPI(prompt) {
+  var resp = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'deepseek-chat',
+      messages: [
+        { role: 'system', content: '你是"长安伴游"，西安14年土著向导，陕西腔（额代替我），热情直爽。输出纯JSON。坐标格式：兵马俑coord为"109.285,34.385"，大雁塔为"108.963,34.225"，钟楼为"108.948,34.267"。只输出JSON，字数精简。' },
+        { role: 'user', content: prompt }
+      ],
+      temperature: 0.7,
+      max_tokens: 3000
+    })
+  });
+  var data = await resp.json();
+  if (!data.choices || !data.choices[0]) throw new Error('API返回异常');
+  return data.choices[0].message.content;
+}
+
+// ===== 增强版结果渲染（使用DB真实数据填充） =====
+// 智能识别POI类型——根据名称关键字判断属于景点/美食/酒店/体验
+function detectEnrichType(name) {
+  if (!name) return 'attractions';
+  var n = name.toLowerCase();
+  // 演出/表演/剧场/秀 → 体验
+  if (/演出|表演|剧场|剧院|秀|音乐厅|livehouse|脱口秀|相声|话剧|歌剧|音乐会|舞台|live|show|immersive/i.test(n)) return 'experience';
+  // 汉服/妆造/摄影/旅拍/剧本杀/密室/轰趴 → 体验
+  if (/汉服|妆造|旅拍|剧本杀|密室|轰趴|陶艺|手作|diy|手工坊|陶吧|画室|茶艺|射箭|攀岩|蹦床|卡丁车|vr|ar/i.test(n)) return 'experience';
+  // 美食/小吃/餐厅/火锅/烤肉 → 美食
+  if (/饭店|餐厅|火锅|烤肉|面馆|泡馍|小吃|烧烤|甜点|蛋糕|咖啡|奶茶|茶馆|酒馆|酒吧|自助|海鲜/i.test(n)) return 'foods';
+  // 酒店/民宿/宾馆/客栈/青旅 → 酒店
+  if (/酒店|宾馆|民宿|客栈|青旅|公寓|度假村|温泉/i.test(n)) return 'hotels';
+  // 默认景点
+  return 'attractions';
+}
+
+// 预渲染富化：渲染前把DB未命中的条目通过高德+AI补充完整
+// 返回更新后的dbData和spotLookup（快速查找表，同时记录原始名→DB名映射）
+async function preRenderEnrich(plan, dbData) {
+  if (!plan || !plan.days) return { dbData: dbData, spotLookup: {} };
+
+  // 收集所有需要富化的POI
+  var toEnrich = []; // {name, type, source}
+  (plan.days || []).forEach(function(d) {
+    (d.spots || []).forEach(function(s) {
+      if (!s.name) return;
+      var enrichType = detectEnrichType(s.name);
+      var dbKey = (enrichType === 'experience') ? 'experience' : (enrichType === 'foods') ? 'foods' : (enrichType === 'hotels') ? 'hotels' : 'attractions';
+      var dbArr = dbData[dbKey] || [];
+      var found = dbArr.find(function(item) {
+        return item.name && (item.name.includes(s.name) || s.name.includes(item.name) || item.name.substring(0,3) === s.name.substring(0,3));
+      });
+      if (!found) {
+        toEnrich.push({ name: s.name, type: enrichType, fallbackType: (enrichType === 'attractions') ? 'experience' : 'attractions' });
+      }
+    });
+  });
+
+  if (toEnrich.length === 0) return { dbData: dbData, spotLookup: {} };
+
+  console.log('🔄 预渲染富化中，共' + toEnrich.length + '条数据待补充...');
+
+  // 并行请求（3秒超时），每个失败后会回退重试不同类型
+  var spotLookup = {};
+  var promises = toEnrich.map(function(task) {
+    return (async function() {
+      // 首次尝试：用检测到的类型
+      var result = await enrichSinglePOI(task.name, task.type);
+      if (!result && task.fallbackType) {
+        // 回退重试：用备用类型（如attractions找不到→experience）
+        console.log('  ↻ 重试备用类型: ' + task.fallbackType + ' → ' + task.name);
+        result = await enrichSinglePOI(task.name, task.fallbackType);
+        if (result) task.type = task.fallbackType; // 更新类型以便正确注入dbData
+      }
+      if (result && result.item) {
+        var item = result.item;
+        // 双向名称映射：原始名和DB名都指向同一数据
+        spotLookup[task.name] = item;
+        if (item.name !== task.name) spotLookup[item.name] = item;
+        // 注入到对应的dbData数组
+        var dbKey = (task.type === 'experience') ? 'experience' : (task.type === 'foods') ? 'foods' : (task.type === 'hotels') ? 'hotels' : 'attractions';
+        if (!dbData[dbKey]) dbData[dbKey] = [];
+        dbData[dbKey].push(item);
+      }
+    })();
+  });
+
+  await Promise.allSettled(promises);
+  console.log('✅ 预渲染富化完成，新增' + Object.keys(spotLookup).length + '条');
+  return { dbData: dbData, spotLookup: spotLookup };
+}
+
+// 单条POI富化（3秒超时）
+function enrichSinglePOI(name, type) {
+  return new Promise(function(resolve) {
+    var controller = new AbortController();
+    var timer = setTimeout(function() { controller.abort(); resolve(null); }, 3000);
+    fetch('/api/enrich-poi', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name, type: type }),
+      signal: controller.signal
+    }).then(function(r) { return r.json(); })
+      .then(function(result) {
+        clearTimeout(timer);
+        resolve(result && result.ok ? result : null);
+      }).catch(function() {
+        clearTimeout(timer);
+        resolve(null);
+      });
+  });
+}
+
+function renderCreateResultEnhanced(content, formData, dbData, preEnrichLookup) {
+  document.getElementById('loadingTxt').style.display = 'none';
+  document.getElementById('genBtn').disabled = false;
+  document.getElementById('genBtn').textContent = '🚀 开始智能规划';
+  
+  var plan;
+  try {
+    var m = content.match(/\{[\s\S]*\}/);
+    plan = JSON.parse(m ? m[0] : content);
+  } catch(e) {
+    plan = { title: '路线已生成', xiaoba_say: content.substring(0, 400), days: [], foods: [], tips: ['详细内容请截图'], budget: null, hotel: null };
+  }
+  
+  // 保存到历史记录
+  savePlanToHistory(plan, formData);
+  
+  document.getElementById('cr-title').textContent = plan.title || '你的专属西安路线';
+  document.getElementById('cr-meta').innerHTML = '<span>📅 ' + (formData.days||0) + '天</span><span>👥 ' + (formData.count||0) + '人</span><span>💰 ' + (formData.budget||'—') + '</span><span>🚌 ' + (formData.transport||'—') + '</span>';
+  
+  // ---- 把规划中的DB条目注入全局列表，复用 showCardDetail 弹窗 ----
+  // 景点：行程中所有景点，有DB匹配就放DB数据，没有就用AI数据构造一个轻量对象
+  var planSpots = [];
+  var planFoods = [];
+  var planHotels = [];
+
+  (plan.days || []).forEach(function(d) {
+    (d.spots || []).forEach(function(s) {
+      var dbItem = null;
+      // 优先查预富化结果（演出/体验类不在attractions里）
+      if (preEnrichLookup && preEnrichLookup[s.name]) {
+        dbItem = preEnrichLookup[s.name];
+      }
+      // 其次查attractions/experience DB
+      if (!dbItem && dbData && dbData.attractions) {
+        dbItem = dbData.attractions.find(function(a) {
+          return a.name && s.name && (a.name.includes(s.name) || s.name.includes(a.name));
+        });
+      }
+      if (!dbItem && dbData && dbData.experience) {
+        dbItem = dbData.experience.find(function(a) {
+          return a.name && s.name && (a.name.includes(s.name) || s.name.includes(a.name));
+        });
+      }
+      if (dbItem) {
+        planSpots.push(Object.assign({}, dbItem));
+      } else {
+        // AI景点没有DB匹配，构造轻量对象
+        planSpots.push({
+          name: s.name || '景点',
+          cat: '景点',
+          desc: s.tip || '',
+          coord: s.coord || '',
+          images: [],
+          photos: [],
+          guide: s.tip || '',
+          pitfalls: ''
+        });
+      }
+    });
+  });
+
+  (plan.foods || []).forEach(function(f) {
+    var dbFood = null;
+    if (dbData && dbData.foods) {
+      dbFood = dbData.foods.find(function(fd) {
+        return fd.name && f.name && (fd.name.includes(f.name) || f.name.includes(fd.name));
+      });
+    }
+    if (dbFood) {
+      planFoods.push(Object.assign({}, dbFood));
+    } else {
+      planFoods.push({
+        name: f.name || '美食',
+        cat: '餐饮',
+        desc: f.tip || '',
+        address: f.area || '',
+        adname: f.area || '',
+        images: [],
+        photos: [],
+        guide: f.tip || '',
+        pitfalls: ''
+      });
+    }
+  });
+
+  // 酒店：直接使用DB真实数据（已按用户住宿偏好筛选）
+  if (dbData && dbData.hotels && dbData.hotels.length > 0) {
+    // 优先用AI推荐的酒店名精确匹配，匹配不到就用第一条
+    var hotelName = (plan.hotel && plan.hotel.name) || '';
+    var matchHotel = null;
+    if (hotelName) {
+      matchHotel = dbData.hotels.find(function(h) {
+        return h.name && (h.name.indexOf(hotelName) >= 0 || hotelName.indexOf(h.name) >= 0);
+      });
+    }
+    // 如果AI返回了area信息但没匹配到，尝试用第一条匹配
+    if (!matchHotel) {
+      var hotelArea = (plan.hotel && plan.hotel.area) || '';
+      if (hotelArea) {
+        matchHotel = dbData.hotels.find(function(h) {
+          return (h.address && h.address.indexOf(hotelArea) >= 0);
+        });
+      }
+    }
+    if (!matchHotel) matchHotel = dbData.hotels[0];
+    // 构建价格显示
+    var hPrice = '';
+    if (matchHotel.roomRate) hPrice = '¥' + matchHotel.roomRate + '/晚';
+    else if (matchHotel.price) hPrice = '¥' + matchHotel.price + '/晚';
+    else if (matchHotel.cat === '豪华型') hPrice = '¥800-1500/晚';
+    else if (matchHotel.cat === '舒适型') hPrice = '¥300-600/晚';
+    else if (matchHotel.cat === '经济型') hPrice = '¥150-300/晚';
+    else hPrice = '¥200-500/晚';
+    var dbHotelItem = Object.assign({}, matchHotel, { price: hPrice, photos: matchHotel.images || matchHotel.photos || [] });
+    planHotels.push(dbHotelItem);
+  } else if (plan.hotel) {
+    planHotels.push({
+      name: plan.hotel.area || '推荐酒店',
+      cat: '酒店',
+      desc: plan.hotel.reason || '',
+      price: plan.hotel.budget || '',
+      images: [],
+      photos: [],
+      guide: plan.hotel.reason || '',
+      pitfalls: ''
+    });
+  }
+
+  // 写入全局列表（供 showCardDetail 读取）
+  _currentSpotsList = planSpots;
+  _currentFoodList = planFoods;
+  _currentHotelList = planHotels;
+
+  // ---- 渲染 HTML ----
+  var h = '';
+  if (plan.xiaoba_say) h += '<div class="rcard"><div class="xb-bubble"><div class="xb-bub-head"><div class="xb-bub-avatar">🏯</div><span class="xb-bub-name">长安伴游</span><button class="xb-play-btn" onclick="event.stopPropagation();playChangAnIntro()" title="播放语音">🔊</button></div><div class="xb-bub-text">' + plan.xiaoba_say + '</div></div></div>';
+
+  // 每日行程
+  var spotGlobalIdx = 0;
+  if (plan.days && plan.days.length) {
+    plan.days.forEach(function(d) {
+      h += '<div class="rcard"><div class="day-block"><div class="day-head"><div class="day-num" style="color:#E8453C;background:#FEF2F1;font-weight:700;">D' + d.day + '天</div><div class="day-theme">' + (d.theme || '第'+d.day+'天') + '</div></div></div><div class="tl">';
+      (d.spots || []).forEach(function(s) {
+        var si = spotGlobalIdx++;
+        var dbItem = planSpots[si];
+        var imgHtml = '';
+        var hasRealImg = dbItem && dbItem.images && dbItem.images.length > 0;
+        if (hasRealImg) {
+          imgHtml = '<div style="width:100%;height:120px;border-radius:8px;overflow:hidden;margin:6px 0;cursor:pointer;" onclick="showCardDetail(\'spots\',' + si + ')">' +
+            '<img src="' + dbItem.images[0] + '" alt="' + (s.name||'') + '" style="width:100%;height:100%;object-fit:cover;" loading="lazy" data-enrich-name="' + (s.name||'').replace(/"/g,'') + '"></div>';
+        } else if (s.name) {
+          // 占位：渲染时无数据，后台补充完成后自动替换
+          imgHtml = '<div id="enrich-' + si + '" style="width:100%;height:80px;border-radius:8px;background:linear-gradient(135deg,#fef2f1,#fff3e0);display:flex;align-items:center;justify-content:center;margin:6px 0;font-size:24px;cursor:pointer;" onclick="showCardDetail(\'spots\',' + si + '" data-enrich-name="' + (s.name||'').replace(/"/g,'') + '">🏛️<span style="font-size:11px;color:#E8453C;margin-left:8px;" class="enrich-status">加载数据中...</span></div>';
+        }
+        var navCoord = (dbItem && dbItem.coord) ? dbItem.coord : (s.coord || '');
+        var navLink = navCoord ? 'https://uri.amap.com/navigation?to=' + navCoord + '&mode=car&callnative=1' : '#';
+        h += '<div class="tl-item">' +
+          '<div class="tl-dot"></div>' +
+          '<div class="tl-info">' +
+            '<div class="tl-time">' + (s.time||'') + '</div>' +
+            '<div class="tl-name" style="cursor:pointer;color:#1D1D1F;font-weight:600;" onclick="showCardDetail(\'spots\',' + si + ')">' + (s.name||'') + ' <span style="font-size:11px;color:#E8453C;">查看详情 ›</span></div>' +
+            imgHtml +
+            (s.tip ? '<div class="tl-tip">' + s.tip + '</div>' : '') +
+            '<div class="tl-nav">' +
+              '<a href="' + navLink + '" target="_blank">🧭 一键导航</a>' +
+              '<button class="tl-guide-btn" onclick="showCardDetail(\'spots\',' + si + ')">📸 攻略&详情</button>' +
+            '</div>' +
+          '</div></div>';
+      });
+      h += '</div></div>';
+    });
+  }
+
+  // 美食 - 可点击卡片
+  if (plan.foods && plan.foods.length) {
+    h += '<div class="rcard"><div class="rcard-title">🍜 长安伴游私房美食单 <span style="font-size:12px;color:#888;font-weight:400;">（点击查看详情&导航）</span></div><div class="food-grid">';
+    plan.foods.forEach(function(f, fi) {
+      var dbFood = planFoods[fi];
+      var imgHtml = '';
+      if (dbFood && dbFood.images && dbFood.images.length > 0) {
+        imgHtml = '<div style="width:100%;height:90px;border-radius:8px;overflow:hidden;margin:4px 0;">' +
+          '<img src="' + dbFood.images[0] + '" alt="' + (f.name||'') + '" style="width:100%;height:100%;object-fit:cover;" loading="lazy" data-enrich-name="' + (f.name||'').replace(/"/g,'') + '"></div>';
+      } else {
+        imgHtml = '<div style="width:100%;height:60px;border-radius:8px;background:#f0fdf4;display:flex;align-items:center;justify-content:center;margin:4px 0;font-size:24px;">🍜<span style="font-size:11px;color:#10B981;margin-left:6px;">图片补充中</span></div>';
+      }
+      var ratingHtml = (dbFood && dbFood.rating) ? '<div style="font-size:11px;color:#f59e0b;margin-top:2px;">⭐' + dbFood.rating + '</div>' : '';
+      var distHtml = (dbFood && dbFood.dist) ? '<div style="font-size:11px;color:#888;">📏 ' + dbFood.dist + '</div>' : '';
+      h += '<div class="food-card" style="cursor:pointer;position:relative;" onclick="showCardDetail(\'food\',' + fi + ')">' +
+        imgHtml +
+        '<div class="food-name">🍜 ' + (f.name||'') + '</div>' +
+        '<div class="food-area">📍 ' + (f.area || (dbFood && dbFood.adname) || '') + '</div>' +
+        ratingHtml + distHtml +
+        '<div class="food-tip" style="font-size:11px;color:#666;margin-top:2px;">' + (f.tip||'') + '</div>' +
+        '<div style="font-size:11px;color:#E8453C;margin-top:4px;text-align:right;">详情&导航 ›</div>' +
+        '</div>';
+    });
+    h += '</div></div>';
+  }
+
+  // 住宿 - 可点击卡片（始终展示DB真实数据）
+  if (planHotels.length > 0 || plan.hotel) {
+    var dbHotel = planHotels[0];
+    var hotelImgHtml = '';
+    if (dbHotel && dbHotel.images && dbHotel.images.length > 0) {
+      hotelImgHtml = '<div style="width:100%;height:150px;border-radius:10px;overflow:hidden;margin-bottom:10px;">' +
+        '<img src="' + dbHotel.images[0] + '" alt="' + (dbHotel.name||'酒店') + '" style="width:100%;height:100%;object-fit:cover;" loading="lazy"></div>';
+    }
+    var hotelClickStr = dbHotel ? 'onclick="showCardDetail(\'hotel\',0)"' : '';
+    var hotelMeta = dbHotel ? (dbHotel.address || dbHotel.guide || '') : (plan.hotel ? (plan.hotel.reason||'') : '');
+    var hotelRating = dbHotel && dbHotel.rating ? '<div style="font-size:12px;color:#f59e0b;margin-top:2px;">⭐' + dbHotel.rating + ' · ' + (dbHotel.cat||'酒店') + '</div>' : '';
+    var hotelPrice = dbHotel && dbHotel.price ? dbHotel.price : (plan.hotel ? (plan.hotel.budget||'') : '');
+    h += '<div class="rcard"><div class="rcard-title">🏨 住宿推荐 <span style="font-size:12px;color:#888;font-weight:400;">（点击查看详情&导航）</span></div>' +
+      '<div class="hotel-card" style="cursor:pointer;" ' + hotelClickStr + '>' +
+      hotelImgHtml +
+      '<div style="display:flex;align-items:flex-start;gap:12px;">' +
+        '<div class="hotel-emoji">🏨</div>' +
+        '<div class="hotel-info">' +
+          '<div class="hotel-name">' + (dbHotel ? dbHotel.name : (plan.hotel ? (plan.hotel.area||'推荐区域') : '推荐酒店')) + '</div>' +
+          '<div class="hotel-meta">' + hotelMeta + '</div>' +
+          hotelRating +
+          '<div class="hotel-price"><span class="price-now">' + hotelPrice + '</span><span class="rebate-tag">参考价格</span></div>' +
+          '<div style="font-size:11px;color:#E8453C;margin-top:6px;">点击查看详情&导航 ›</div>' +
+        '</div>' +
+      '</div></div></div>';
+  }
+
+  // 预算
+  if (plan.budget) {
+    h += '<div class="rcard"><div class="rcard-title">💰 预算参考（人均）</div><div class="budget-grid">' +
+      '<div class="bg-item"><div class="bg-label">🚌 交通</div><div class="bg-val">' + (plan.budget.transport||'—') + '</div></div>' +
+      '<div class="bg-item"><div class="bg-label">🎫 门票</div><div class="bg-val">' + (plan.budget.tickets||'—') + '</div></div>' +
+      '<div class="bg-item"><div class="bg-label">🍜 餐饮</div><div class="bg-val">' + (plan.budget.food||'—') + '</div></div>' +
+      '<div class="bg-item"><div class="bg-label">🏨 住宿</div><div class="bg-val">' + (plan.budget.hotel||'—') + '</div></div>' +
+      '</div><div class="bg-total"><span class="bg-total-label">合计（人均）</span><span class="bg-total-val">' + (plan.budget.total||'—') + '</span></div></div>';
+  }
+
+  // 避坑
+  if (plan.tips && plan.tips.length) {
+    h += '<div class="rcard"><div class="rcard-title">⚠️ 避坑指南</div><div class="tips-list">';
+    plan.tips.forEach(function(t) { h += '<div class="tips-item">' + t + '</div>'; });
+    h += '</div></div>';
+  }
+
+  // ---- 分享推广区 ----
+  h += '<div class="rcard" style="text-align:center;padding:20px 16px;">';
+  h += '<div style="font-size:15px;font-weight:600;color:#1D1D1F;margin-bottom:12px;">📤 分享给朋友</div>';
+  h += '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;">';
+  h += '<button class="share-action-btn" onclick="sharePlanResult()" style="background:#07C160;color:#fff;border:none;border-radius:20px;padding:10px 20px;font-size:13px;cursor:pointer;">💬 分享给好友</button>';
+  h += '<button class="share-action-btn" onclick="shareToTimeline()" style="background:#E8453C;color:#fff;border:none;border-radius:20px;padding:10px 20px;font-size:13px;cursor:pointer;">📱 分享朋友圈</button>';
+  h += '<button class="share-action-btn" onclick="savePlanImage()" style="background:#3B82F6;color:#fff;border:none;border-radius:20px;padding:10px 20px;font-size:13px;cursor:pointer;">💾 保存相册</button>';
+  h += '</div>';
+  h += '<div style="font-size:12px;color:#999;margin:16px 0 10px;">扫码直接使用长安伴游</div>';
+  h += '<div id="plan-qr-wrap" style="display:flex;justify-content:center;margin-bottom:10px;"><div id="plan-qr-code" style="width:120px;height:120px;background:#f0f0f0;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#999;">二维码加载中…</div></div>';
+  h += '<div style="font-size:11px;color:#bbb;">长按识别二维码 · 开启你的长安之旅</div>';
+  h += '</div>';
+  
+  document.getElementById('cr-body').innerHTML = h;
+  document.getElementById('create-result').style.display = 'block';
+  document.querySelector('.main-form').style.display = 'none';
+  document.getElementById('create-result').scrollIntoView({ behavior: 'smooth' });
+  isPaid = false;
+  
+  // 生成二维码
+  setTimeout(function() { generatePlanQR(); }, 500);
+  
+  // ---- 后台自动扩充数据库：对DB未命中的条目，悄悄调高德+补充并保存 ----
+  // 等页面渲染完成后异步执行，不阻塞用户体验
+  setTimeout(function() { enrichMissingItems(plan, dbData, planSpots, planFoods, planHotels); }, 800);
+}
+
+// 自动扩充数据库：对AI推荐但DB没有的条目，后台调 /api/enrich-poi 拉取并保存
+async function enrichMissingItems(plan, dbData, planSpots, planFoods, planHotels) {
+  var tasks = [];
+
+  // 检查每个景点——智能判断类型（演出→experience，不是attractions）
+  var spotIdx = 0;
+  (plan.days || []).forEach(function(d) {
+    (d.spots || []).forEach(function(s) {
+      var si = spotIdx++;
+      var enrichType = detectEnrichType(s.name);
+      var dbArr = (enrichType === 'experience') ? (dbData && dbData.experience) : (enrichType === 'foods') ? (dbData && dbData.foods) : (enrichType === 'hotels') ? (dbData && dbData.hotels) : (dbData && dbData.attractions);
+      var dbItem = dbArr && dbArr.find(function(a) {
+        return a.name && s.name && (a.name.includes(s.name) || s.name.includes(a.name) || a.name.substring(0,3) === s.name.substring(0,3));
+      });
+      if (!dbItem && s.name) {
+        tasks.push({ name: s.name, type: enrichType, idx: si, listType: 'spots' });
+      }
+    });
+  });
+
+  // 检查美食
+  (plan.foods || []).forEach(function(f, fi) {
+    var dbFood = dbData && dbData.foods && dbData.foods.find(function(fd) {
+      return fd.name && f.name && (fd.name.includes(f.name) || f.name.includes(fd.name));
+    });
+    if (!dbFood && f.name) {
+      tasks.push({ name: f.name, type: 'foods', idx: fi, listType: 'food' });
+    }
+  });
+
+  // 检查酒店
+  if (plan.hotel && plan.hotel.area) {
+    var dbHotel = dbData && dbData.hotels && dbData.hotels.find(function(h) {
+      return h.name && plan.hotel.area && (h.name.includes(plan.hotel.area) || plan.hotel.area.includes(h.name));
+    });
+    if (!dbHotel) {
+      tasks.push({ name: plan.hotel.area, type: 'hotels', idx: 0, listType: 'hotel' });
+    }
+  }
+
+  if (tasks.length === 0) return;
+  console.log('🔄 后台自动扩充数据库，共' + tasks.length + '条新数据待补充...');
+
+  // 依次补充（不并发，避免API压力）
+  for (var i = 0; i < tasks.length; i++) {
+    var task = tasks[i];
+    try {
+      var resp = await fetch('/api/enrich-poi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: task.name, type: task.type })
+      });
+      var result = await resp.json();
+      if (result.ok && result.item) {
+        var item = result.item;
+        // 添加兼容别名
+        item.photos = item.images || [];
+        item.photo = (item.images && item.images[0]) || null;
+        item.dist = item.distance ? (item.distance > 1000 ? (item.distance/1000).toFixed(1)+'km' : Math.round(item.distance)+'m') : '—';
+
+        // 更新全局列表，让详情弹窗立即可用
+        if (task.listType === 'spots' && _currentSpotsList[task.idx]) {
+          _currentSpotsList[task.idx] = Object.assign({}, _currentSpotsList[task.idx], item, {photos: item.images || []});
+        } else if (task.listType === 'food' && _currentFoodList[task.idx]) {
+          _currentFoodList[task.idx] = Object.assign({}, _currentFoodList[task.idx], item, {photos: item.images || []});
+        } else if (task.listType === 'hotel' && _currentHotelList[task.idx]) {
+          _currentHotelList[task.idx] = Object.assign({}, _currentHotelList[task.idx], item, {photos: item.images || []});
+        }
+
+        // 替换占位卡片：把整个placeholder div（enrich-{idx}）替换为真实图片+保持点击事件
+        if (item.images && item.images.length > 0) {
+          // 方案A：按 enrich-{idx} id 替换整个占位div
+          var placeholder = document.getElementById('enrich-' + task.idx);
+          if (placeholder) {
+            var wrap = document.createElement('div');
+            wrap.style.cssText = 'width:100%;height:120px;border-radius:8px;overflow:hidden;margin:6px 0;cursor:pointer;';
+            wrap.onclick = function() { showCardDetail('spots', task.idx); };
+            wrap.innerHTML = '<img src="' + item.images[0] + '" alt="' + (item.name||'') + '" style="width:100%;height:100%;object-fit:cover;" loading="lazy">';
+            placeholder.parentNode.replaceChild(wrap, placeholder);
+            // 更新状态标签
+            var statusEl = document.querySelector('#enrich-' + task.idx + ' .enrich-status');
+          }
+        } else {
+          // 没有图片但数据拿到了：更新状态标签
+          var placeholderDiv = document.getElementById('enrich-' + task.idx);
+          if (placeholderDiv) {
+            var statusSpan = placeholderDiv.querySelector('.enrich-status');
+            if (statusSpan) statusSpan.textContent = '已获取（无图片）';
+          }
+        }
+
+        // 同时更新所有 data-enrich-name 匹配的 <img> 标签
+        var cardImgs = document.querySelectorAll('[data-enrich-name="' + task.name.replace(/"/g,'') + '"]');
+        if (item.images && item.images.length > 0) {
+          cardImgs.forEach(function(el) {
+            if (el.tagName === 'IMG') {
+              el.src = item.images[0];
+              el.style.opacity = '1';
+            }
+          });
+        }
+
+        if (result.source === 'amap_fresh') {
+          console.log('✅ 新增到' + task.type + '数据库: ' + item.name);
+        }
+      }
+    } catch(e) {
+      console.warn('⚠️ 补充[' + task.name + ']失败:', e.message);
+    }
+    // 每次补充间隔1.5秒，不影响用户操作
+    if (i < tasks.length - 1) await new Promise(function(r) { setTimeout(r, 1500); });
+  }
+  console.log('🎉 数据库自动扩充完成！下次同类规划将直接从本地加载。');
+}
+
+// ===== 攻略详情弹窗 =====
+function showSpotGuideDetail(name, guide, pitfalls, images) {
+  var imgs = (images || '').split('||').filter(function(u) { return u && u.startsWith('http'); });
+  var imgHtml = '';
+  if (imgs.length > 0) {
+    imgHtml = '<div style="display:flex;overflow-x:auto;gap:8px;margin:8px 0;">';
+    imgs.forEach(function(u) {
+      imgHtml += '<img src="' + u + '" alt="" style="width:200px;height:140px;object-fit:cover;border-radius:8px;flex-shrink:0;">';
+    });
+    imgHtml += '</div>';
+  }
+  var h = '<div style="padding:16px;max-height:70vh;overflow-y:auto;"><h2 style="font-size:18px;margin-bottom:12px;">📸 ' + name + '</h2>' + imgHtml + '<div style="margin:8px 0;padding:12px;background:#f0fdf4;border-radius:8px;"><h3 style="font-size:14px;color:#059669;margin-bottom:6px;">📋 游玩攻略</h3><p style="font-size:13px;color:#333;line-height:1.8;white-space:pre-line;">' + (guide || '暂无攻略') + '</p></div><div style="margin:8px 0;padding:12px;background:#fef2f2;border-radius:8px;"><h3 style="font-size:14px;color:#dc2626;margin-bottom:6px;">⚠️ 避坑指南</h3><p style="font-size:13px;color:#333;line-height:1.8;white-space:pre-line;">' + (pitfalls || '暂无避坑信息') + '</p></div></div>';
+  
+  var mask = document.getElementById('detailMask');
+  var body = mask.querySelector('.popup-body');
+  if (body) body.innerHTML = h;
+  mask.classList.add('show');
+  mask.scrollTop = 0;
+}
+
+
 function buildPrompt() {
   const days = state._days || calcDays();
   const parts = [
@@ -1749,13 +2685,13 @@ function buildPrompt() {
   return `\u8BF7\u6839\u636E\u4EE5\u4E0B\u4FE1\u606F\u5236\u5B9A${days}\u5929\u897F\u5B89\u65C5\u884C\u8DEF\u7EBF\uFF08\u5305\u542B\u9AD8\u5FB7\u5730\u56FE\u5750\u6807\uFF09\uFF1A\n\n`+parts.join('\n');
 }
 
-const SYSTEM_PROMPT = `你是"小长安"，西安14年土著向导，陕西腔（额代替我），热情直爽。输出纯JSON（不含任何其他文字）：
+const SYSTEM_PROMPT = `你是"长安伴游"，西安14年土著向导，陕西腔（额代替我），热情直爽。输出纯JSON（不含任何其他文字）：
 {
   "title":"一行路线标题",
-  "xiaoba_say":"小长安开场白（100字内，有烟火气）",
+  "xiaoba_say":"长安伴游开场白（100字内，有烟火气）",
   "days":[{
     "day":1,"theme":"当日主题",
-    "spots":[{"time":"08:00-10:00","name":"景点","tip":"小长安建议1-2句陕西话","coord":"lng,lat"}]
+    "spots":[{"time":"08:00-10:00","name":"景点","tip":"长安伴游建议1-2句陕西话","coord":"lng,lat"}]
   }],
   "foods":[{"name":"美食","area":"区域","tip":"一句话","coord":"lng,lat"}],
   "hotel":{"area":"推荐住宿区域","reason":"理由","budget":"价位"},
@@ -1785,7 +2721,7 @@ function renderResult(content) {
   let h = '';
 
   if (plan.xiaoba_say) h += `<div class="rcard"><div class="xb-bubble">
-    <div class="xb-bub-head"><div class="xb-bub-avatar">🏯</div><span class="xb-bub-name">小长安说</span></div>
+    <div class="xb-bub-head"><div class="xb-bub-avatar">🏯</div><span class="xb-bub-name">长安伴游说</span></div>
     <div class="xb-bub-text">${plan.xiaoba_say}</div></div></div>`;
 
   // 每日行程（带高德导航）
@@ -1824,7 +2760,7 @@ function renderResult(content) {
 
   // 美食
   if (plan.foods && plan.foods.length) {
-    h += `<div class="rcard"><div class="rcard-title">小长安私房美食单</div><div class="food-grid">`;
+    h += `<div class="rcard"><div class="rcard-title">长安伴游私房美食单</div><div class="food-grid">`;
     plan.foods.forEach(f => {
       h += `<div class="food-card">
         <div class="food-name">\uD83C\uDF5C ${f.name||''}</div>
@@ -1841,7 +2777,7 @@ function renderResult(content) {
       <div class="hotel-card"><div class="hotel-emoji">\uD83C\uDFE8</div><div class="hotel-info">
         <div class="hotel-name">${plan.hotel.area||'推荐区域'}</div>
         <div class="hotel-meta">${plan.hotel.reason||''}</div>
-        <div class="hotel-price"><span class="price-now">${plan.hotel.budget||''}</span><span class="rebate-tag">小长安专享</span></div>
+        <div class="hotel-price"><span class="price-now">${plan.hotel.budget||''}</span><span class="rebate-tag">长安伴游专享</span></div>
       </div></div></div>`;
   }
 
@@ -1904,13 +2840,448 @@ function renderError(msg) {
 }
 
 function shareResult() {
-  if (navigator.share) navigator.share({ title:'我用AI规划了西安路线', text:'小长安帮我规划的，超详细！', url:location.href });
-  else toast('截图分享给朋友吧！');
+  sharePlanResult();
+}
+
+// 分享给好友
+function sharePlanResult() {
+  if (navigator.share) {
+    navigator.share({ title:'长安伴游 · 我的西安旅行攻略', text:'长安伴游帮我规划的西安路线，超详细！', url:location.href });
+  } else {
+    prompt('复制链接分享给朋友吧：', location.href);
+  }
+}
+
+// 分享朋友圈
+function shareToTimeline() {
+  toast('请截图保存，然后发到朋友圈吧~');
+  setTimeout(function() { savePlanImage(); }, 800);
+}
+
+// 保存为图片（简单截图提示）
+function savePlanImage() {
+  var el = document.getElementById('create-result');
+  if (!el) { toast('请先生成规划'); return; }
+  // 使用canvas截图
+  html2canvas(el, { scale: 2, backgroundColor: '#F5F5F5', useCORS: true }).then(function(canvas) {
+    var link = document.createElement('a');
+    link.download = '长安伴游_西安攻略.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    toast('✅ 已保存到相册');
+  }).catch(function() {
+    toast('截图保存，长按识别二维码即可分享');
+  });
+}
+
+// 生成二维码
+function generatePlanQR() {
+  var wrap = document.getElementById('plan-qr-wrap');
+  if (!wrap) return;
+  var qrEl = document.getElementById('plan-qr-code');
+  if (!qrEl) return;
+  var url = location.href.split('?')[0];
+  var qrSrc = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=' + encodeURIComponent(url);
+  qrEl.innerHTML = '<img src="' + qrSrc + '" alt="二维码" style="width:120px;height:120px;" onerror="this.style.display=\'none\'">';
+}
+
+// 保存规划到历史记录
+function savePlanToHistory(plan, formData) {
+  try {
+    var history = JSON.parse(localStorage.getItem('cb_plan_history') || '[]');
+    var entry = {
+      id: Date.now(),
+      title: plan.title || '西安定制游',
+      date: new Date().toISOString(),
+      days: plan.days || [],
+      foods: plan.foods || [],
+      formData: formData || {},
+      plan: plan
+    };
+    history.unshift(entry);
+    // 最多保存20条
+    if (history.length > 20) history = history.slice(0, 20);
+    localStorage.setItem('cb_plan_history', JSON.stringify(history));
+    // 设置全局最新规划数据（供旅行建议等页面使用）
+    _lastPlanData = entry;
+  } catch(e) {
+    console.warn('保存历史失败:', e);
+  }
+}
+
+// 渲染"我的"页面中的规划历史
+function renderMinePlanList() {
+  var listEl = document.getElementById('mine-plan-list');
+  if (!listEl) return;
+  var history = [];
+  try {
+    history = JSON.parse(localStorage.getItem('cb_plan_history') || '[]');
+  } catch(e) {}
+  
+  if (!history.length) {
+    listEl.innerHTML = '<div style="text-align:center;padding:30px;color:#c7c7cc;font-size:14px;">还没有生成过攻略<br>去首页生成你的专属路线吧~</div>';
+    return;
+  }
+  
+  var h = '';
+  history.forEach(function(item, idx) {
+    var spotNames = [];
+    (item.days || []).forEach(function(d) {
+      (d.spots || []).forEach(function(s) { if (spotNames.length < 5) spotNames.push(s.name || ''); });
+    });
+    var dateStr = item.date ? new Date(item.date).toLocaleDateString('zh-CN') : '';
+    h += '<div class="mine-plan-item" onclick="loadHistoryPlan(' + idx + ')">';
+    h += '<div class="plan-title">' + (item.title || '西安定制游') + '</div>';
+    h += '<div class="plan-meta">' + dateStr + ' · ' + (item.days ? item.days.length : '') + '天</div>';
+    h += '<div class="plan-days">';
+    spotNames.forEach(function(n) {
+      if (n) h += '<span class="plan-day-tag">' + n + '</span>';
+    });
+    h += '</div>';
+    h += '<div style="font-size:11px;color:#3B82F6;margin-top:8px;text-align:right;">查看详情 & 一键导航 ›</div>';
+    h += '</div>';
+  });
+  listEl.innerHTML = h;
+}
+
+// 加载历史规划（onclick不能await，改用.then模式）
+function loadHistoryPlan(idx) {
+  var history = [];
+  try { history = JSON.parse(localStorage.getItem('cb_plan_history') || '[]'); } catch(e) {}
+  if (!history[idx]) return;
+  var item = history[idx];
+  
+  // 隐藏其他页面，显示规划结果
+  document.querySelectorAll('.page').forEach(function(p) { p.style.display = 'none'; });
+  
+  var el = document.getElementById('create-result');
+  if (!el) return;
+  el.style.display = 'block';
+  document.getElementById('cr-body').innerHTML = '<div style="text-align:center;padding:60px;color:#888;">长安伴游正在加载攻略数据...</div>';
+  
+  var plan = item.plan;
+  var formData = item.formData || {};
+  
+  document.getElementById('cr-title').textContent = plan.title || '西安定制游';
+  document.getElementById('cr-meta').innerHTML = '<span>📅 ' + (item.days ? item.days.length : 0) + '天</span><span>👥 ' + (formData.count||0) + '人</span><span>💰 ' + (formData.budget||'—') + '</span>';
+  
+  // 异步获取DB数据
+  var dbPromise = (typeof LocalDB !== 'undefined') ? LocalDB.getAllData() : Promise.resolve(null);
+  dbPromise.then(function(dbData) {
+    _currentSpotsList = []; _currentFoodList = []; _currentHotelList = [];
+    
+    // Build spot/food/hotel lists from plan
+    var planSpots = [], planFoods = [], planHotels = [];
+    (plan.days || []).forEach(function(d) {
+      (d.spots || []).forEach(function(s) {
+        var dbItem = null;
+        if (dbData && dbData.attractions) {
+          dbItem = dbData.attractions.find(function(a) { return a.name && s.name && (a.name.includes(s.name) || s.name.includes(a.name)); });
+        }
+        if (!dbItem && dbData && dbData.experience) {
+          dbItem = dbData.experience.find(function(a) { return a.name && s.name && (a.name.includes(s.name) || s.name.includes(a.name)); });
+        }
+        if (dbItem) { planSpots.push(Object.assign({}, dbItem)); }
+        else { planSpots.push({ name: s.name || '', cat: '景点', images: [], photos: [], guide: s.tip || '', pitfalls: '' }); }
+      });
+    });
+    (plan.foods || []).forEach(function(f) {
+      var dbFood = null;
+      if (dbData && dbData.foods) {
+        dbFood = dbData.foods.find(function(fd) { return fd.name && f.name && (fd.name.includes(f.name) || f.name.includes(fd.name)); });
+      }
+      if (dbFood) { planFoods.push(Object.assign({}, dbFood)); }
+      else { planFoods.push({ name: f.name || '', cat: '餐饮', images: [], photos: [], guide: f.tip || '', pitfalls: '' }); }
+    });
+    // 酒店：直接使用DB真实数据（不再通过AI的区域名匹配，直接用按类型筛选的酒店列表第一条）
+    if (dbData && dbData.hotels && dbData.hotels.length > 0) {
+      var mh = dbData.hotels[0];
+      var hPrice = '';
+      if (mh.roomRate) hPrice = '¥' + mh.roomRate + '/晚';
+      else if (mh.price) hPrice = '¥' + mh.price + '/晚';
+      else if (mh.cat === '豪华型') hPrice = '¥800-1500/晚';
+      else if (mh.cat === '舒适型') hPrice = '¥300-600/晚';
+      else if (mh.cat === '经济型') hPrice = '¥150-300/晚';
+      else hPrice = '¥200-500/晚';
+      planHotels.push(Object.assign({}, mh, { price: hPrice, photos: mh.images || mh.photos || [] }));
+    } else if (plan.hotel) {
+      planHotels.push({ name: plan.hotel.area || '', cat: '酒店', images: [], photos: [], guide: plan.hotel.reason || '', pitfalls: '' });
+    }
+    
+    _currentSpotsList = planSpots;
+    _currentFoodList = planFoods;
+    _currentHotelList = planHotels;
+    
+    // Build HTML
+    var h = '';
+    if (plan.xiaoba_say) h += '<div class="rcard"><div class="xb-bubble"><div class="xb-bub-head"><div class="xb-bub-avatar">🏯</div><span class="xb-bub-name">长安伴游</span><button class="xb-play-btn" onclick="event.stopPropagation();playChangAnIntro()">🔊</button></div><div class="xb-bub-text">' + plan.xiaoba_say + '</div></div></div>';
+    
+    var si = 0;
+    (plan.days || []).forEach(function(d) {
+      h += '<div class="rcard"><div class="day-block"><div class="day-head"><div class="day-num" style="color:#E8453C;background:#FEF2F1;font-weight:700;">D' + d.day + '天</div><div class="day-theme">' + (d.theme||'第'+d.day+'天') + '</div></div></div><div class="tl">';
+      (d.spots || []).forEach(function(s) {
+        var cur = si++;
+        var dbItem = planSpots[cur];
+        var navCoord = (dbItem && dbItem.coord) || (s.coord || '');
+        h += '<div class="tl-item"><div class="tl-dot"></div><div class="tl-info">';
+        h += '<div class="tl-time">' + (s.time||'') + '</div>';
+        h += '<div class="tl-name" style="cursor:pointer;font-weight:600;" onclick="showCardDetail(\'spots\',' + cur + ')">' + (s.name||'') + ' <span style="font-size:11px;color:#E8453C;">查看详情 ›</span></div>';
+        h += (s.tip ? '<div class="tl-tip">' + s.tip + '</div>' : '');
+        h += '<div class="tl-nav"><a href="' + (navCoord ? 'https://uri.amap.com/navigation?to='+navCoord+'&mode=car&callnative=1' : '#') + '" target="_blank">🧭 一键导航</a>';
+        h += '<button class="tl-guide-btn" onclick="showCardDetail(\'spots\',' + cur + ')">📸 攻略&详情</button></div>';
+        h += '</div></div>';
+      });
+      h += '</div></div>';
+    });
+
+    // 美食卡片
+    if (plan.foods && plan.foods.length) {
+      h += '<div class="rcard"><div class="rcard-title">🍜 长安伴游私房美食单 <span style="font-size:12px;color:#888;font-weight:400;">（点击查看详情&导航）</span></div><div class="food-grid">';
+      plan.foods.forEach(function(f, fi) {
+        var dbFood = planFoods[fi];
+        var imgHtml = '';
+        if (dbFood && dbFood.images && dbFood.images.length > 0) {
+          imgHtml = '<div style="width:100%;height:90px;border-radius:8px;overflow:hidden;margin:4px 0;">' +
+            '<img src="' + dbFood.images[0] + '" alt="' + (f.name||'') + '" style="width:100%;height:100%;object-fit:cover;" loading="lazy"></div>';
+        }
+        var ratingHtml = (dbFood && dbFood.rating) ? '<div style="font-size:11px;color:#f59e0b;margin-top:2px;">⭐' + dbFood.rating + '</div>' : '';
+        h += '<div class="food-card" style="cursor:pointer;position:relative;" onclick="showCardDetail(\'food\',' + fi + ')">' +
+          imgHtml + '<div class="food-name">🍜 ' + (f.name||'') + '</div>' +
+          '<div class="food-area">📍 ' + (f.area || (dbFood && dbFood.adname) || '') + '</div>' +
+          ratingHtml + '<div class="food-tip" style="font-size:11px;color:#666;margin-top:2px;">' + (f.tip||'') + '</div>' +
+          '<div style="font-size:11px;color:#E8453C;margin-top:4px;text-align:right;">详情&导航 ›</div></div>';
+      });
+      h += '</div></div>';
+    }
+
+    // 住宿卡片
+    if (planHotels.length > 0) {
+      var dbHotel = planHotels[0];
+      var hotelImgHtml2 = '';
+      if (dbHotel && dbHotel.images && dbHotel.images.length > 0) {
+        hotelImgHtml2 = '<div style="width:100%;height:150px;border-radius:10px;overflow:hidden;margin-bottom:10px;">' +
+          '<img src="' + dbHotel.images[0] + '" alt="' + (dbHotel.name||'酒店') + '" style="width:100%;height:100%;object-fit:cover;" loading="lazy"></div>';
+      }
+      h += '<div class="rcard"><div class="rcard-title">🏨 住宿推荐 <span style="font-size:12px;color:#888;font-weight:400;">（点击查看详情&导航）</span></div>' +
+        '<div class="hotel-card" style="cursor:pointer;" onclick="showCardDetail(\'hotel\',0)">' +
+        hotelImgHtml2 +
+        '<div style="display:flex;align-items:flex-start;gap:12px;">' +
+        '<div class="hotel-emoji">🏨</div>' +
+        '<div class="hotel-info">' +
+        '<div class="hotel-name">' + (dbHotel ? dbHotel.name : '推荐酒店') + '</div>' +
+        '<div class="hotel-meta">' + (dbHotel ? (dbHotel.address || dbHotel.guide || '') : '') + '</div>' +
+        (dbHotel && dbHotel.rating ? '<div style="font-size:12px;color:#f59e0b;margin-top:2px;">⭐' + dbHotel.rating + ' · ' + (dbHotel.cat||'酒店') + '</div>' : '') +
+        '<div class="hotel-price"><span class="price-now">' + (dbHotel && dbHotel.price ? dbHotel.price : '') + '</span><span class="rebate-tag">参考价格</span></div>' +
+        '<div style="font-size:11px;color:#E8453C;margin-top:6px;">点击查看详情&导航 ›</div>' +
+        '</div></div></div></div>';
+    }
+
+    // 预算和避坑
+    if (plan.budget) {
+      h += '<div class="rcard"><div class="rcard-title">💰 预算参考</div><div class="budget-grid">' +
+        (plan.budget.transport ? '<div class="budget-item"><div class="budget-val">' + plan.budget.transport + '</div><div class="budget-label">交通</div></div>' : '') +
+        (plan.budget.tickets ? '<div class="budget-item"><div class="budget-val">' + plan.budget.tickets + '</div><div class="budget-label">门票</div></div>' : '') +
+        (plan.budget.food ? '<div class="budget-item"><div class="budget-val">' + plan.budget.food + '</div><div class="budget-label">餐饮</div></div>' : '') +
+        (plan.budget.hotel ? '<div class="budget-item"><div class="budget-val">' + plan.budget.hotel + '</div><div class="budget-label">住宿</div></div>' : '') +
+        (plan.budget.total ? '<div class="budget-item"><div class="budget-val" style="color:#E8453C;">' + plan.budget.total + '</div><div class="budget-label">合计</div></div>' : '') +
+        '</div></div>';
+    }
+    if (plan.tips && plan.tips.length) {
+      h += '<div class="rcard"><div class="rcard-title">⚠️ 避坑指南</div><div class="tips-list">';
+      plan.tips.forEach(function(t) { h += '<div class="tips-item">' + t + '</div>'; });
+      h += '</div></div>';
+    }
+    
+    document.getElementById('cr-body').innerHTML = h;
+    document.getElementById('create-result').scrollIntoView({ behavior: 'smooth' });
+    setTimeout(function() { generatePlanQR(); }, 500);
+  }).catch(function(e) {
+    console.error('加载历史攻略失败:', e);
+    document.getElementById('cr-body').innerHTML = '<div style="text-align:center;padding:40px;color:#E8453C;">加载攻略数据失败，请重试</div>';
+  });
 }
 
 function toast(m) {
   const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// 意见反馈提交
+function submitFeedback() {
+  var type = '';
+  document.querySelectorAll('#page-feedback .chip.selected').forEach(function(c) { type = c.textContent; });
+  var contact = document.getElementById('fb-contact').value.trim();
+  var content = document.getElementById('fb-content').value.trim();
+  if (!content) { toast('请填写反馈内容'); return; }
+  
+  var feedback = {
+    type: type || '其他',
+    contact: contact,
+    content: content,
+    time: new Date().toISOString(),
+    userAgent: navigator.userAgent
+  };
+  
+  try {
+    var list = JSON.parse(localStorage.getItem('cb_feedback_list') || '[]');
+    list.unshift(feedback);
+    if (list.length > 100) list = list.slice(0, 100);
+    localStorage.setItem('cb_feedback_list', JSON.stringify(list));
+  } catch(e) {}
+  
+  // 也尝试发送到服务器
+  try {
+    fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(feedback)
+    }).catch(function(){});
+  } catch(e) {}
+  
+  document.getElementById('fb-contact').value = '';
+  document.getElementById('fb-content').value = '';
+  toast('✅ 感谢你的反馈！我们会认真对待每一条建议 ❤️');
+}
+
+// ===== 旅行建议生成 =====
+function genTravelAdvice() {
+  var resultEl = document.getElementById('advice-result');
+  
+  // 优先使用全局变量，其次从localStorage取
+  var latest = _lastPlanData;
+  if (!latest) {
+    var history = JSON.parse(localStorage.getItem('cb_plan_history') || '[]');
+    if (history.length === 0) {
+      resultEl.innerHTML = '<div style="text-align:center;padding:40px;color:#E8453C;font-size:14px;">还没有生成过旅行规划哦~<br>回到首页生成一个吧！</div>';
+      return;
+    }
+    latest = history[0];
+  }
+  
+  var formData = latest.formData || {};
+  var startDate = formData.startDate;
+  if (!startDate) {
+    resultEl.innerHTML = '<div style="text-align:center;padding:40px;color:#E8453C;font-size:14px;">历史记录中找不到出行日期<br>请重新生成规划~</div>';
+    return;
+  }
+  
+  var d = new Date(startDate);
+  var month = d.getMonth() + 1;
+  var day = d.getDate();
+  var dayOfWeek = ['周日','周一','周二','周三','周四','周五','周六'][d.getDay()];
+  
+  // 根据月份生成季节性建议
+  var season = '';
+  var temp = '';
+  var clothing = '';
+  var sunTips = '';
+  var foodTips = '';
+  var specialTips = '';
+  
+  if (month >= 3 && month <= 5) {
+    season = '🌸 春季';
+    temp = '10°C ~ 25°C，早晚温差大';
+    clothing = '薄外套+长袖T恤，早晚加一件卫衣或薄毛衣。西安春天风大，建议带一条丝巾或围巾。';
+    sunTips = '春季紫外线中等，SPF30防晒霜即可，戴帽子更舒适。';
+    foodTips = '春季宜吃清淡，推荐春韭饺子、野菜团子，多喝水防春燥。';
+    specialTips = '3-4月是赏花季，青龙寺樱花、交大樱花道都是好去处。';
+  } else if (month >= 6 && month <= 8) {
+    season = '☀️ 夏季';
+    temp = '25°C ~ 38°C，闷热多雨';
+    clothing = '短袖短裤为主，带一把晴雨伞。室内外温差大，商场地铁冷气足，备一件薄开衫。运动鞋或凉鞋都行，城墙骑行建议穿运动鞋。';
+    sunTips = '⚠️ 紫外线强，SPF50+防晒霜必备！墨镜+遮阳帽+防晒衣三件套，每2小时补涂一次。';
+    foodTips = '夏季推荐冰峰汽水、凉皮、酸梅汤解暑。回民街夜市尽量8点后去，白天太热。多吃西瓜补水。';
+    specialTips = '暑期是旅游旺季，兵马俑、陕历博务必提前3天预约！华山夜爬是夏季经典体验。';
+  } else if (month >= 9 && month <= 11) {
+    season = '🍂 秋季';
+    temp = '10°C ~ 22°C，秋高气爽';
+    clothing = '长袖+薄外套，10月下旬后可加毛衣。西安秋天很短，11月就可能入冬，关注天气变化。';
+    sunTips = '秋老虎不可忽视，9月仍需要防晒。10月后紫外线减弱，日常保湿更重要。';
+    foodTips = '秋天是西安最美的季节！石榴、柿子正当季，临潼石榴汁一定要尝。烤肉、泡馍正当时。';
+    specialTips = '9-10月是西安旅游黄金季，天气最舒服。中秋前后城墙上有灯会，大唐不夜城夜景绝美。';
+  } else {
+    season = '❄️ 冬季';
+    temp = '-5°C ~ 8°C，干冷有霾';
+    clothing = '羽绒服+毛衣+保暖内衣，帽子手套围巾全副武装。鞋子要防滑保暖，室内有暖气很暖和，洋葱式穿法最实用。';
+    sunTips = '冬季紫外线弱，但雪后反光强需注意。重点做好保湿，西安冬天很干燥，润唇膏+护手霜+保湿霜必带。';
+    foodTips = '冬天最适合吃羊肉泡馍、水盆羊肉、葫芦头泡馍暖身！热气腾腾的灌汤包配一碗胡辣汤，从胃暖到心。';
+    specialTips = '12月-2月是淡季，景点人少体验好。如果遇到下雪，城墙雪景是绝美打卡点！除夕大唐不夜城有跨年活动。';
+  }
+  
+  var dateStr = month + '月' + day + '日 ' + dayOfWeek;
+  
+  var h = '<div class="rcard" style="margin-top:12px;">';
+  h += '<div style="font-size:18px;font-weight:700;color:#E8453C;margin-bottom:4px;">📅 ' + dateStr + ' · ' + season + '</div>';
+  h += '<div style="font-size:13px;color:#8e8e93;margin-bottom:12px;">预计气温：' + temp + '</div>';
+  
+  // 衣
+  h += '<div class="advice-blk" style="margin-bottom:12px;">';
+  h += '<div class="advice-blk-title">👔 穿衣指南</div>';
+  h += '<div class="advice-blk-text">' + clothing + '</div></div>';
+  
+  // 住宿出行 —— 基于用户住宿偏好
+  var hotelTypeName = (formData.hotelType || '舒适型');
+  var transportMode = (formData.transport || '公共交通');
+  var stayAdvice = '';
+  if (transportMode.includes('自驾')) {
+    stayAdvice = '你是自驾出行，建议住宿选地铁沿线+有停车场的酒店，钟楼附近停车较贵（30-60元/天），南稍门、龙首原等周边地铁站附近性价比更高。';
+  } else if (transportMode.includes('专车')) {
+    stayAdvice = '有专车司机很方便，住宿可以选稍远但品质更好的区域如曲江或浐灞，环境好、酒店新。';
+  } else {
+    stayAdvice = '推荐住钟楼/南门附近，地铁2号线贯穿南北，核心景点步行可达。你选的' + hotelTypeName + '酒店性价比不错~';
+  }
+  
+  // 人群特殊建议
+  var peopleAdvice = '';
+  var totalPeople = formData.count || 0;
+  var whoStr = (formData.who || '');
+  if (totalPeople > 0) {
+    if (whoStr.includes('亲子') || whoStr.includes('孩子')) peopleAdvice += '带小朋友出行，建议每天只安排2-3个景点，留足休息时间。大唐不夜城晚上人多，牵好小朋友的手哦~ ';
+    if (whoStr.includes('老人') || whoStr.includes('爸妈')) peopleAdvice += '有长辈同行，建议避开华山等高强度景点，城墙可以坐电瓶车游览。随身带折叠凳会方便很多~ ';
+    if (!whoStr.includes('亲子') && !whoStr.includes('老人')) peopleAdvice += '你们' + totalPeople + '人同行，正好凑一桌吃泡馍！可以考虑华山夜爬、城墙骑行等活力项目~';
+  }
+
+  // 食
+  h += '<div class="advice-blk" style="margin-bottom:12px;">';
+  h += '<div class="advice-blk-title">🍜 饮食推荐</div>';
+  h += '<div class="advice-blk-text">' + foodTips + '</div></div>';
+  
+  // 住行 —— 基于用户出行方式个性化
+  h += '<div class="advice-blk" style="margin-bottom:12px;">';
+  h += '<div class="advice-blk-title">🛏️ 住宿出行</div>';
+  h += '<div class="advice-blk-text">' + stayAdvice + '</div></div>';
+  
+  // 人群建议
+  if (peopleAdvice) {
+    h += '<div class="advice-blk" style="margin-bottom:12px;">';
+    h += '<div class="advice-blk-title">👨‍👩‍👧‍👦 出行贴士</div>';
+    h += '<div class="advice-blk-text">' + peopleAdvice + '</div></div>';
+  }
+  
+  // 防晒
+  h += '<div class="advice-blk" style="margin-bottom:12px;">';
+  h += '<div class="advice-blk-title">☀️ 防晒护肤</div>';
+  h += '<div class="advice-blk-text">' + sunTips + '</div></div>';
+  
+  // 特别提醒
+  h += '<div class="advice-blk" style="margin-bottom:12px;">';
+  h += '<div class="advice-blk-title">💝 贴心提醒</div>';
+  h += '<div class="advice-blk-text">' + specialTips + '</div></div>';
+  
+  // 高情商寄语
+  var greetings = [
+    '放心来，长安伴游已经帮你把一切都想到了~ 带上好心情，其他交给我们！',
+    '每个季节的西安都有独特的美，你来的正是时候！长安伴游陪你发现最美的长安~',
+    '旅行的意义不在目的地，而在沿途的风景和看风景的心情。西安，不会让你失望！',
+    '十三朝古都的故事，从你踏上这片土地的那一刻开始。欢迎来到长安！'
+  ];
+  h += '<div class="advice-blk" style="background:#FEF2F1;border-radius:12px;padding:12px;text-align:center;">';
+  h += '<div style="font-size:15px;color:#E8453C;font-weight:500;">🏯 长安伴游想说</div>';
+  h += '<div style="font-size:14px;color:#666;margin-top:6px;line-height:1.6;">' + greetings[d.getDate() % greetings.length] + '</div></div>';
+  
+  h += '</div>';
+  resultEl.innerHTML = h;
+  resultEl.scrollIntoView({behavior:'smooth'});
 }
 
 // =============================================
@@ -2501,48 +3872,84 @@ async function fetchAmapAround(keywords, type, lat, lng, radius, offset, needPho
 function amapPoiToFoodItem(poi, userLat, userLng) {
   const dist = haversineDistance(userLat, userLng, parseFloat(poi.location.split(',')[1]), parseFloat(poi.location.split(',')[0]));
   const biz = poi.biz_ext || {};
+  const deep = poi.deep_info || {};
+  const cat = typeNameToCat(poi.type || '', poi.name || '', poi.tag || '');
+
+  // 构建真实描述（优先级：高德推荐语 → 标签 → 类型描述 → 地址）
+  var desc = '';
+  if (biz.recommend) desc = biz.recommend;
+  else if (poi.recommend) desc = poi.recommend;
+  else if (deep.intro) desc = deep.intro;
+  else if (poi.tag) desc = '🏷️ ' + poi.tag;
+  else if (poi.keytag) desc = '🏷️ ' + poi.keytag;
+  else {
+    // 格式化类型字段：去掉分类前缀，只留最后一级
+    var typeParts = (poi.type || '').split(';');
+    desc = typeParts[typeParts.length - 1] || poi.address || '高德推荐美食';
+  }
+
   return {
     name: poi.name || '未知美食',
     area: poi.address || poi.business_area || '附近',
-    desc: biz.recommend || poi.type || '高德推荐',
-    price: biz.cost ? '¥' + biz.cost + '/人' : '¥—',
+    desc: desc,
+    price: biz.cost ? '¥' + biz.cost + '/人' : (biz.avg_cost ? '¥' + biz.avg_cost + '/人' : '¥—'),
     coord: poi.location || '',
-    cat: typeNameToCat(poi.type || ''),
+    cat: cat,
     dist: formatDistance(dist),
     amapId: poi.id || '',
-    rating: biz.rating || '',
+    rating: biz.rating || poi.biz_ext?.rating || '',
+    ratingNum: biz.rating_num || '',
     photos: (poi.photos && poi.photos.length) ? poi.photos.map(p => p.url) : [],
-    tel: poi.tel || '',
-    openTime: biz.opentime2 || '',
+    tel: poi.tel || deep.tel || '',
+    openTime: biz.opentime2 || deep.opentime || '',
     website: safeWebsite(poi.website),
     keytag: poi.keytag || '',
+    tag: poi.tag || '',
     businessArea: poi.business_area || '',
-    recommend: poi.recommend || '',
+    recommend: poi.recommend || biz.recommend || '',
     discountNum: poi.discount_num || '0',
     groupbuyNum: poi.groupbuy_num || '0',
     cityname: poi.cityname || '',
-    adname: poi.adname || ''
+    adname: poi.adname || '',
+    pname: poi.pname || '',
+    bizType: poi.biz_type || '',
+    naviGeo: poi.navi_geometry || ''
   };
 }
 
 function amapPoiToSpotItem(poi, userLat, userLng) {
   const dist = haversineDistance(userLat, userLng, parseFloat(poi.location.split(',')[1]), parseFloat(poi.location.split(',')[0]));
   const biz = poi.biz_ext || {};
+  const deep = poi.deep_info || {};
+
+  // 构建描述：高德介绍 → 推荐语 → 标签 → 地址
+  var desc = '';
+  if (deep.intro) desc = deep.intro;
+  else if (biz.introduction) desc = biz.introduction;
+  else if (poi.recommend) desc = poi.recommend;
+  else if (poi.tag) desc = '🏷️ ' + poi.tag;
+  else {
+    var typeParts = (poi.type || '').split(';');
+    desc = typeParts[typeParts.length - 1] || '西安必游景点';
+  }
+
   return {
     name: poi.name || '未知景点',
     dist: formatDistance(dist),
-    desc: biz.introduction || poi.address || '高德推荐景点',
+    desc: desc,
     coord: poi.location || '',
     gaodeUid: poi.id || '',
     amapId: poi.id || '',
     rating: biz.rating || '',
-    tel: poi.tel || '',
+    ratingNum: biz.rating_num || '',
+    tel: poi.tel || deep.tel || '',
     photos: (poi.photos && poi.photos.length) ? poi.photos.map(p => p.url) : [],
     address: poi.address || '',
-    openTime: biz.opentime2 || '',
+    openTime: biz.opentime2 || deep.opentime || '',
     ticketOrdering: biz.ticket_ordering || '0',
     website: safeWebsite(poi.website),
     keytag: poi.keytag || '',
+    tag: poi.tag || '',
     businessArea: poi.business_area || '',
     recommend: poi.recommend || '',
     discountNum: poi.discount_num || '0',
@@ -2550,38 +3957,52 @@ function amapPoiToSpotItem(poi, userLat, userLng) {
     cityname: poi.cityname || '',
     adname: poi.adname || '',
     bizType: poi.biz_type || '',
-    alias: poi.alias || ''
+    alias: poi.alias || '',
+    pname: poi.pname || '',
+    naviGeo: poi.navi_geometry || ''
   };
 }
 
 function amapPoiToHotelItem(poi, userLat, userLng) {
   const dist = haversineDistance(userLat, userLng, parseFloat(poi.location.split(',')[1]), parseFloat(poi.location.split(',')[0]));
   const biz = poi.biz_ext || {};
+  const deep = poi.deep_info || {};
   const cat = hotelTypeFromStar(biz.star || '');
+
+  // 构建描述
+  var desc = '';
+  if (poi.recommend) desc = poi.recommend;
+  else if (poi.tag) desc = '🏷️ ' + poi.tag;
+  else if (deep.intro) desc = deep.intro;
+  else desc = poi.address || '高德推荐住宿';
+
   return {
     name: poi.name || '未知酒店',
     dist: formatDistance(dist),
-    desc: poi.address || '高德推荐酒店',
+    desc: desc,
     price: hotelPriceFromStar(biz.star || ''),
     origPrice: hotelOrigPriceFromStar(biz.star || ''),
     coord: poi.location || '',
     cat: cat,
     amapId: poi.id || '',
     rating: biz.rating || '',
-    tel: poi.tel || '',
+    ratingNum: biz.rating_num || '',
+    tel: poi.tel || deep.tel || '',
     photos: (poi.photos && poi.photos.length) ? poi.photos.map(p => p.url) : [],
-    link: `https://uri.amap.com/detail?poiid=${poi.id || ''}`,
+    link: 'https://uri.amap.com/detail?poiid=' + (poi.id || ''),
     address: poi.address || '',
     website: safeWebsite(poi.website),
     keytag: poi.keytag || '',
+    tag: poi.tag || '',
     businessArea: poi.business_area || '',
     recommend: poi.recommend || '',
     discountNum: poi.discount_num || '0',
     groupbuyNum: poi.groupbuy_num || '0',
-    openTime: biz.opentime2 || '',
+    openTime: biz.opentime2 || deep.opentime || '',
     star: biz.star || '',
     cityname: poi.cityname || '',
-    adname: poi.adname || ''
+    adname: poi.adname || '',
+    pname: poi.pname || ''
   };
 }
 
@@ -2615,26 +4036,49 @@ function switchGalleryPhoto(dot, idx, name) {
   dots.forEach((d, i) => { d.style.background = i === idx ? '#fff' : 'rgba(255,255,255,0.5)'; });
 }
 
-function typeNameToCat(type) {
+// 按菜品名+高德类型智能分类（西安本地美食四大类）
+function typeNameToCat(type, name, tag) {
+  const n = (name || '').replace(/\s+/g,'');
   const t = (type || '').toLowerCase();
-  if (t.includes('中餐') || t.includes('火锅') || t.includes('川菜') || t.includes('湘菜') || t.includes('粤菜') || t.includes('东北') || t.includes('西北') || t.includes('清真'))
-    return '陕菜经典';
-  if (t.includes('小吃') || t.includes('快餐') || t.includes('面食') || t.includes('米线') || t.includes('包子') || t.includes('饺子'))
-    return '回坊小吃';
-  if (t.includes('面包') || t.includes('咖啡') || t.includes('茶') || t.includes('甜点') || t.includes('糕点'))
-    return '面食天堂';
-  if (t.includes('烧烤') || t.includes('烤肉') || t.includes('串') || t.includes('夜市') || t.includes('大排档'))
-    return '夜市烧烤';
-  return '回坊小吃';
+  const g = (tag || '');
+
+  // 排除非正餐：饮品/咖啡/茶/甜品/面包/糕点 → 归入「其他」不显示
+  if (t.includes('茶艺')||t.includes('咖啡')||t.includes('冷饮')||t.includes('甜品')||t.includes('糕点')||t.includes('面包')||t.includes('奶茶')||t.includes('饮品')||t.includes('酒吧')) return '__skip__';
+  if (n.includes('咖啡')||n.includes('茶')&&!n.includes('早茶')||n.includes('奶茶')||n.includes('甜品')||n.includes('蛋糕')||n.includes('面包')||n.includes('冰淇淋')) return '__skip__';
+
+  // === 陕菜：正宗陕菜馆子 ===
+  // 菜名关键词
+  if (/葫芦鸡|陕菜|秦菜|西北菜|陕西菜|西安饭庄|德发长|老孙家|春发生|同盛祥|西安烤鸭|长安大排档|醉长安|遇见长安|长安壹号/.test(n)) return '陕菜';
+  if (/羊肉泡|水盆|葫芦头|粉汤羊血|梆梆肉|烩三鲜|条子肉|带把肘子|温拌腰丝|奶汤锅子鱼|金线油塔/.test(n)) return '陕菜';
+  // 高德类型辅助
+  if (t.includes('中餐') && /陕|秦|西|长安/.test(n)) return '陕菜';
+
+  // === 烧烤：烤肉烤串类 ===
+  if (/烧烤|烤肉|烤串|串串|烤全羊|烤面筋|烤鱼(?!片)/.test(n)) return '烧烤';
+  if (t.includes('烧烤')||t.includes('烤肉')) return '烧烤';
+
+  // === 面食：面条/饺子/包子/米线/米皮/胡辣汤 ===
+  if (/面(?!包)(?!筋)(?!对)|饺子|包子|米线|米皮|胡辣汤|肉丸糊|饸饹|搅团|鱼鱼|biang/i.test(n)) return '面食';
+  if (t.includes('面食')||t.includes('面馆')||t.includes('饺子')) return '面食';
+
+  // === 小吃：肉夹馍/凉皮/灌汤包/粉蒸肉/甑糕/酸梅汤/醪糟 ===
+  if (/肉夹馍|凉皮|灌汤包|粉蒸肉|甑糕|柿子饼|酸梅汤|醪糟|镜糕|黄桂|稠酒|冰峰|豌豆黄|柿子糊|油茶|麻花|麻酱/.test(n)) return '小吃';
+  if (/泡馍/.test(n) && !/羊肉|水盆|葫芦/.test(n)) return '小吃';
+  if (t.includes('小吃')||t.includes('快餐')) return '小吃';
+
+  // === 默认：名里有面→面食，有肉→小吃，其他→陕菜 ===
+  if (/面/.test(n)&&!/面对面/.test(n)) return '面食';
+  if (/肉|馍|饼|丸子/.test(n)) return '小吃';
+  return '陕菜';
 }
 
 function hotelTypeFromStar(star) {
-  if (!star || star === '') return '经济连锁';
+  if (!star || star === '') return '经济';
   const s = parseInt(star) || 0;
-  if (s >= 5) return '高档型';
-  if (s >= 4) return '高档型';
-  if (s >= 3) return '舒适型';
-  return '经济连锁';
+  if (s >= 5) return '高档';
+  if (s >= 4) return '高档';
+  if (s >= 3) return '舒适';
+  return '经济';
 }
 
 function hotelPriceFromStar(star) {
@@ -2648,7 +4092,7 @@ function hotelOrigPriceFromStar(star) {
 }
 
 function fallbackFoodSVG(name) {
-  return foodSVG('回坊小吃');
+  return foodSVG('小吃');
 }
 
 function spotFallbackSVG(name) {
@@ -2671,10 +4115,10 @@ function photoCellHtml(poi, fallbackSvg) {
 
 // ===== 本地人美食弹窗（分类图片）=====
 const FOOD_CAT_STYLE = {
-  '陕菜经典': { icon:'🍲', c1:'#D4782F', c2:'#F0C080', emoji:'🥢' },
-  '回坊小吃': { icon:'🥙', c1:'#C84B31', c2:'#F09080', emoji:'🍢' },
-  '面食天堂': { icon:'🍜', c1:'#B8860B', c2:'#F0D878', emoji:'🫓' },
-  '夜市烧烤': { icon:'🍖', c1:'#5D4037', c2:'#A08070', emoji:'🔥' }
+  '陕菜': { icon:'🍲', c1:'#D4782F', c2:'#F0C080', emoji:'🥢' },
+  '小吃': { icon:'🥙', c1:'#C84B31', c2:'#F09080', emoji:'🍢' },
+  '面食': { icon:'🍜', c1:'#B8860B', c2:'#F0D878', emoji:'🫓' },
+  '烧烤': { icon:'🍖', c1:'#5D4037', c2:'#A08070', emoji:'🔥' }
 };
 
 function foodSVG(cat) {
@@ -2683,21 +4127,21 @@ function foodSVG(cat) {
 }
 
 const LOCAL_FOODS = [
-  // 陕菜经典
-  { cat:'陕菜经典', name:'德发长饺子宴', area:'钟楼附近', desc:'百年老字号，饺子花样上百种，本地人招待贵客首选', price:'¥60/人', coord:'108.948,34.261' },
-  { cat:'陕菜经典', name:'西安饭庄', area:'东大街', desc:'陕菜头牌，葫芦鸡一绝，周恩来总理曾在此宴请外宾', price:'¥90/人', coord:'108.957,34.260' },
-  { cat:'回坊小吃', name:'回坊老赵家腊牛肉夹馍', area:'回民街深处', desc:'肉多得往外掉，肥瘦相间，汁水多到滴一手，本地人排队常态', price:'¥18/人', coord:'108.946,34.265' },
-  { cat:'回坊小吃', name:'马家灌汤包子', area:'大皮院', desc:'皮薄汤多，先咬一小口吸汤再吃，烫嘴也舍不得停', price:'¥22/人', coord:'108.943,34.264' },
-  { cat:'回坊小吃', name:'杨家粉蒸肉', area:'北院门', desc:'牛肉裹粉蒸得软糯入味，夹在荷叶饼里一口闷，香得很', price:'¥20/人', coord:'108.942,34.267' },
-  { cat:'回坊小吃', name:'花奶奶酸梅汤', area:'回民街主街', desc:'熬出来的酸梅汤和冲调的不是一回事，加醪糟更是一绝', price:'¥8/人', coord:'108.945,34.263' },
-  { cat:'面食天堂', name:'老马家肉丸胡辣汤', area:'洒金桥', desc:'手打牛肉丸Q弹，麻辣味儿正，配上锅盔绝了，大清早就排长队', price:'¥12/人', coord:'108.940,34.268' },
-  { cat:'面食天堂', name:'秦镇米皮老店', area:'高新区秦镇', desc:'米皮薄如纸，红油辣子香而不燥，夏天来一碗爽翻', price:'¥10/人', coord:'108.845,34.196' },
-  { cat:'面食天堂', name:'刘记水盆羊肉', area:'南稍门', desc:'汤清肉烂，月牙饼掰碎了泡进去，再来瓣蒜，额能连吃三碗', price:'¥28/人', coord:'108.939,34.248' },
-  { cat:'夜市烧烤', name:'小东门梆梆肉', area:'朝阳门里', desc:'熏制大肠和猪肚，铁锅柴火熏得焦香四溢，配啤酒一绝', price:'¥35/人', coord:'108.960,34.266' },
-  { cat:'夜市烧烤', name:'马峰烤肉', area:'小南门', desc:'只在晚上出摊，羊肉串嫩到不行，排队半小时也值', price:'¥40/人', coord:'108.937,34.258' },
+  // 陕菜
+  { cat:'陕菜', name:'德发长饺子宴', area:'钟楼附近', desc:'百年老字号，饺子花样上百种，本地人招待贵客首选', price:'¥60/人', coord:'108.948,34.261' },
+  { cat:'陕菜', name:'西安饭庄', area:'东大街', desc:'陕菜头牌，葫芦鸡一绝，周恩来总理曾在此宴请外宾', price:'¥90/人', coord:'108.957,34.260' },
+  { cat:'小吃', name:'回坊老赵家腊牛肉夹馍', area:'回民街深处', desc:'肉多得往外掉，肥瘦相间，汁水多到滴一手，本地人排队常态', price:'¥18/人', coord:'108.946,34.265' },
+  { cat:'小吃', name:'马家灌汤包子', area:'大皮院', desc:'皮薄汤多，先咬一小口吸汤再吃，烫嘴也舍不得停', price:'¥22/人', coord:'108.943,34.264' },
+  { cat:'小吃', name:'杨家粉蒸肉', area:'北院门', desc:'牛肉裹粉蒸得软糯入味，夹在荷叶饼里一口闷，香得很', price:'¥20/人', coord:'108.942,34.267' },
+  { cat:'小吃', name:'花奶奶酸梅汤', area:'回民街主街', desc:'熬出来的酸梅汤和冲调的不是一回事，加醪糟更是一绝', price:'¥8/人', coord:'108.945,34.263' },
+  { cat:'面食', name:'老马家肉丸胡辣汤', area:'洒金桥', desc:'手打牛肉丸Q弹，麻辣味儿正，配上锅盔绝了，大清早就排长队', price:'¥12/人', coord:'108.940,34.268' },
+  { cat:'面食', name:'秦镇米皮老店', area:'高新区秦镇', desc:'米皮薄如纸，红油辣子香而不燥，夏天来一碗爽翻', price:'¥10/人', coord:'108.845,34.196' },
+  { cat:'面食', name:'刘记水盆羊肉', area:'南稍门', desc:'汤清肉烂，月牙饼掰碎了泡进去，再来瓣蒜，额能连吃三碗', price:'¥28/人', coord:'108.939,34.248' },
+  { cat:'烧烤', name:'小东门梆梆肉', area:'朝阳门里', desc:'熏制大肠和猪肚，铁锅柴火熏得焦香四溢，配啤酒一绝', price:'¥35/人', coord:'108.960,34.266' },
+  { cat:'烧烤', name:'马峰烤肉', area:'小南门', desc:'只在晚上出摊，羊肉串嫩到不行，排队半小时也值', price:'¥40/人', coord:'108.937,34.258' },
 ];
 
-const FOOD_CATEGORIES = ['全部', '陕菜经典', '回坊小吃', '面食天堂', '夜市烧烤'];
+const FOOD_CATEGORIES = ['全部', '陕菜', '小吃', '面食', '烧烤'];
 let foodActiveCat = '全部';
 
 function openLocalFood() {
@@ -2724,17 +4168,16 @@ let _cachedFoods = null;
 
 async function renderFoodList() {
   const list = document.getElementById('food-list');
-  list.innerHTML = '<p style="text-align:center;color:#999;padding:30px;">📡 正在从高德获取附近真实美食...</p>';
+  list.innerHTML = '<p style="text-align:center;color:#999;padding:30px;">🍜 正在加载本地美食库...</p>';
   
   try {
     if (!_cachedFoods) {
-      const pos = await getUserPosition();
-      const rawPois = await fetchAmapAround('美食|小吃|陕菜|羊肉泡馍|肉夹馍', '餐饮服务', pos.lat, pos.lng, 5000, 30, true);
-      _cachedFoods = rawPois.map(p => amapPoiToFoodItem(p, pos.lat, pos.lng));
+      var pos = await getUserPosition();
+      _cachedFoods = await LocalDB.getFoods(pos.lat, pos.lng);
     }
-  } catch (e) { /* fallback to static */ }
+  } catch (e) { _cachedFoods = []; }
   
-  const sourceData = (_cachedFoods && _cachedFoods.length > 0) ? _cachedFoods : LOCAL_FOODS;
+  var sourceData = (_cachedFoods && _cachedFoods.length > 0) ? _cachedFoods : [];
   const filtered = foodActiveCat === '全部' ? sourceData : sourceData.filter(f => f.cat === foodActiveCat);
   
   if (filtered.length === 0) {
@@ -2813,74 +4256,43 @@ let _cachedSpots = null;
 
 async function openSpotsNearby() {
   // 免费功能：无需支付即可浏览
-  const list = document.getElementById('spots-list');
-  list.innerHTML = '<p style="text-align:center;color:#999;padding:30px;">📡 正在从高德获取西安真实景点...</p>';
+  var list = document.getElementById('spots-list');
+  list.innerHTML = '<p style="text-align:center;color:#999;padding:30px;">🏛️ 正在加载本地景点库...</p>';
   document.getElementById('spots-overlay').classList.add('show');
   
   try {
     if (!_cachedSpots) {
-      const pos = await getUserPosition();
-      const rawPois = await fetchAmapPOIs('景点|博物馆|寺庙|遗址|公园', '风景名胜|科教文化服务|公园广场', '西安', 30, true);
-      _cachedSpots = rawPois.map(p => amapPoiToSpotItem(p, pos.lat, pos.lng));
+      var pos = await getUserPosition();
+      _cachedSpots = await LocalDB.getAttractions(pos.lat, pos.lng);
     }
-  } catch (e) { /* fallback */ }
+  } catch (e) { _cachedSpots = []; }
   
-  const sourceData = (_cachedSpots && _cachedSpots.length > 0) ? _cachedSpots : NEARBY_SPOTS;
-  const isAmapData = _cachedSpots && _cachedSpots.length > 0;
+  var sourceData = (_cachedSpots && _cachedSpots.length > 0) ? _cachedSpots : [];
+  var isAmapData = _cachedSpots && _cachedSpots.length > 0;
   
-  let h = '';
-  let rank = 0;
-  sourceData.forEach(s => {
+  var h = '';
+  var rank = 0;
+  sourceData.forEach(function(s) {
     rank++;
-    const rcClass = rank === 1 ? ' gold' : rank === 2 ? ' silver' : rank === 3 ? ' bronze' : ' normal';
-    const rcIcon = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
-    const distLabel = s.dist || '—';
-    
-    if (isAmapData) {
-      const fallbackSvg = spotFallbackSVG(s.name);
-      const photoGallery = renderPhotoGallery(s.photos, fallbackSvg, s.name);
-      const ticketHtml = s.ticketOrdering === '1' ? '<span class="list-tag" style="background:#FFF3E0;color:#E65100;">🎫 可购票</span>' : '';
-      const ratingHtml = s.rating ? `<span>⭐${s.rating}</span>` : '';
-      const telHtml = s.tel ? `<span style="font-size:11px;color:#888;">📞 ${s.tel}</span>` : '';
-      const keytagHtml = s.keytag ? `<span class="list-tag" style="background:#FFF3E0;color:#E65100;">${s.keytag}</span>` : '';
-      const bizAreaHtml = s.businessArea ? `<span style="font-size:11px;color:#888;">🏘️ ${s.businessArea}</span>` : '';
-      const recHtml = s.recommend ? `<span style="font-size:10px;color:#4CAF50;">👍 推荐度${s.recommend}/5</span>` : '';
-      const aliasHtml = s.alias ? `<span style="font-size:11px;color:#888;">(又名: ${s.alias})</span>` : '';
-      const discHtml = parseInt(s.discountNum) > 0 ? `<span class="list-tag" style="background:#FFF8E1;color:#FF6F00;">🎫 ${s.discountNum}优惠</span>` : '';
-      const grpHtml = parseInt(s.groupbuyNum) > 0 ? `<span class="list-tag" style="background:#EDE7F6;color:#4527A0;">🛒 ${s.groupbuyNum}团购</span>` : '';
-      h += `<div class="list-item">
-        <div class="list-photo" style="border-radius:10px;overflow:hidden;flex-shrink:0;background:#f5f5f5;position:relative;">${photoGallery}<div class="photo-tag">${distLabel}</div></div>
-        <div class="list-info">
-          <div class="list-name">${s.name} <span class="spot-rank-badge${rcClass}">${rcIcon}</span>${ratingHtml}${aliasHtml}</div>
-          <div class="list-addr">📍 ${s.address || ''} · 📏 ${distLabel} · ${s.adname || '西安'}${telHtml}</div>
-          <div class="list-desc">${s.desc || ''}${recHtml}</div>
-          ${s.openTime ? `<div style="font-size:11px;color:#888;margin:2px 0;">🕐 ${s.openTime}</div>` : ''}
-          <div class="list-tags">${keytagHtml}${ticketHtml}${discHtml}${grpHtml}</div>
-          <div class="list-btn-row">
-            <a class="list-nav" href="https://uri.amap.com/navigation?to=${s.coord},${encodeURIComponent(s.name)}&mode=car&callnative=1" target="_blank">🧭 一键导航</a>
-            <a class="list-nav blue" href="https://uri.amap.com/detail?poiid=${s.amapId || ''}" target="_blank">📋 高德详情</a>
-            <span class="list-nav blue" onclick="openGuide('${s.name}')" style="cursor:pointer;">📸 攻略</span>
-            ${s.website ? `<a class="list-nav" href="${s.website.startsWith('http')?s.website:'https://'+s.website}" target="_blank" style="background:#f5f5f5;color:#333;">🌐 官网</a>` : ''}
-          </div>
-        </div>
-      </div>`;
-    } else {
-      // Fallback to static data
-      const fallbackSvg = spotSVG(s.name, s.icon, s.c1, s.c2);
-      const imgSrc = s.photo || fallbackSvg;
-      h += `<div class="list-item">
-        <div class="list-photo" style="border-radius:10px;overflow:hidden;flex-shrink:0;background:#f5f5f5;"><img src="${imgSrc}" alt="${s.name}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" onerror="this.src='${fallbackSvg}'"><div class="photo-tag">${s.dist}</div></div>
-        <div class="list-info">
-          <div class="list-name">${s.name} <span class="spot-rank-badge${rcClass}">${rcIcon}</span></div>
-          <div class="list-addr">📏 距钟楼约 ${s.dist}</div>
-          <div class="list-desc">${s.desc}</div>
-          <div class="list-btn-row">
-            <a class="list-nav" href="https://uri.amap.com/navigation?to=${s.gaodeUid},${s.name}&mode=car&callnative=1" target="_blank">🧭 一键导航</a>
-            <span class="list-nav blue" onclick="openGuide('${s.name}')" style="cursor:pointer;">📸 拍照攻略</span>
-          </div>
-        </div>
-      </div>`;
-    }
+    var rcClass = rank === 1 ? ' gold' : rank === 2 ? ' silver' : rank === 3 ? ' bronze' : ' normal';
+    var rcIcon = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    var distLabel = s.dist || '—';
+    var fallbackSvg = spotFallbackSVG(s.name);
+    var photoGallery = renderPhotoGallery(s.photos, fallbackSvg, s.name);
+    var ratingHtml = s.rating ? '<span>⭐' + s.rating + '</span>' : '';
+    h += '<div class="list-item">' +
+      '<div class="list-photo" style="border-radius:10px;overflow:hidden;flex-shrink:0;background:#f5f5f5;position:relative;">' + photoGallery + '<div class="photo-tag">' + distLabel + '</div></div>' +
+      '<div class="list-info">' +
+        '<div class="list-name">' + s.name + ' <span class="spot-rank-badge' + rcClass + '">' + rcIcon + '</span>' + ratingHtml + '</div>' +
+        '<div class="list-addr">📍 ' + (s.address || '西安') + ' · 📏 ' + distLabel + '</div>' +
+        '<div class="list-desc">' + (s.desc || '') + '</div>' +
+        '<div class="list-btn-row">' +
+          '<a class="list-nav" href="https://uri.amap.com/navigation?to=' + s.coord + ',' + encodeURIComponent(s.name) + '&mode=car&callnative=1" target="_blank">🧭 一键导航</a>' +
+          '<a class="list-nav blue" href="https://uri.amap.com/detail?poiid=' + (s.amapId || '') + '" target="_blank">📋 高德详情</a>' +
+          '<span class="list-nav blue" onclick="openGuide(\'' + s.name + '\')" style="cursor:pointer;">📸 攻略</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
   });
   list.innerHTML = h;
   document.getElementById('spots-overlay').classList.add('show');
@@ -2946,10 +4358,10 @@ function copyWx(wxid) {
 
 // ===== 附近酒店 =====
 const HOTEL_CAT_STYLE = {
-  '经济连锁': { icon:'🏨', c1:'#FF8F00', c2:'#FFB74D', emoji:'💰' },
-  '舒适型':    { icon:'🏨', c1:'#1565C0', c2:'#64B5F6', emoji:'🛏️' },
-  '高档型':    { icon:'🏨', c1:'#4E342E', c2:'#8D6E63', emoji:'✨' },
-  '特色民宿':  { icon:'🏨', c1:'#00695C', c2:'#80CBC4', emoji:'🏡' }
+  '经济': { icon:'🏨', c1:'#FF8F00', c2:'#FFB74D', emoji:'💰' },
+  '舒适': { icon:'🏨', c1:'#1565C0', c2:'#64B5F6', emoji:'🛏️' },
+  '高档': { icon:'🏨', c1:'#4E342E', c2:'#8D6E63', emoji:'✨' },
+  '民宿': { icon:'🏨', c1:'#00695C', c2:'#80CBC4', emoji:'🏡' }
 };
 
 function hotelSVG(cat) {
@@ -2957,18 +4369,27 @@ function hotelSVG(cat) {
   return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${s.c1}"/><stop offset="100%" stop-color="${s.c2}"/></linearGradient></defs><rect width="200" height="200" rx="12" fill="url(#hg)"/><text x="100" y="100" text-anchor="middle" font-size="52">${s.emoji}</text><text x="100" y="150" text-anchor="middle" font-size="22" fill="white" font-weight="bold" style="text-shadow:0 1px 3px rgba(0,0,0,.3)">${cat}</text></svg>`)}`;
 }
 
+function estimateHotelPrice(cat) {
+  if (!cat) return '--';
+  if (cat.includes('经济')) return '150-250';
+  if (cat.includes('舒适')) return '250-500';
+  if (cat.includes('豪华') || cat.includes('高档')) return '500-1500';
+  if (cat.includes('民宿')) return '200-500';
+  return '200-500';
+}
+
 const HOTELS = [
-  { name:'钟楼饭店', dist:'0.3km', desc:'老牌四星，钟楼旁位置绝佳，俯瞰钟楼夜景', price:'388', origPrice:'588', photo:'https://dimg04.c-ctrip.com/images/1mc0m12000amb30aeA2BA_W_1280_853_R5_Q70.jpg', link:'https://hotels.ctrip.com/hotel/375609.html', coord:'108.947,34.260', cat:'高档型' },
-  { name:'西安美居酒店(钟楼店)', dist:'0.5km', desc:'法式风格，地铁口零距离，性价比超高', price:'258', origPrice:'398', photo:'https://dimg04.c-ctrip.com/images/200d14000000vwonq3B33_W_1280_853_R5_Q70.jpg', link:'https://hotels.ctrip.com/hotel/435167.html', coord:'108.952,34.263', cat:'舒适型' },
-  { name:'汉庭酒店(钟楼东大街店)', dist:'0.8km', desc:'经济实惠，干净卫生，连锁品牌有保障', price:'168', origPrice:'258', photo:'https://dimg04.c-ctrip.com/images/200k11000000qfcid5959_C_360_360_Q50.jpg', link:'https://hotels.ctrip.com/hotel/153210.html', coord:'108.957,34.262', cat:'经济连锁' },
-  { name:'西安索菲特传奇酒店', dist:'1.2km', desc:'人民大厦内，法式奢华，带行政酒廊', price:'988', origPrice:'1588', photo:'https://dimg04.c-ctrip.com/images/20060k000000b971iEA9A_C_360_360_Q50.jpg', link:'https://hotels.ctrip.com/hotel/435608.html', coord:'108.955,34.270', cat:'高档型' },
-  { name:'西安W酒店', dist:'3.5km', desc:'网红潮牌酒店，曲江池畔，设计感炸裂', price:'1288', origPrice:'1888', photo:'https://dimg04.c-ctrip.com/images/0222o12000cfl2yy2186E_R_960_660_R5_D.jpg', link:'https://hotels.ctrip.com/hotel/6892125.html', coord:'108.980,34.208', cat:'高档型' },
-  { name:'全季酒店(大雁塔店)', dist:'4.8km', desc:'新中式风格，距大雁塔步行10分钟', price:'298', origPrice:'428', photo:'https://dimg04.c-ctrip.com/images//1mc6a12000rye09u4001B_R_1080_808_Q90.jpg', link:'https://hotels.ctrip.com/hotel/298713.html', coord:'108.960,34.222', cat:'舒适型' },
-  { name:'如家精选(回民街店)', dist:'0.4km', desc:'就在回民街口，下楼就开吃，吃货首选', price:'188', origPrice:'288', photo:'https://dimg04.c-ctrip.com/images/1mc2a12000sferil0B2ED_W_1280_853_R5_Q70.jpg', link:'https://hotels.ctrip.com/hotel/852361.html', coord:'108.945,34.266', cat:'经济连锁' },
-  { name:'花间堂·与鹿(诗经里)', dist:'21km', desc:'诗经里景区内，温泉私汤，唐风庭院园林', price:'598', origPrice:'898', photo:'https://dimg04.c-ctrip.com/images/1mc2p12000ntca9bmD529_W_1280_853_R5_Q70.jpg', link:'https://hotels.ctrip.com/hotel/54895140.html', coord:'108.764,34.215', cat:'特色民宿' },
+  { name:'钟楼饭店', dist:'0.3km', desc:'老牌四星，钟楼旁位置绝佳，俯瞰钟楼夜景', price:'388', origPrice:'588', photo:'https://dimg04.c-ctrip.com/images/1mc0m12000amb30aeA2BA_W_1280_853_R5_Q70.jpg', link:'https://hotels.ctrip.com/hotel/375609.html', coord:'108.947,34.260', cat:'高档' },
+  { name:'西安美居酒店(钟楼店)', dist:'0.5km', desc:'法式风格，地铁口零距离，性价比超高', price:'258', origPrice:'398', photo:'https://dimg04.c-ctrip.com/images/200d14000000vwonq3B33_W_1280_853_R5_Q70.jpg', link:'https://hotels.ctrip.com/hotel/435167.html', coord:'108.952,34.263', cat:'舒适' },
+  { name:'汉庭酒店(钟楼东大街店)', dist:'0.8km', desc:'经济实惠，干净卫生，连锁品牌有保障', price:'168', origPrice:'258', photo:'https://dimg04.c-ctrip.com/images/200k11000000qfcid5959_C_360_360_Q50.jpg', link:'https://hotels.ctrip.com/hotel/153210.html', coord:'108.957,34.262', cat:'经济' },
+  { name:'西安索菲特传奇酒店', dist:'1.2km', desc:'人民大厦内，法式奢华，带行政酒廊', price:'988', origPrice:'1588', photo:'https://dimg04.c-ctrip.com/images/20060k000000b971iEA9A_C_360_360_Q50.jpg', link:'https://hotels.ctrip.com/hotel/435608.html', coord:'108.955,34.270', cat:'高档' },
+  { name:'西安W酒店', dist:'3.5km', desc:'网红潮牌酒店，曲江池畔，设计感炸裂', price:'1288', origPrice:'1888', photo:'https://dimg04.c-ctrip.com/images/0222o12000cfl2yy2186E_R_960_660_R5_D.jpg', link:'https://hotels.ctrip.com/hotel/6892125.html', coord:'108.980,34.208', cat:'高档' },
+  { name:'全季酒店(大雁塔店)', dist:'4.8km', desc:'新中式风格，距大雁塔步行10分钟', price:'298', origPrice:'428', photo:'https://dimg04.c-ctrip.com/images//1mc6a12000rye09u4001B_R_1080_808_Q90.jpg', link:'https://hotels.ctrip.com/hotel/298713.html', coord:'108.960,34.222', cat:'舒适' },
+  { name:'如家精选(回民街店)', dist:'0.4km', desc:'就在回民街口，下楼就开吃，吃货首选', price:'188', origPrice:'288', photo:'https://dimg04.c-ctrip.com/images/1mc2a12000sferil0B2ED_W_1280_853_R5_Q70.jpg', link:'https://hotels.ctrip.com/hotel/852361.html', coord:'108.945,34.266', cat:'经济' },
+  { name:'花间堂·与鹿(诗经里)', dist:'21km', desc:'诗经里景区内，温泉私汤，唐风庭院园林', price:'598', origPrice:'898', photo:'https://dimg04.c-ctrip.com/images/1mc2p12000ntca9bmD529_W_1280_853_R5_Q70.jpg', link:'https://hotels.ctrip.com/hotel/54895140.html', coord:'108.764,34.215', cat:'民宿' },
 ];
 
-const HOTEL_CATEGORIES = ['全部', '经济连锁', '舒适型', '高档型', '特色民宿'];
+const HOTEL_CATEGORIES = ['全部', '经济型', '舒适型', '豪华型', '民宿'];
 let hotelActiveCat = '全部';
 
 let _cachedHotels = null;
@@ -2993,77 +4414,46 @@ function filterHotelCat(cat) {
 }
 
 async function renderHotelList() {
-  const list = document.getElementById('hotel-list');
-  list.innerHTML = '<p style="text-align:center;color:#999;padding:30px;">📡 正在从高德获取附近真实酒店...</p>';
+  var list = document.getElementById('hotel-list');
+  list.innerHTML = '<p style="text-align:center;color:#999;padding:30px;">🏨 正在加载本地酒店库...</p>';
   
   try {
     if (!_cachedHotels) {
-      const pos = await getUserPosition();
-      // 搜索多种类型的酒店
-      const rawPois1 = await fetchAmapAround('酒店', '住宿服务', pos.lat, pos.lng, 10000, 15, true);
-      const rawPois2 = await fetchAmapAround('宾馆|旅馆|民宿|客栈', '住宿服务', pos.lat, pos.lng, 10000, 15, true);
-      const allRaw = [...rawPois1];
-      // 合并去重
-      const seen = new Set(rawPois1.map(p => p.id));
-      rawPois2.forEach(p => { if (!seen.has(p.id)) { allRaw.push(p); seen.add(p.id); } });
-      _cachedHotels = allRaw.map(p => amapPoiToHotelItem(p, pos.lat, pos.lng));
+      var pos = await getUserPosition();
+      _cachedHotels = await LocalDB.getHotels(pos.lat, pos.lng);
     }
-  } catch (e) { /* fallback */ }
+  } catch (e) { _cachedHotels = []; }
   
-  const sourceData = (_cachedHotels && _cachedHotels.length > 0) ? _cachedHotels : HOTELS;
-  const isAmapData = _cachedHotels && _cachedHotels.length > 0;
-  const filtered = hotelActiveCat === '全部' ? sourceData : sourceData.filter(h => h.cat === hotelActiveCat);
+  var sourceData = (_cachedHotels && _cachedHotels.length > 0) ? _cachedHotels : [];
+  var filtered = hotelActiveCat === '全部' ? sourceData : sourceData.filter(function(h) {
+    if (hotelActiveCat === '民宿') return (h.name && h.name.includes('民宿')) || (h.desc && h.desc.includes('民宿'));
+    return h.cat === hotelActiveCat;
+  });
   
   if (filtered.length === 0) {
     list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">暂无该类型酒店</p>';
     return;
   }
   
-  let h = '';
-  filtered.forEach(hotel => {
-    if (isAmapData) {
-      const fallbackSvg = hotelSVG(hotel.cat);
-      const photoGallery = renderPhotoGallery(hotel.photos, fallbackSvg, hotel.name);
-      const ratingHtml = hotel.rating ? `<span style="color:#FF9800;"> ⭐${hotel.rating}</span>` : '';
-      const keytagHtml = hotel.keytag ? `<span class="list-tag" style="background:#EDE7F6;color:#4527A0;">${hotel.keytag}</span>` : '';
-      const starHtml = hotel.star ? `<span style="font-size:11px;color:#FF9800;">${'⭐'.repeat(Math.min(5, hotel.star.length))}</span>` : '';
-      const bizAreaHtml = hotel.businessArea ? `<span style="font-size:11px;color:#888;"> · 🏘️ ${hotel.businessArea}</span>` : '';
-      const telHtml = hotel.tel ? `<span style="font-size:11px;color:#888;"> · 📞 ${hotel.tel}</span>` : '';
-      const openHtml = hotel.openTime ? `<div style="font-size:11px;color:#888;margin-top:2px;">🕐 ${hotel.openTime}</div>` : '';
-      const discHtml = parseInt(hotel.discountNum) > 0 ? `<span class="list-tag" style="background:#FFF8E1;color:#FF6F00;">🎫 ${hotel.discountNum}优惠</span>` : '';
-      const grpHtml = parseInt(hotel.groupbuyNum) > 0 ? `<span class="list-tag" style="background:#EDE7F6;color:#4527A0;">🛒 ${hotel.groupbuyNum}团购</span>` : '';
-      h += `<div class="hotel-list-item">
-        <div class="hotel-photo" style="overflow:hidden;">${photoGallery}</div>
-        <div class="hotel-detail">
-          <div class="h-name">${hotel.name}${ratingHtml}${starHtml}</div>
-          <div class="h-dist">📍 ${hotel.dist} · ${hotel.cat} · ${hotel.adname || '西安'}${bizAreaHtml}${telHtml}</div>
-          <div class="h-price-row"><span class="h-price">¥${hotel.price}<s>¥${hotel.origPrice}</s></span><span class="h-rebate">参考价</span></div>
-          <div class="list-desc">${hotel.address || hotel.desc || ''}</div>
-          ${openHtml}
-          <div class="list-tags" style="margin:4px 0;">${keytagHtml}${discHtml}${grpHtml}</div>
-          <div class="hotel-btn-row">
-            <a class="hotel-btn buy" href="${hotel.link}" target="_blank">📋 高德详情</a>
-            <a class="hotel-btn nav" href="https://uri.amap.com/navigation?to=${hotel.coord}&mode=car" target="_blank">🧭 导航</a>
-            ${hotel.website ? `<a class="hotel-btn" href="${hotel.website.startsWith('http')?hotel.website:'https://'+hotel.website}" target="_blank" style="background:#f5f5f5;color:#333;">🌐 官网</a>` : ''}
-          </div>
-        </div>
-      </div>`;
-    } else {
-      // Fallback
-      h += `<div class="hotel-list-item">
-        <div class="hotel-photo"><img src="${hotel.photo || hotelSVG(hotel.cat)}" alt="${hotel.name}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.src='${hotelSVG(hotel.cat)}'"></div>
-        <div class="hotel-detail">
-          <div class="h-name">${hotel.name}</div>
-          <div class="h-dist">📍 距钟楼约 ${hotel.dist} · ${hotel.cat}</div>
-          <div class="h-price-row"><span class="h-price">¥${hotel.price}<s>¥${hotel.origPrice}</s></span><span class="h-rebate">小长安专享</span></div>
-          <div class="list-desc">${hotel.desc}</div>
-          <div class="hotel-btn-row">
-            <a class="hotel-btn buy" href="${hotel.link}" target="_blank">🛒 去团购</a>
-            <a class="hotel-btn nav" href="https://uri.amap.com/navigation?to=${hotel.coord}&mode=car" target="_blank">🧭 导航</a>
-          </div>
-        </div>
-      </div>`;
-    }
+  var h = '';
+  filtered.forEach(function(hotel) {
+    var fallbackSvg = hotelSVG(hotel.cat);
+    var photoGallery = renderPhotoGallery(hotel.photos, fallbackSvg, hotel.name);
+    var ratingHtml = hotel.rating ? ' <span style="color:#FF9800;">⭐' + hotel.rating + '</span>' : '';
+    var coord = hotel.coord || '';
+    h += '<div class="hotel-list-item">' +
+      '<div class="hotel-photo" style="overflow:hidden;">' + photoGallery + '</div>' +
+      '<div class="hotel-detail">' +
+        '<div class="h-name">' + hotel.name + ratingHtml + '</div>' +
+        '<div class="h-dist">📍 ' + hotel.dist + ' · ' + (hotel.cat || '酒店') + ' · 西安</div>' +
+        '<div class="h-price-row"><span class="h-price">¥' + (hotel.price || estimateHotelPrice(hotel.cat)) + '</span><span class="h-rebate">参考价</span></div>' +
+        '<div class="list-desc">' + (hotel.address || hotel.desc || '') + '</div>' +
+        '<div class="hotel-btn-row">' +
+          '<a class="hotel-btn buy" href="' + (hotel.link || '#') + '" target="_blank">📋 高德详情</a>' +
+          '<a class="hotel-btn nav" href="https://uri.amap.com/navigation?to=' + coord + '&mode=car" target="_blank">🧭 导航</a>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
   });
   list.innerHTML = h;
 }
@@ -3075,7 +4465,7 @@ function closeHotelModal(e) {
 }
 
 // ===== AI 智能体对话 =====
-const CHAT_SYSTEM_PROMPT = `你是"小长安"，西安14年土著导游，陕西口音（用"额"代替"我"），性格热情直爽、幽默风趣。你是西安旅行专家，能回答关于西安的任何问题：景点、美食、交通、住宿、历史、文化、天气、路线规划等。
+const CHAT_SYSTEM_PROMPT = `你是"长安伴游"，西安14年土著导游，陕西口音（用"额"代替"我"），性格热情直爽、幽默风趣。你是西安旅行专家，能回答关于西安的任何问题：景点、美食、交通、住宿、历史、文化、天气、路线规划等。
 
 回复要求：
 1. 用口语化的、接地气的方式回答，陕西味十足
@@ -3093,7 +4483,7 @@ let chatMessages = [];
 
 function openAIChat() {
   if (chatMessages.length === 0) {
-    chatMessages.push({ role:'bot', text:'嘿！额是小长安，西安土著活了14年！\\n\\n你想问啥都行——景点、美食、住宿、路线，额都能给你安排得明明白白的。\\n\\n来，说说你有啥需求？带娃？情侣？还是一个人独闯长安城？', time:getTimeStr() });
+    chatMessages.push({ role:'bot', text:'嘿！额是长安伴游，西安土著活了14年！\\n\\n你想问啥都行——景点、美食、住宿、路线，额都能给你安排得明明白白的。\\n\\n来，说说你有啥需求？带娃？情侣？还是一个人独闯长安城？', time:getTimeStr() });
   }
   renderChatMessages();
   document.getElementById('chat-overlay').classList.add('show');
@@ -3143,29 +4533,26 @@ function sendChatMsg() {
   renderChatMessages();
   addTyping();
   
-  // Call DeepSeek API
+  // Call DeepSeek API (使用统一的海绵函数，含API Key和CORS兜底)
   (async () => {
     try {
-      const resp = await fetch(PROXY_URL, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
-          model:'deepseek-chat',
-          max_tokens:800,
-          temperature:0.9,
-          messages:[
-            {role:'system',content:CHAT_SYSTEM_PROMPT},
-            {role:'user',content:text}
-          ]
-        })
+      const resp = await _fetchDeepSeek({
+        model:'deepseek-chat',
+        max_tokens:800,
+        temperature:0.9,
+        messages:[
+          {role:'system',content:CHAT_SYSTEM_PROMPT},
+          {role:'user',content:text}
+        ]
       });
-      if (!resp.ok) throw new Error('API错误');
+      if (!resp.ok) throw new Error('API错误 '+resp.status);
       const data = await resp.json();
       removeTyping();
       chatMessages.push({ role:'bot', text:data.choices[0].message.content, time:getTimeStr() });
       renderChatMessages();
     } catch(e) {
       removeTyping();
+      console.error('AI对话API失败:', e);
       // Fallback response if API fails
       const fallback = getFallbackResponse(text);
       chatMessages.push({ role:'bot', text:fallback, time:getTimeStr() });
@@ -3178,7 +4565,7 @@ function getFallbackResponse(q) {
   const ql = q.toLowerCase();
   if (ql.includes('兵马俑') || ql.includes('门票')) return '兵马俑门票120元/人，学生半价60元。旺季（3月-11月）8:30-17:00，淡季8:30-16:30。建议提前网上购票，现场排队太费劲。额建议找个导游讲解，比自己瞎看强多了！';
   if (ql.includes('住') || ql.includes('酒店') || ql.includes('住宿')) return '住的话额推荐钟楼附近，去哪都方便。经济型168起，舒适型258起，高档型388起。打开"附近酒店"标签能看到详细列表，还有团购链接！';
-  if (ql.includes('吃') || ql.includes('美食') || ql.includes('推荐')) return '额私藏的美食单在"本地人美食"标签里，分成了陕菜经典、回坊小吃、面食天堂、夜市烧烤四个分类。回民街的灌汤包子和肉夹馍是必吃的，别去主街，钻进巷子里找老店！';
+  if (ql.includes('吃') || ql.includes('美食') || ql.includes('推荐')) return '额私藏的美食单在"本地人美食"标签里，分成了陕菜、小吃、面食、烧烤四个分类。回民街的灌汤包子和肉夹馍是必吃的，别去主街，钻进巷子里找老店！';
   if (ql.includes('行程') || ql.includes('路线') || ql.includes('规划') || ql.includes('天')) return '想要定制行程的话，回到首页点"开始规划我的西安之旅"，告诉额你的天数、人数、偏好，额用AI给你生成详细到每小时的路线，连导航都配好了！';
   return '这个问题额得查一下最新信息，不过关于西安的景点、美食、住宿、路线这些事儿，你尽管问！或者试试快捷提问，额都能给你安排得妥妥的。';
 }
@@ -3217,7 +4604,7 @@ function playVoiceIntro() {
   btn.classList.add('playing');
   btn.textContent = '🔊 额正在说…';
 
-  const text = '嘿！你好！额是小长安，你在西安的土著老朋友。额在西安活了14年，比任何一个攻略APP都懂这座城。额能帮你规划旅行路线、推荐本地人私藏的美食、陪你聊天解答任何关于西安的问题。想规划行程就在下面填地点和时间，想找好吃的、找酒店、找景点，点下面导航栏就行。有任何问题点开AI智能体问额！祝你在西安耍得开心！';
+  const text = '嘿！你好呀~欢迎来到长安伴游！额是你在西安的AI智能旅行伴侣，能帮你规划专属路线、推荐本地人私藏美食、一键导航到景点，还能陪你聊天解闷儿。不管你是带娃、情侣、还是一个人闯长安，额都能给你安排得明明白白的。很开心能为你服务，祝你在西安耍得开心！';
 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'zh-CN';
@@ -3249,6 +4636,24 @@ function stopVoice() {
     btn.classList.remove('playing');
     btn.textContent = '🔊 听额用陕西话给你说两句';
   }
+}
+
+// "我的"页面长安伴游语音介绍
+function playChangAnIntro() {
+  if (!('speechSynthesis' in window)) {
+    toast('你的浏览器不支持语音播报');
+    return;
+  }
+  const text = '你好呀~欢迎来到长安伴游！额是你在西安的AI智能旅行伴侣，能帮你规划专属路线、推荐本地人私藏美食、一键导航到景点，还能陪你聊天解闷儿。很开心能为你服务，祝你在西安耍得开心！';
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'zh-CN';
+  utterance.rate = 0.95;
+  utterance.pitch = 1.05;
+  const voices = speechSynthesis.getVoices();
+  const zhVoice = voices.find(v => v.lang.startsWith('zh'));
+  if (zhVoice) utterance.voice = zhVoice;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utterance);
 }
 
 // 预加载语音列表并首次访问自动播报
@@ -3324,8 +4729,16 @@ function genPlan() {
     toast('请至少选择1位出行人');
     return;
   }
+  if (total > 9) {
+    toast('出行人数不能超过9人（成人+儿童+老人）');
+    return;
+  }
 
   var days = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
+  if (days > 7) {
+    toast('行程天数不能超过7天，请调整日期范围');
+    return;
+  }
 
   // 收集所有chip选中的值
   function getSelectedChip(sectionIdx, groupIdx) {
@@ -3413,15 +4826,71 @@ function genPlan() {
 }
 
 // 实际执行AI规划（支付通过后调用）
-function doGenPlan() {
+async function doGenPlan() {
   document.querySelector('.main-form').style.display = 'none';
   document.getElementById('create-result').classList.remove('show');
   document.getElementById('weather-widget').style.display = 'none';
   document.getElementById('loadingTxt').style.display = 'block';
   document.getElementById('genBtn').disabled = true;
-  document.getElementById('genBtn').textContent = '⏳ 小长安正在规划中…';
+  document.getElementById('genBtn').textContent = '⏳ 长安伴游正在规划中…';
 
-  callDeepSeekForCreate();
+  // 构建表单数据
+  var formData = {
+    from: state.from, startDate: state.depart, endDate: state['return'],
+    days: state._days || 2, who: state.who, count: state.count,
+    budget: state.budget, hotelBudget: state.hotelBudget, hotelType: state.hotelType,
+    transport: state.transport,
+    foodPref: state.foodPref || [], foodWant: state.foodWant || [], foodTaboo: state.foodTaboo,
+    styles: state.styles || [], mustSee: state.mustSee || [], pace: state.pace,
+    specials: state.specials || [], note: state.note
+  };
+
+  try {
+    // 1. 从本地数据库获取匹配数据
+    var dbData = await LocalDB.getDataForPlan({
+      hotelType: formData.hotelType,
+      budget: formData.budget,
+      styles: formData.styles,
+      mustSee: formData.mustSee,
+      foodPref: formData.foodPref,
+      foodWant: formData.foodWant
+    });
+    console.log('📦 本地数据库匹配数据：景点' + (dbData.attractions?dbData.attractions.length:0) + ' 美食' + (dbData.foods?dbData.foods.length:0) + ' 酒店' + (dbData.hotels?dbData.hotels.length:0));
+
+    // 2. 构建增强prompt（含DB真实数据）
+    var prompt = buildPromptEnhanced(formData, dbData);
+
+    // 3. 调用DeepSeek
+    _planAbortController = new AbortController();
+    var timeout = setTimeout(function() { _planAbortController.abort(); }, 40000);
+    
+    var content = await callDeepSeekAPI(prompt);
+    clearTimeout(timeout);
+    
+    if (!content) throw new Error('AI返回空内容');
+
+    // 4. 预渲染富化——对DB没有的条目（如演出/体验），先调高德+AI补充
+    try {
+      var m = content.match(/\{[\s\S]*\}/);
+      var previewPlan = JSON.parse(m ? m[0] : content);
+      var enrichResult = await preRenderEnrich(previewPlan, dbData);
+      dbData = enrichResult.dbData;
+      var spotLookup = enrichResult.spotLookup;
+    } catch(e) {
+      console.warn('预富化失败（不影响主流程）:', e.message);
+      var spotLookup = {};
+    }
+
+    // 5. 增强渲染（使用DB真实数据填充，含预富化结果）
+    renderCreateResultEnhanced(content, formData, dbData, spotLookup);
+
+  } catch(e) {
+    clearTimeout(timeout);
+    var msg = e.message;
+    if (e.name==='AbortError') msg = 'AI响应超时，请重试';
+    else if (msg==='Failed to fetch') msg = IS_LOCAL ? '代理未启动，请先运行 proxy.js' : '网络连接失败';
+    renderCreateError(msg);
+  }
 }
 
 function callDeepSeekForCreate() {
@@ -3474,7 +4943,7 @@ function renderCreateResult(content) {
   var h = '';
 
   if (plan.xiaoba_say) {
-    h += '<div class="rcard"><div class="xb-bubble"><div class="xb-bub-head"><div class="xb-bub-avatar">🏯</div><span class="xb-bub-name">小长安说</span></div><div class="xb-bub-text">' + plan.xiaoba_say + '</div></div></div>';
+    h += '<div class="rcard"><div class="xb-bubble"><div class="xb-bub-head"><div class="xb-bub-avatar">🏯</div><span class="xb-bub-name">长安伴游说</span></div><div class="xb-bub-text">' + plan.xiaoba_say + '</div></div></div>';
   }
 
   if (plan.days && plan.days.length) {
@@ -3490,7 +4959,7 @@ function renderCreateResult(content) {
   }
 
   if (plan.foods && plan.foods.length) {
-    h += '<div class="rcard"><div class="rcard-title">🍜 小长安私房美食单</div><div class="food-grid">';
+    h += '<div class="rcard"><div class="rcard-title">🍜 长安伴游私房美食单</div><div class="food-grid">';
     plan.foods.forEach(function(f) {
       h += '<div class="food-card"><div class="food-name">🍜 ' + (f.name||'') + '</div><div class="food-area">📍 ' + (f.area||'') + '</div><div class="food-tip">' + (f.tip||'') + '</div></div>';
     });
@@ -3498,7 +4967,7 @@ function renderCreateResult(content) {
   }
 
   if (plan.hotel) {
-    h += '<div class="rcard"><div class="rcard-title">🏨 住宿推荐</div><div class="hotel-card"><div class="hotel-emoji">🏨</div><div class="hotel-info"><div class="hotel-name">' + (plan.hotel.area||'推荐区域') + '</div><div class="hotel-meta">' + (plan.hotel.reason||'') + '</div><div class="hotel-price"><span class="price-now">' + (plan.hotel.budget||'') + '</span><span class="rebate-tag">小长安专享</span></div></div></div></div>';
+    h += '<div class="rcard"><div class="rcard-title">🏨 住宿推荐</div><div class="hotel-card"><div class="hotel-emoji">🏨</div><div class="hotel-info"><div class="hotel-name">' + (plan.hotel.area||'推荐区域') + '</div><div class="hotel-meta">' + (plan.hotel.reason||'') + '</div><div class="hotel-price"><span class="price-now">' + (plan.hotel.budget||'') + '</span><span class="rebate-tag">长安伴游专享</span></div></div></div></div>';
   }
 
   if (plan.budget) {
@@ -3540,6 +5009,416 @@ function backToForm() {
   window.scrollTo(0, 0);
 }
 
+// ===== 美食/酒店/景点 页面加载 =====
+
+var _lastPlanData = null;
+var _currentFoodList = [];
+var _currentHotelList = [];
+var _currentSpotsList = [];
+
+// 美食页
+var _foodPageLoaded = false;
+function loadFoodPage() {
+  var catHtml = '';
+  FOOD_CATEGORIES.forEach(function(c) {
+    catHtml += '<div class="cat-tab' + (c === foodActiveCat ? ' active' : '') + '" onclick="filterFoodPageCat(\'' + c + '\')">' + c + '</div>';
+  });
+  document.getElementById('food-page-cat-tabs').innerHTML = catHtml;
+  if (!_foodPageLoaded) renderFoodPageList();
+}
+
+function filterFoodPageCat(cat) {
+  foodActiveCat = cat;
+  document.querySelectorAll('#food-page-cat-tabs .cat-tab').forEach(function(t) {
+    t.classList.toggle('active', t.textContent === cat);
+  });
+  renderFoodPageList();
+}
+
+async function renderFoodPageList() {
+  var list = document.getElementById('food-page-list');
+  list.innerHTML = '<p class="loading-msg">📡 正在获取西安地道美食（高德实时数据）...</p>';
+  try {
+    if (!_cachedFoods) {
+      var pos = await getUserPosition();
+      var dbFoods = await LocalDB.getFoods(pos.lat, pos.lng);
+      _cachedFoods = dbFoods;
+    }
+  } catch(e) { console.error('LocalDB加载美食失败：', e); }
+  
+  var sourceData = (_cachedFoods && _cachedFoods.length > 0) ? _cachedFoods : [];
+  var filtered = foodActiveCat === '全部' ? sourceData : sourceData.filter(function(f) { return f.cat === foodActiveCat; });
+  _currentFoodList = filtered;
+  
+  if (filtered.length === 0) {
+    list.innerHTML = '<p class="loading-msg">😔 该分类下暂无数据，换个分类试试</p>';
+    return;
+  }
+  
+  var h = '';
+  filtered.forEach(function(f, idx) {
+    var fallbackSvg = foodSVG(f.cat);
+    var isAmap = f.photos && f.photos.length > 0;
+    var photoHtml = isAmap ? renderPhotoGallery(f.photos, fallbackSvg, f.name) : '<img src="' + (f.photo || f.img || fallbackSvg) + '" alt="' + f.name + '" loading="lazy" onerror="this.src=\'' + fallbackSvg + '\'" style="width:100%;height:100%;object-fit:cover;">';
+    // 真实评分显示
+    var ratingHtml = '';
+    if (f.rating && parseFloat(f.rating) > 0) {
+      var stars = '⭐'.repeat(Math.min(5, Math.round(parseFloat(f.rating))));
+      ratingHtml = ' <span style="font-size:11px;color:#FF9800;">' + stars + ' ' + f.rating + '</span>';
+    }
+    var distHtml = f.dist || '';
+    var priceHtml = f.price || '';
+    var navCoord = f.coord || '';
+    h += '<div class="food-page-card" onclick="showCardDetail(\'food\',' + idx + ')">' +
+      '<div class="fp-photo">' + photoHtml + '</div>' +
+      '<div class="fp-info">' +
+        '<div class="fp-name">' + f.name + ratingHtml + '</div>' +
+        '<div class="fp-desc">' + (f.desc || '').substring(0, 80) + '</div>' +
+        '<div class="fp-meta">' +
+          '<span class="fp-price">' + priceHtml + '</span>' +
+          (distHtml ? '<span class="fp-dist">📏 ' + distHtml + '</span>' : '') +
+        '</div>' +
+      '</div>' +
+      (navCoord ? '<div class="fp-nav"><button class="fp-nav-btn" onclick="event.stopPropagation();window.open(\'https://uri.amap.com/navigation?to=' + navCoord + '&mode=car&callnative=1\', \'_blank\')">🧭</button></div>' : '') +
+    '</div>';
+  });
+  list.innerHTML = h;
+  _foodPageLoaded = true;
+}
+
+// 酒店页
+var _hotelPageLoaded = false;
+function loadHotelPage() {
+  var catHtml = '';
+  HOTEL_CATEGORIES.forEach(function(c) {
+    catHtml += '<div class="cat-tab' + (c === hotelActiveCat ? ' active' : '') + '" onclick="filterHotelPageCat(\'' + c + '\')">' + c + '</div>';
+  });
+  document.getElementById('hotel-page-cat-tabs').innerHTML = catHtml;
+  if (!_hotelPageLoaded) renderHotelPageList();
+}
+
+function filterHotelPageCat(cat) {
+  hotelActiveCat = cat;
+  document.querySelectorAll('#hotel-page-cat-tabs .cat-tab').forEach(function(t) {
+    t.classList.toggle('active', t.textContent === cat);
+  });
+  renderHotelPageList();
+}
+
+async function renderHotelPageList() {
+  var list = document.getElementById('hotel-page-list');
+  list.innerHTML = '<p class="loading-msg">📡 正在获取附近酒店...</p>';
+  try {
+    if (!_cachedHotels) {
+      var pos = await getUserPosition();
+      var dbHotels = await LocalDB.getHotels(pos.lat, pos.lng);
+      _cachedHotels = dbHotels;
+    }
+  } catch(e) { console.error('LocalDB加载酒店失败：', e); }
+  
+  var sourceData = (_cachedHotels && _cachedHotels.length > 0) ? _cachedHotels : [];
+  var filtered = hotelActiveCat === '全部' ? sourceData : sourceData.filter(function(h) {
+    if (hotelActiveCat === '民宿') return (h.name && h.name.includes('民宿')) || (h.desc && h.desc.includes('民宿'));
+    return h.cat === hotelActiveCat;
+  });
+  _currentHotelList = filtered;
+  
+  if (filtered.length === 0) {
+    list.innerHTML = '<p class="loading-msg">暂无该类型酒店</p>';
+    return;
+  }
+  
+  var h = '';
+  filtered.forEach(function(hotel, idx) {
+    var fallbackSvg = hotelSVG(hotel.cat);
+    var isAmap = hotel.images && hotel.images.length > 0;
+    var photoHtml = isAmap ? renderPhotoGallery(hotel.images, fallbackSvg, hotel.name) : '<img src="' + ((hotel.images && hotel.images[0]) || fallbackSvg) + '" alt="' + hotel.name + '" loading="lazy" onerror="this.src=\'' + fallbackSvg + '\'" style="width:100%;height:100%;object-fit:cover;">';
+    // 评分
+    var ratingHtml = hotel.rating && parseFloat(hotel.rating) > 0 ? ' ⭐' + hotel.rating : '';
+    var starHtml = hotel.star ? ' ' + ('⭐'.repeat(Math.min(5, (hotel.star||'').length))) : '';
+    var distHtml = hotel.dist || '';
+    var priceHtml = hotel.price || estimateHotelPrice(hotel.cat);
+    var navCoord = hotel.coord || '';
+    // 描述截取
+    var descShort = (hotel.desc || '').substring(0, 60);
+    if (!descShort && hotel.address) descShort = hotel.address.substring(0, 60);
+    h += '<div class="hotel-page-card" onclick="showCardDetail(\'hotel\',' + idx + ')">' +
+      '<div class="hp-photo">' + photoHtml + '</div>' +
+      '<div class="hp-info">' +
+        '<div class="hp-name">' + hotel.name + '<span style="font-size:11px;color:#FF9800;">' + ratingHtml + starHtml + '</span></div>' +
+        (descShort ? '<div class="hp-meta" style="font-size:12px;color:#8e8e93;margin:4px 0;">' + descShort + '</div>' : '') +
+        '<div class="hp-bottom">' +
+          '<div class="hp-price">¥' + priceHtml + '<span>起/晚</span></div>' +
+          (navCoord ? '<button class="hp-nav-btn" onclick="event.stopPropagation();window.open(\'https://uri.amap.com/navigation?to=' + navCoord + '&mode=car&callnative=1\', \'_blank\')">🧭 导航</button>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  });
+  list.innerHTML = h;
+  _hotelPageLoaded = true;
+}
+
+// 景点页
+function loadSpotsPage() {
+  var catHtml = '';
+  SPOTS_CATEGORIES.forEach(function(c) {
+    catHtml += '<div class="cat-tab' + (c === _spotsActiveCat ? ' active' : '') + '" onclick="filterSpotsPageCat(\'' + c + '\')">' + c + '</div>';
+  });
+  var tabsEl = document.getElementById('spots-page-cat-tabs');
+  if (tabsEl) tabsEl.innerHTML = catHtml;
+  if (!_spotsPageLoaded) renderSpotsPageList();
+}
+
+function filterSpotsPageCat(cat) {
+  _spotsActiveCat = cat;
+  document.querySelectorAll('#spots-page-cat-tabs .cat-tab').forEach(function(t) {
+    t.classList.toggle('active', t.textContent === cat);
+  });
+  renderSpotsPageList();
+}
+
+async function renderSpotsPageList() {
+  var list = document.getElementById('spots-page-list');
+  list.innerHTML = '<p class="loading-msg">📡 正在获取附近景点...</p>';
+  try {
+    if (!_cachedSpots) {
+      var pos = await getUserPosition();
+      var dbSpots = await LocalDB.getAttractions(pos.lat, pos.lng);
+      _cachedSpots = dbSpots;
+    }
+  } catch(e) { console.error('LocalDB加载景点失败：', e); }
+  
+  var sourceData = (_cachedSpots && _cachedSpots.length > 0) ? _cachedSpots : [];
+  var filtered = _spotsActiveCat === '全部' ? sourceData : sourceData.filter(function(s) {
+    return s.cat === _spotsActiveCat;
+  });
+  _currentSpotsList = filtered;
+  
+  var h = '';
+  filtered.forEach(function(s, idx) {
+    var isAmap = s.images && s.images.length > 0;
+    var fallbackSvg = s.icon ? spotSVG(s.name, s.icon, s.c1, s.c2) : 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="160"><rect width="400" height="160" fill="#E8453C"/><text x="200" y="90" text-anchor="middle" fill="white" font-size="40">🏛️</text></svg>');
+    var photoHtml = '';
+    if (isAmap) {
+      photoHtml = renderPhotoGallery(s.images, fallbackSvg, s.name);
+    } else if (s.images && s.images[0]) {
+      photoHtml = '<img src="' + s.images[0] + '" alt="' + s.name + '" loading="lazy" onerror="this.src=\'' + fallbackSvg + '\'" style="width:100%;height:100%;object-fit:cover;">';
+    } else {
+      photoHtml = '<img src="' + fallbackSvg + '" alt="' + s.name + '" style="width:100%;height:100%;object-fit:cover;">';
+    }
+    var distHtml = s.dist || '';
+    var navCoord = s.coord || '';
+    var ratingHtml = s.rating && parseFloat(s.rating) > 0 ? ' ⭐' + s.rating + '分' : '';
+    h += '<div class="spot-page-card" onclick="showCardDetail(\'spots\',' + idx + ')">' +
+      '<div class="sp-photo-wrap">' +
+        photoHtml +
+        (distHtml ? '<div class="sp-dist-tag">📏 ' + distHtml + '</div>' : '') +
+      '</div>' +
+      '<div class="sp-info">' +
+        '<div class="sp-name">' + s.name + '<span style="font-size:11px;color:#FF9800;font-weight:400;">' + ratingHtml + '</span></div>' +
+        '<div class="sp-desc">' + (s.desc || s.address || '').substring(0, 100) + '</div>' +
+        '<div class="sp-bottom">' +
+          '<div class="sp-meta">' + (s.businessArea ? '📍 ' + s.businessArea : '🏛️ 西安') + '</div>' +
+          (navCoord ? '<button class="sp-nav-btn" onclick="event.stopPropagation();window.open(\'https://uri.amap.com/navigation?to=' + navCoord + '&mode=car&callnative=1\', \'_blank\')">🧭 导航</button>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  });
+  list.innerHTML = h;
+  _spotsPageLoaded = true;
+}
+
+// ===== 通用卡片详情弹窗 =====
+function showCardDetail(type, idx) {
+  var item;
+  if (type === 'food') item = _currentFoodList[idx];
+  else if (type === 'hotel') item = _currentHotelList[idx];
+  else if (type === 'spots') item = _currentSpotsList[idx];
+  else if (type === 'experience') item = _currentExpList[idx];
+  if (!item) return;
+
+  var mask = document.getElementById('detailMask');
+  var gallery = document.getElementById('popup-gallery');
+  var desc = document.getElementById('popupDesc');
+  var nameEl = document.getElementById('popupName');
+  var subEl = document.getElementById('popupSubTxt');
+  var btnGroup = mask.querySelector('.popup-btn-group');
+  var commentBlock = mask.querySelector('.comment-block');
+
+  if (commentBlock) commentBlock.style.display = 'none';
+
+  // 标题
+  nameEl.textContent = item.name;
+
+  // 副标题：分类 · 距离 · 价格 · 区域
+  var subParts = [];
+  if (item.cat) subParts.push(item.cat);
+  if (item.dist) subParts.push('📏 ' + item.dist);
+  if (item.price) subParts.push(item.price);
+  if (item.businessArea) subParts.push('📍 ' + item.businessArea);
+  else if (item.adname) subParts.push('📍 ' + item.adname);
+  subEl.textContent = subParts.join(' · ');
+
+  // 图片
+  var fallbackSvg;
+  if (type === 'food') fallbackSvg = foodSVG(item.cat || '小吃');
+  else if (type === 'hotel') fallbackSvg = hotelSVG(item.cat || '经济');
+  else fallbackSvg = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect width="400" height="200" fill="#E8453C"/><text x="200" y="110" text-anchor="middle" fill="white" font-size="50">🏛️</text></svg>');
+
+  // 兼容多种图片字段名：images, photos, photo_list
+  var photoList = item.images || item.photos || item.photo_list || [];
+  var hasAmapPhotos = photoList.length > 0;
+  var galleryHtml;
+  if (hasAmapPhotos) {
+    galleryHtml = '<div style="position:relative;width:100%;height:200px;overflow:hidden;border-radius:12px;background:#f0f0f0;">' +
+      renderPhotoGallery(photoList, fallbackSvg, item.name) + '</div>';
+  } else if (item.photo) {
+    galleryHtml = '<img src="' + item.photo + '" alt="' + item.name + '" style="width:100%;height:200px;object-fit:cover;border-radius:12px;" onerror="this.src=\'' + fallbackSvg + '\'">';
+  } else {
+    galleryHtml = '<img src="' + fallbackSvg + '" alt="' + item.name + '" style="width:100%;height:200px;object-fit:cover;border-radius:12px;">';
+  }
+  gallery.innerHTML = galleryHtml;
+  gallery.style.display = 'block';
+
+  // 描述：完整内容拼接
+  var descText = '';
+  if (item.desc) descText += item.desc;
+  // 评分
+  if (item.rating && parseFloat(item.rating) > 0) {
+    var stars = '⭐'.repeat(Math.min(5, Math.round(parseFloat(item.rating))));
+    var ratingLine = '\n\n' + stars + ' ' + item.rating + '分';
+    if (item.ratingNum) ratingLine += '（' + item.ratingNum + '人评）';
+    descText += ratingLine;
+  }
+  if (item.keytag) descText += '\n\n🏷️ 标签：' + item.keytag;
+  else if (item.tag) descText += '\n\n🏷️ 标签：' + item.tag;
+  if (item.openTime) descText += '\n\n🕐 营业时间：' + item.openTime;
+  if (item.tel) descText += '\n\n📞 电话：' + item.tel;
+  if (item.address) descText += '\n\n📍 地址：' + item.address;
+  if (item.website) descText += '\n\n🔗 官网：' + item.website;
+
+  // 攻略和避坑指南 —— 优先使用DB内置数据
+  var guideKey = 'guide_' + (item.amapId || item.name);
+  var safeGuideKey = guideKey.replace(/[^a-zA-Z0-9_-]/g, '_');
+  var guideHtml = '';
+
+  // 1) 优先使用DB中AI预生成的攻略数据
+  if (item.guide || item.pitfalls) {
+    guideHtml = '<div class="popup-guide-block">' +
+      '<div class="popup-guide-title">📸 ' + (type === 'food' ? '美食攻略' : type === 'hotel' ? '住宿攻略' : type === 'experience' ? '体验攻略' : '游玩攻略') + '</div>' +
+      '<div class="popup-guide-content">' + (item.guide || '暂无攻略') + '</div>';
+    if (item.mustSee) {
+      guideHtml += '<div class="popup-guide-title" style="margin-top:12px;">🏛️ 必看</div>' +
+        '<div class="popup-guide-content">' + item.mustSee + '</div>';
+    }
+    if (item.mustEat) {
+      guideHtml += '<div class="popup-guide-title" style="margin-top:12px;">🍽️ 必吃</div>' +
+        '<div class="popup-guide-content">' + item.mustEat + '</div>';
+    }
+    if (item.mustTry) {
+      guideHtml += '<div class="popup-guide-title" style="margin-top:12px;">✨ 必试</div>' +
+        '<div class="popup-guide-content">' + item.mustTry + '</div>';
+    }
+    guideHtml += '<div class="popup-guide-title" style="margin-top:16px;">⚠️ 避坑指南</div>' +
+      '<div class="popup-guide-content">' + (item.pitfalls || '暂无避坑信息') + '</div>';
+    guideHtml += '</div>';
+  }
+
+  // 2) 回退到localStorage缓存
+  if (!guideHtml && !item.guide && !item.pitfalls) {
+    var cachedGuide = localStorage.getItem(guideKey);
+    if (cachedGuide) {
+      try {
+        var guideData = JSON.parse(cachedGuide);
+        guideHtml = '<div class="popup-guide-block">' +
+          '<div class="popup-guide-title">📸 游玩攻略</div>' +
+          '<div class="popup-guide-content">' + guideData.guide + '</div>' +
+          '<div class="popup-guide-title" style="margin-top:16px;">⚠️ 避坑指南</div>' +
+          '<div class="popup-guide-content">' + guideData.pitfalls + '</div>' +
+        '</div>';
+      } catch(e) { /* ignore corrupt cache */ }
+    }
+  }
+
+  // 3) 都无则显示"生成攻略"按钮
+  if (!guideHtml) {
+    guideHtml = '<div class="popup-guide-block" id="guide-block-' + safeGuideKey + '">' +
+      '<button class="popup-btn primary" onclick="generateGuide(\'' + guideKey.replace(/'/g, "\\'") + '\',\'' + (item.name || '').replace(/'/g, "\\'") + '\')">📸 生成游玩攻略 & 避坑指南</button>' +
+    '</div>';
+  }
+
+  // 构建详情HTML：描述 + 攻略 + 避坑指南
+  var detailHtml = '';
+  if (descText) {
+    detailHtml += '<p style="white-space:pre-line;line-height:1.8;color:#333;font-size:14px;">' + descText + '</p>';
+  }
+  detailHtml += guideHtml;
+  desc.innerHTML = detailHtml || '<p style="color:#8e8e93;">暂无详细介绍</p>';
+
+  // 按钮组：导航 + 详情链接 + 关闭
+  var btnHtml = '';
+  if (item.coord) {
+    btnHtml += '<button class="popup-btn primary" onclick="window.open(\'https://uri.amap.com/navigation?to=' + item.coord + '&mode=car&callnative=1\', \'_blank\')">🧭 高德导航</button>';
+  }
+  if (item.amapId) {
+    btnHtml += '<button class="popup-btn" onclick="window.open(\'https://uri.amap.com/detail?poiid=' + item.amapId + '\', \'_blank\')">📋 高德详情</button>';
+  }
+  if (item.link) {
+    btnHtml += '<button class="popup-btn" onclick="window.open(\'' + item.link + '\', \'_blank\')">🔗 查看详情</button>';
+  }
+  btnHtml += '<button class="popup-btn" onclick="closeDetailPopup()">✕ 关闭</button>';
+  btnGroup.innerHTML = btnHtml;
+
+  // 显示
+  mask.classList.add('show');
+  mask.scrollTop = 0;
+}
+
+// 生成攻略和避坑指南
+async function generateGuide(guideKey, name) {
+  var safeGuideKey = guideKey.replace(/[^a-zA-Z0-9_-]/g, '_');
+  var block = document.getElementById('guide-block-' + safeGuideKey);
+  if (!block) {
+    console.error('找不到guide-block:', safeGuideKey);
+    return;
+  }
+
+  // 显示loading
+  block.innerHTML = '<div class="popup-guide-loading">⏳ 正在生成攻略，请稍候...</div>';
+
+  try {
+    // 调用本地代理的/api/guide端点
+    var resp = await fetch('/api/guide?name=' + encodeURIComponent(name));
+    if (!resp.ok) {
+      throw new Error('生成失败: HTTP ' + resp.status);
+    }
+
+    var data = await resp.json();
+
+    // 验证返回数据
+    if (!data.guide && !data.pitfalls) {
+      throw new Error('返回数据格式错误');
+    }
+
+    // 缓存到localStorage
+    localStorage.setItem(guideKey, JSON.stringify(data));
+    console.log('✅ 攻略已生成并缓存:', name);
+
+    // 显示攻略和避坑指南
+    block.innerHTML = '<div class="popup-guide-block">' +
+      '<div class="popup-guide-title">📸 游玩攻略</div>' +
+      '<div class="popup-guide-content">' + (data.guide || '暂无攻略') + '</div>' +
+      '<div class="popup-guide-title" style="margin-top:16px;">⚠️ 避坑指南</div>' +
+      '<div class="popup-guide-content">' + (data.pitfalls || '暂无避坑指南') + '</div>' +
+    '</div>';
+
+  } catch(e) {
+    console.error('生成攻略失败:', e);
+    block.innerHTML = '<div class="popup-guide-error">⚠️ 生成失败：' + e.message + '</div>' +
+      '<button class="popup-btn" onclick="generateGuide(\'' + guideKey.replace(/'/g, "\\'") + '\',\'' + name.replace(/'/g, "\\'") + '\')">重试</button>';
+  }
+}
+
 // ===== 页面导航（6Tab版） =====
 var _currentTab = 'changan';
 
@@ -3556,25 +5435,36 @@ function switchTab(tab) {
     document.getElementById('page-create').classList.add('active');
     document.getElementById('tabChangan').classList.add('active');
   } else if (tab === 'food') {
-    document.getElementById('page-explore').classList.add('active');
+    document.getElementById('page-food').classList.add('active');
     document.getElementById('tabFood').classList.add('active');
-    switchExploreTab('food');
+    loadFoodPage();
   } else if (tab === 'hotel') {
-    document.getElementById('page-explore').classList.add('active');
+    document.getElementById('page-hotel').classList.add('active');
     document.getElementById('tabHotel').classList.add('active');
-    switchExploreTab('hotel');
+    loadHotelPage();
   } else if (tab === 'spots') {
-    document.getElementById('page-explore').classList.add('active');
+    document.getElementById('page-spots').classList.add('active');
     document.getElementById('tabSpots').classList.add('active');
-    switchExploreTab('scenic');
+    loadSpotsPage();
   } else if (tab === 'aichat') {
     var chatOv2 = document.getElementById('chat-overlay');
     if (chatOv2) chatOv2.classList.add('show');
     document.getElementById('tabAIChat').classList.add('active');
     return;
+  } else if (tab === 'experience') {
+    document.getElementById('page-experience').classList.add('active');
+    document.getElementById('tabExperience').classList.add('active');
+    loadExperiencePage();
   } else if (tab === 'mine') {
     document.getElementById('page-mine').classList.add('active');
     document.getElementById('tabMine').classList.add('active');
+    renderMinePlanList();
+  } else if (tab === 'feedback') {
+    document.getElementById('page-feedback').classList.add('active');
+  } else if (tab === 'about') {
+    document.getElementById('page-about').classList.add('active');
+  } else if (tab === 'advice') {
+    document.getElementById('page-advice').classList.add('active');
   }
   window.scrollTo(0, 0);
 }
