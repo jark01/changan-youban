@@ -1871,7 +1871,8 @@ function checkPayStatus() { return isPaid; }
 function getApiBase() {
   if (IS_LOCAL) return '';
   if (window._tunnelUrl) return window._tunnelUrl;
-  return '';
+  // GitHub Pages 部署时的后端地址 fallback（localtunnel 固定子域名）
+  return 'https://changan-youban.loca.lt';
 }
 
 async function showPayModal(action) {
