@@ -234,22 +234,55 @@ body{font-family:-apple-system,'PingFang SC','Helvetica Neue',sans-serif;backgro
 .pay-qrcode-img-s{width:130px;height:130px;border-radius:8px;background:#fff;display:block;margin:0 auto}
 .pay-qrcode-box{display:inline-block;background:#f8f8f8;border-radius:16px;padding:16px;border:2px dashed #07C160}
 .pay-qrcode-img{width:180px;height:180px;border-radius:8px;background:#fff;display:block}
-.pay-qrcode-amount{font-size:22px;font-weight:800;color:#1d1d1f;margin-top:10px}
-.pay-qrcode-tip{font-size:12px;color:#8e8e93;margin-top:10px;line-height:1.5}
-.pay-tabs{display:flex;gap:0;margin-bottom:16px;background:#f5f5f7;border-radius:12px;padding:4px}
-.pay-tab{flex:1;text-align:center;padding:10px 0;border-radius:10px;font-size:13px;font-weight:600;color:#8e8e93;cursor:pointer;transition:all .2s;border:none;background:none}
-.pay-tab.active{background:#07C160;color:#fff;box-shadow:0 2px 8px rgba(7,193,96,.3)}
-.pay-tab.ali.active{background:#1677FF;box-shadow:0 2px 8px rgba(22,119,255,.3)}
-.pay-divider{display:flex;align-items:center;gap:12px;margin:20px 0 16px;color:#8e8e93;font-size:12px}
-.pay-divider::before,.pay-divider::after{content:'';flex:1;height:1px;background:#e5e5ea}
-.pay-features{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
-.pay-feat{display:flex;align-items:center;gap:10px;font-size:13px;color:#1d1d1f}
-.pf-icon{width:32px;height:32px;border-radius:8px;background:#f5f5f7;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.pay-btn{width:100%;background:#07C160;color:#fff;border:none;border-radius:16px;padding:15px;font-size:17px;font-weight:700;cursor:pointer}
-.pay-btn:active{transform:scale(.97);background:#06AD56}
-.pay-btn.disabled{background:#ccc;cursor:not-allowed}
+.pay-qrcode-amount{font-size:22px;font-weight:800;color:#1d1d1f;margin-top:10px;text-align:center}
+.pay-qrcode-tip{font-size:11px;color:#8e8e93;margin-top:8px;line-height:1.4}
+/* 双栏布局：左=收款码，右=核验区 */
+.pay-columns{display:flex;gap:14px}
+.pay-col-left{flex:1;min-width:0}
+.pay-col-right{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center}
+.pay-col-left .pay-qrcode-label,.pay-verify-label{font-size:13px;font-weight:700;color:#1d1d1f;margin-bottom:8px;text-align:center}
+.pay-qrcode-dual{display:flex;flex-direction:column;gap:6px}
+.pay-qrcode-item{background:#f8f8f8;border-radius:12px;padding:8px;text-align:center}
+.pay-qrcode-item.wechat{border:1.5px dashed #07C160}
+.pay-qrcode-item.alipay{border:1.5px dashed #1677FF}
+.pay-qrcode-tag{font-size:11px;font-weight:700;margin-bottom:4px}
+.pay-qrcode-item.wechat .pay-qrcode-tag{color:#07C160}
+.pay-qrcode-item.alipay .pay-qrcode-tag{color:#1677FF}
+.pay-qrcode-img-s{width:90px;height:90px;border-radius:6px;background:#fff;display:block;margin:0 auto}
+.pay-qrcode-fallback{display:flex;align-items:center;justify-content:center;min-height:90px}
+/* 核验区 */
+.pay-verify-box{width:140px;height:140px;border:2px dashed #ccc;border-radius:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;background:#fafafa;transition:border-color 0.2s;position:relative}
+.pay-verify-box:hover{border-color:#E8453C}
+.pay-verify-box.has-image{border-style:solid;border-color:#10B981}
+.pay-verify-preview{width:100%;height:100%;object-fit:cover;display:block}
+.pay-verify-placeholder{text-align:center;color:#bbb}
+.pay-verify-icon{font-size:32px;margin-bottom:4px}
+.pay-verify-hint{font-size:12px;line-height:1.4}
+.pay-verify-btn{width:140px;margin-top:10px;padding:10px;background:#E8453C;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.pay-verify-btn:active{transform:scale(0.96);opacity:0.9}
+.pay-verify-btn:disabled{background:#ccc;cursor:not-allowed}
+.pay-verify-tip{font-size:10px;color:#8e8e93;margin-top:6px;text-align:center}
+/* 核验结果 */
+.pay-verify-result{text-align:center;padding:12px 0;margin-top:12px;border-top:1px solid #f0f0f0}
+.pay-verify-steps{display:flex;flex-direction:column;gap:4px;font-size:11px;text-align:left;padding:0 4px}
+.pay-verify-steps .step{display:flex;align-items:center;gap:6px;padding:3px 0}
+/* 确定按钮 */
+.pay-confirm-btn{display:block;width:100%;margin-top:12px;padding:14px;background:#10B981;color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;animation:payPulse 1.5s ease-in-out infinite}
+.pay-confirm-btn:active{transform:scale(0.97);background:#059669}
+@keyframes payPulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.4)}50%{box-shadow:0 0 0 10px rgba(16,185,129,0)}}
+.pay-spinner{width:36px;height:36px;border:3px solid #e5e5ea;border-top-color:#E8453C;border-radius:50%;margin:0 auto 10px;animation:spin .8s linear infinite}
+.pay-status{padding:16px 0;text-align:center;display:none}
+.pay-status-text{font-size:14px;color:#1d1d1f;font-weight:600;margin-top:8px}
 .pay-footer{text-align:center;padding:0 20px 20px;font-size:11px;color:#8e8e93}
 .pay-footer a{color:#1d1d1f;text-decoration:underline}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pay-status{padding:4px 0;text-align:center}
+.pay-status-icon{font-size:36px;margin-bottom:6px}
+.pay-status-text{font-size:14px;color:#1d1d1f;font-weight:600}
+.pay-status-sub{font-size:11px;color:#8e8e93;margin-top:4px}
+.pay-error{text-align:center;padding:12px}
+.pay-timer{font-size:12px;color:#8e8e93}
 
 /* Form Page */
 .form-page{background:#fff;padding-bottom:100px}
@@ -752,38 +785,61 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
 
 <div class="app-container">
 
-<!-- ===== 支付弹窗 ===== -->
+<!-- ===== 支付弹窗（截图核验）===== -->
 <div class="pay-overlay" id="pay-overlay">
   <div class="pay-modal">
     <div class="pay-header">
       <button class="pay-close" onclick="closePayModal()">✕</button>
       <div class="pay-icon">🔒</div>
-      <div class="pay-title">解锁全部功能</div>
-      <div class="pay-sub">一次解锁，全程无忧</div>
+      <div class="pay-title">解锁AI智能行程规划</div>
+      <div class="pay-sub">扫码支付 ¥<span id="pay-expected-amount">9.90</span>，截图上传核验</div>
     </div>
     <div class="pay-body">
-      <div class="pay-price-row">
-        <span class="pay-price">¥9.9 <small>/ 全程</small></span>
-        <span class="pay-orig">¥29.9</span>
-      </div>
-      <div class="pay-qrcode-section">
-        <div class="pay-qrcode-dual">
-          <div class="pay-qrcode-item wechat">
-            <div class="pay-qrcode-label">💚 微信支付</div>
-            <img class="pay-qrcode-img-s" id="pay-qr-wechat" src="alipay-qr.png" alt="微信收款码" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent('changanyouban')">
+      <!-- 左：收款码 右：核验区 -->
+      <div class="pay-columns">
+        <div class="pay-col-left">
+          <div class="pay-qrcode-label">📱 收款码</div>
+          <div class="pay-qrcode-dual">
+            <div class="pay-qrcode-item wechat">
+              <div class="pay-qrcode-tag">💚 微信</div>
+              <img class="pay-qrcode-img-s" src="wechat-qr.png" alt="微信收款码" onerror="this.style.display='none';this.parentElement.querySelector('.pay-qrcode-fallback').style.display='block'">
+              <div class="pay-qrcode-fallback" style="display:none;color:#8e8e93;font-size:10px;padding:20px">收款码未上传</div>
+            </div>
+            <div class="pay-qrcode-item alipay">
+              <div class="pay-qrcode-tag">💙 支付宝</div>
+              <img class="pay-qrcode-img-s" src="alipay-qr.png" alt="支付宝收款码" onerror="this.style.display='none';this.parentElement.querySelector('.pay-qrcode-fallback').style.display='block'">
+              <div class="pay-qrcode-fallback" style="display:none;color:#8e8e93;font-size:10px;padding:20px">收款码未上传</div>
+            </div>
           </div>
-          <div class="pay-qrcode-item alipay">
-            <div class="pay-qrcode-label">💙 支付宝</div>
-            <img class="pay-qrcode-img-s" id="pay-qr-alipay" src="wechat-qr.png" alt="支付宝收款码" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent('changanyouban')">
-          </div>
+          <div class="pay-qrcode-amount">¥9.90</div>
+          <div class="pay-qrcode-tip">扫码支付 → 截图保存 → 右侧上传核验</div>
         </div>
-        <div class="pay-qrcode-amount">¥9.90</div>
-        <div class="pay-qrcode-tip">截图保存 → 打开微信/支付宝扫一扫 → 支付 ¥9.90</div>
+        <div class="pay-col-right">
+          <div class="pay-verify-label">🔍 核验码</div>
+          <!-- 截图预览/上传框 -->
+          <div class="pay-verify-box" id="pay-verify-box">
+            <img class="pay-verify-preview" id="pay-verify-preview" src="" style="display:none">
+            <div class="pay-verify-placeholder" id="pay-verify-placeholder">
+              <div class="pay-verify-icon">📷</div>
+              <div class="pay-verify-hint">点击上传<br>支付截图</div>
+            </div>
+          </div>
+          <input type="file" id="pay-screenshot-input" accept="image/*" style="display:none" onchange="handleScreenshotSelect(this)">
+          <button class="pay-verify-btn" id="pay-verify-btn" onclick="startVerify()">🔍 开始核验</button>
+          <div class="pay-verify-tip" id="pay-verify-tip">上传支付截图后点击核验</div>
+        </div>
       </div>
-      <div class="pay-divider"><span>支付完成后</span></div>
-      <button class="pay-btn" id="pay-btn" onclick="startPay()">✅ 已完成支付 · 点击解锁行程</button>
+      <!-- 核验结果 -->
+      <div class="pay-verify-result" id="pay-verify-result" style="display:none">
+        <div class="pay-verify-steps" id="pay-verify-steps"></div>
+      </div>
+      <!-- 状态 -->
+      <div class="pay-status" id="pay-status" style="display:none">
+        <div class="pay-spinner"></div>
+        <div class="pay-status-text" id="pay-status-text" style="font-size:12px;color:#888">⏳ 首次使用需下载OCR模型（约15MB），后续将秒级识别</div>
+      </div>
     </div>
-    <div class="pay-footer">支付后即刻生效 · <a href="#" onclick="alert('请联系微信：xiaochangan');return false;">联系客服</a></div>
+    <div class="pay-footer">截图仅用于支付验证 · 支付核验通过后即可开始规划</div>
   </div>
 </div>
 
@@ -1523,7 +1579,7 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
     <h2>💡 旅行建议</h2>
     <p>基于你的规划，长安伴游给你贴心建议~</p>
   </div>
-  <div class="field-group" style="text-align:center;">
+  <div id="advice-btn-wrap" class="field-group" style="text-align:center;">
     <button class="btn-submit" style="flex:none;width:auto;padding:10px 20px;margin:0;border-radius:12px;" onclick="genTravelAdvice()">🎯 生成贴心建议</button>
   </div>
   <div id="advice-result" style="margin-top:16px;">
@@ -1802,108 +1858,195 @@ let _localDBReady = false;
   }
 })();
 
-// ===== 支付状态管理 =====
+// ===== 支付截图核验系统（三关验证）=====
 let isPaid = false;
 let _pendingAction = null;
+let _orderId = null;
+let _screenshotBase64 = null;   // 用户上传的截图
+let _verifyPassed = false;      // 核验是否通过
+let _verifyToken = null;        // 解锁令牌
 
-function checkPayStatus() {
-  return isPaid;
+function checkPayStatus() { return isPaid; }
+
+function getApiBase() {
+  if (IS_LOCAL) return '';
+  if (window._tunnelUrl) return window._tunnelUrl;
+  return '';
 }
 
-function showPayModal(action) {
+async function showPayModal(action) {
   _pendingAction = action || 'createPlan';
+  _orderId = null;
+  _screenshotBase64 = null;
+  _verifyPassed = false;
+  _verifyToken = null;
+  
   document.getElementById('pay-overlay').classList.add('show');
+  resetPayUI();
+  await createPayOrder();
 }
 
-function setPayQR(tab) {
-  // 双码并排，无需切换，两个码同时展示
-  var qrW = document.getElementById('pay-qr-wechat');
-  var qrA = document.getElementById('pay-qr-alipay');
-  // 注意：wechat-qr.png 实际是支付宝码，alipay-qr.png 实际是微信码（文件名反了）
-  // 所以 wechat 区域显示 alipay-qr.png（才是真微信码），alipay 区域显示 wechat-qr.png（才是真支付宝码）
-  if (qrW && !qrW.src) qrW.src = 'alipay-qr.png';
-  if (qrA && !qrA.src) qrA.src = 'wechat-qr.png';
+function resetPayUI() {
+  document.getElementById('pay-verify-preview').style.display = 'none';
+  document.getElementById('pay-verify-placeholder').style.display = 'block';
+  document.getElementById('pay-verify-box').classList.remove('has-image');
+  document.getElementById('pay-verify-btn').disabled = true;
+  document.getElementById('pay-verify-tip').textContent = '上传支付截图后点击核验';
+  document.getElementById('pay-verify-result').style.display = 'none';
+  document.getElementById('pay-status').style.display = 'none';
+  document.getElementById('pay-screenshot-input').value = '';
+  var oldBtn = document.querySelector('.pay-confirm-btn');
+  if (oldBtn) oldBtn.remove();
+}
+
+async function createPayOrder() {
+  var apiBase = getApiBase();
+  try {
+    var resp = await fetch(apiBase + '/api/order/create', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+    if (!resp.ok) throw new Error('服务暂不可用（HTTP ' + resp.status + '）');
+    var data = await resp.json();
+    _orderId = data.order_id;
+    document.getElementById('pay-expected-amount').textContent = data.amount || '9.90';
+  } catch(e) {
+    console.error('创建订单失败:', e);
+    toast('支付服务暂不可用，请确保已启动本地服务器');
+  }
+}
+
+// 截图选择
+function handleScreenshotSelect(input) {
+  if (!input.files || !input.files[0]) return;
+  var file = input.files[0];
+  if (file.size > 10 * 1024 * 1024) { toast('截图太大（限10MB）'); input.value = ''; return; }
+  
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    _screenshotBase64 = e.target.result;
+    var p = document.getElementById('pay-verify-preview');
+    p.src = _screenshotBase64; p.style.display = 'block';
+    document.getElementById('pay-verify-placeholder').style.display = 'none';
+    document.getElementById('pay-verify-box').classList.add('has-image');
+    document.getElementById('pay-verify-btn').disabled = false;
+    document.getElementById('pay-verify-tip').textContent = '截图已就绪，点击开始核验';
+    document.getElementById('pay-verify-result').style.display = 'none';
+    var ob = document.querySelector('.pay-confirm-btn'); if (ob) ob.remove();
+  };
+  reader.onerror = function() { toast('文件读取失败'); input.value = ''; };
+  reader.readAsDataURL(file);
+}
+
+// 点击核验区触发文件选择
+document.getElementById('pay-verify-box').addEventListener('click', function() {
+  document.getElementById('pay-screenshot-input').click();
+});
+
+// 开始核验
+async function startVerify() {
+  if (!_screenshotBase64) { toast('请先上传支付截图'); return; }
+  if (!_orderId) { toast('订单未创建，请刷新重试'); return; }
+  
+  var btn = document.getElementById('pay-verify-btn');
+  btn.disabled = true; btn.textContent = '⏳ 核验中…';
+  document.getElementById('pay-verify-result').style.display = 'none';
+  document.getElementById('pay-status').style.display = 'block';
+  
+  // 显示进度：倒计时让用户感知进度
+  var statusEl = document.getElementById('pay-status-text');
+  var startTime = Date.now();
+  var timerInterval = setInterval(function() {
+    var elapsed = Math.round((Date.now() - startTime) / 1000);
+    statusEl.textContent = '正在三关核验…（已等待 ' + elapsed + ' 秒，OCR需要较多计算）';
+  }, 1000);
+  
+  var apiBase = getApiBase();
+  try {
+    var resp = await fetch(apiBase + '/api/order/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: _screenshotBase64, order_id: _orderId })
+    });
+    clearInterval(timerInterval);
+    var data = await resp.json();
+    document.getElementById('pay-status').style.display = 'none';
+    
+    if (data.ok) {
+      _verifyPassed = true;
+      _verifyToken = data.token;
+      showVerifySteps(data.verify_steps, true, null, data.verified_record || ('微信 | ' + (data.txn_id || '---') + ' | 已核查-已生成'));
+      showConfirmButton();
+    } else if (data.need_manual) {
+      showVerifySteps(null, false, data.error || '等待管理员验证');
+      startOrderPollingSimple();
+    } else {
+      var ocrInfo = data.ocr || {};
+      showVerifySteps(null, false, data.error || '核验失败');
+    }
+  } catch(e) {
+    clearInterval(timerInterval);
+    console.error('核验失败:', e);
+    document.getElementById('pay-status').style.display = 'none';
+    showVerifySteps(null, false, '网络错误：' + (e.message || '请检查网络'));
+  }
+  btn.disabled = false; btn.textContent = '🔍 重新核验';
+}
+
+function showVerifySteps(steps, passed, msg, recordInfo) {
+  var el = document.getElementById('pay-verify-steps');
+  if (passed && steps) {
+    var html = '<div style="text-align:center;color:#10B981;font-weight:700;font-size:16px;margin-bottom:8px">✅ 支付核验通过</div>';
+    // 核查记录：微信+单号+已核查-已生成
+    if (recordInfo) {
+      html += '<div style="padding:6px 10px;background:#F0FDF4;border-radius:6px;text-align:center;font-size:11px;color:#059669">' + recordInfo + '</div>';
+    }
+    el.innerHTML = html;
+  } else {
+    el.innerHTML = '<div style="text-align:center;color:#E8453C;font-weight:700;font-size:13px;margin-bottom:4px">❌ ' + (msg || '核验未通过') + '</div>';
+  }
+  document.getElementById('pay-verify-result').style.display = 'block';
+}
+
+function showConfirmButton() {
+  var oldBtn = document.querySelector('.pay-confirm-btn'); if (oldBtn) oldBtn.remove();
+  var btn = document.createElement('button');
+  btn.className = 'pay-confirm-btn';
+  btn.textContent = '📋 查看旅行规划';
+  btn.onclick = confirmAndGenerate;
+  document.getElementById('pay-verify-result').appendChild(btn);
+}
+
+function confirmAndGenerate() {
+  isPaid = true;
+  window._unlockToken = _verifyToken;
+  closePayModal();
+  // 自动生成旅行规划
+  toast('✅ 支付核验通过！正在规划专属路线…');
+  setTimeout(function() { doGenPlan(); }, 300);
+  _pendingAction = null;
+}
+
+// 简单轮询（管理员手动验证场景）
+function startOrderPollingSimple() {
+  var pollCount = 0;
+  var timer = setInterval(async function() {
+    if (_verifyPassed || isPaid) { clearInterval(timer); return; }
+    pollCount++; if (pollCount > 60) { clearInterval(timer); return; }
+    try {
+      var apiBase = getApiBase();
+      var resp = await fetch(apiBase + '/api/order/status?order_id=' + encodeURIComponent(_orderId));
+      if (!resp.ok) return;
+      var data = await resp.json();
+      if (data.status === 'paid') {
+        clearInterval(timer);
+        _verifyPassed = true; _verifyToken = data.token;
+        showVerifySteps({ manual: '✅ 管理员已手动验证通过' }, true);
+        showConfirmButton();
+      }
+    } catch(e) {}
+  }, 3000);
 }
 
 function closePayModal() {
   document.getElementById('pay-overlay').classList.remove('show');
-}
-
-function startPay() {
-  var btn = document.getElementById('pay-btn');
-  if (btn.classList.contains('disabled')) return; // 防重复点击
-  
-  btn.classList.add('disabled');
-  btn.innerHTML = '⏳ 正在验证…';
-  
-  // 二次确认：弹确认框防止随手误点
-  setTimeout(function() {
-    if (!confirm('请确认您已完成扫码支付 ¥9.90\n\n⚠️ 支付成功后请勿关闭页面\n点击"确定"后为您生成专属路线')) {
-      btn.classList.remove('disabled');
-      btn.innerHTML = '✅ 已完成支付 · 点击解锁行程';
-      return;
-    }
-    
-    btn.innerHTML = '⏳ AI服务检测中…';
-    
-    // 连通性预检：本地走代理，公网直连DeepSeek
-    var checkUrl, checkHeaders, checkBody;
-    if (IS_LOCAL) {
-      // 本地环境：检测本地代理
-      checkUrl = '/api/chat';
-      checkHeaders = { 'Content-Type': 'application/json' };
-      checkBody = JSON.stringify({ model: 'deepseek-chat', messages: [{ role: 'user', content: 'ping' }], max_tokens: 1 });
-    } else {
-      // 公网环境：检测DeepSeek API直连
-      checkUrl = 'https://api.deepseek.com/chat/completions';
-      checkHeaders = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + DEEPSEEK_KEY };
-      checkBody = JSON.stringify({ model: 'deepseek-chat', messages: [{ role: 'user', content: 'ping' }], max_tokens: 1 });
-    }
-    
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', checkUrl, true);
-    Object.keys(checkHeaders).forEach(function(k) { xhr.setRequestHeader(k, checkHeaders[k]); });
-    xhr.timeout = 10000;
-    
-    xhr.onload = function() {
-      if (xhr.status === 200 || xhr.status === 201) {
-        // AI服务可用 → 确认支付成功
-        isPaid = true;
-        closePayModal();
-        
-        if (_pendingAction === 'createPlan') {
-          toast('✅ 支付成功！长安伴游正在为你规划专属路线…');
-          setTimeout(function() { doGenPlan(); }, 600);
-        } else if (_pendingAction === 'form') {
-          submitForm();
-        } else if (_pendingAction === 'chat') {
-          openAIChat();
-        } else {
-          toast('✅ 支付成功！');
-        }
-        _pendingAction = null;
-      } else {
-        // AI服务异常
-        btn.classList.remove('disabled');
-        btn.innerHTML = '⚠️ AI服务异常(' + xhr.status + ') · 点击重试';
-        toast('AI服务暂不可用，请稍后重试。code:' + xhr.status);
-      }
-    };
-    
-    xhr.onerror = function() {
-      btn.classList.remove('disabled');
-      btn.innerHTML = '⚠️ 网络不通 · 点击重试';
-      toast(IS_LOCAL ? '请先启动代理服务器(proxy.js)' : '网络连接失败，请检查网络后重试');
-    };
-    
-    xhr.ontimeout = function() {
-      btn.classList.remove('disabled');
-      btn.innerHTML = '⚠️ 连接超时 · 点击重试';
-      toast('AI服务响应超时，请检查网络后重试');
-    };
-    
-    xhr.send(checkBody);
-  }, 800);
 }
 
 // ===== 全局错误捕获 =====
@@ -2092,8 +2235,18 @@ function calcDays() {
 // ===== DEEPSEEK API =====
 var PROXY_URL = '/api/chat';
 var IS_LOCAL = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-var DEEPSEEK_BASE = 'https://api.deepseek.com/v1/chat/completions';
+var DEEPSEEK_BASE = 'https://api.deepseek.com/chat/completions';
 var DEEPSEEK_KEY = 'sk-2061c4530730466589b025bd975a7bed';
+
+// 自动检测隧道URL（localtunnel/ngrok等）
+(function() {
+  if (IS_LOCAL) {
+    // 本地环境：尝试获取公网隧道地址
+    fetch('/api/public-url').then(function(r) { return r.json(); }).then(function(d) {
+      if (d.url) window._tunnelUrl = d.url;
+    }).catch(function() {});
+  }
+})();
 // 公网部署时直连DeepSeek（API已支持CORS跨域）
 if (!IS_LOCAL) {
   PROXY_URL = DEEPSEEK_BASE;
@@ -2199,11 +2352,10 @@ function buildPromptEnhanced(formData, dbData) {
   return '请根据以下信息制定' + formData.days + '天西安旅行路线：\n\n' + parts.join('\n') + dbCtx + '\n\n重要规则：\n1. 你只能从上面【本地数据库】列表中选择景点/美食/酒店\n2. 不要推荐数据库之外的任何内容\n3. 每个景点必须包含确切的GPS坐标\n4. 每天合理分配3-4个景点，考虑距离\n\n输出格式（纯JSON）：\n{\n  "title":"路线标题",\n  "xiaoba_say":"长安伴游开场白（100字内）",\n  "days":[{"day":1,"theme":"主题","spots":[{"time":"08:00-10:00","name":"景点名","tip":"建议1句","coord":"lng,lat"}]}],\n  "foods":[{"name":"美食名","area":"区域","tip":"建议","coord":"lng,lat"}],\n  "hotel":{"name":"酒店名（从上面列表选）","area":"钟楼附近","reason":"理由","budget":"价位"},\n  "budget":{"transport":"交通费","tickets":"门票","food":"餐饮","hotel":"住宿","total":"合计"},\n  "tips":["避坑1","避坑2","避坑3"]\n}';
 }
 
-// DeepSeek API Key — 公网(GitHub Pages)直连AI服务
-var DEEPSEEK_KEY = 'sk-2061c4530730466589b025bd975a7bed';
-
 // ===== 调用DeepSeek API（双层策略：本地代理优先，公网直连兜底）=====
-async function callDeepSeekAPI(prompt) {
+// opts.token: 支付解锁令牌（行程规划必传，美食/酒店等预览不传）
+async function callDeepSeekAPI(prompt, opts) {
+  opts = opts || {};
   var body = JSON.stringify({
     model: 'deepseek-chat',
     messages: [
@@ -2214,12 +2366,15 @@ async function callDeepSeekAPI(prompt) {
     max_tokens: 3000
   });
 
+  var hdrs = { 'Content-Type': 'application/json' };
+  if (opts.token) hdrs['X-Unlock-Token'] = opts.token;
+
   // 策略1：本地环境 → 走代理（/api/chat），性能最优
   if (IS_LOCAL) {
     try {
       var resp = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: hdrs,
         body: body
       });
       if (resp.ok) {
@@ -2229,13 +2384,23 @@ async function callDeepSeekAPI(prompt) {
           if (data.choices && data.choices[0]) return data.choices[0].message.content;
         }
       }
-      if (!resp.ok) throw new Error('代理返回异常(' + resp.status + ')');
+      if (!resp.ok) {
+        // 402 = 令牌验证失败
+        if (resp.status === 402) {
+          var errData = null;
+          try { errData = await resp.json(); } catch(e) {}
+          throw new Error(errData && errData.error ? errData.error : '支付验证失败，请重新支付');
+        }
+        throw new Error('代理返回异常(' + resp.status + ')');
+      }
     } catch(e) {
+      if (opts.token && e.message.indexOf('支付') !== -1) throw e; // 支付相关错误不放行
       console.warn('[长安游伴] 本地代理不可用，降级直连DeepSeek:', e.message);
     }
   }
 
   // 策略2：直连DeepSeek API（公网GitHub Pages / 代理挂了时）
+  // 注意：公网直连时无法验证支付令牌——GitHub Pages纯静态
   try {
     var resp2 = await fetch('https://api.deepseek.com/chat/completions', {
       method: 'POST',
@@ -2500,6 +2665,15 @@ function renderCreateResultEnhanced(content, formData, dbData, preEnrichLookup) 
 
   // ---- 渲染 HTML ----
   var h = '';
+
+  // 主图横幅（首次生成和历史查看都显示，确保一致性）
+  h += '<div style="width:100%;height:160px;border-radius:14px;overflow:hidden;position:relative;margin-bottom:12px;background:linear-gradient(135deg,#1a1a2e 0%,#c0392b 50%,#f39c12 100%);">' +
+    '<img src="https://images.unsplash.com/photo-1698307227259-a31eb39b9944?w=800&q=80" alt="西安钟楼" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.style.display=\'none\'">' +
+    '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.55));display:flex;flex-direction:column;justify-content:flex-end;padding:16px;">' +
+    '<div style="font-size:22px;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5);line-height:1.2;">' + (plan.title || '西安定制游') + '</div>' +
+    '<div style="font-size:12px;color:rgba(255,255,255,.8);margin-top:4px;">长安伴游 · AI智能规划</div>' +
+    '</div></div>';
+
   if (plan.xiaoba_say) h += '<div class="rcard"><div class="xb-bubble"><div class="xb-bub-head"><div class="xb-bub-avatar">🏯</div><span class="xb-bub-name">长安伴游</span><button class="xb-play-btn" onclick="event.stopPropagation();playChangAnIntro()" title="播放语音">🔊</button></div><div class="xb-bub-text">' + plan.xiaoba_say + '</div></div></div>';
 
   // 每日行程
@@ -2626,13 +2800,20 @@ function renderCreateResultEnhanced(content, formData, dbData, preEnrichLookup) 
   document.querySelector('.main-form').style.display = 'none';
   document.getElementById('create-result').scrollIntoView({ behavior: 'smooth' });
   isPaid = false;
+  _verifyToken = null;
+  _verifyPassed = false;
+  window._unlockToken = null;
   
   // 生成二维码
   setTimeout(function() { generatePlanQR(); }, 500);
-  
+
   // ---- 后台自动扩充数据库：对DB未命中的条目，悄悄调高德+补充并保存 ----
   // 等页面渲染完成后异步执行，不阻塞用户体验
   setTimeout(function() { enrichMissingItems(plan, dbData, planSpots, planFoods, planHotels); }, 800);
+
+  // ---- 自动生成贴心建议（无需用户手动点击） ----
+  _lastPlanData = { plan: plan, formData: formData };
+  setTimeout(function() { genTravelAdvice(); }, 1000);
 }
 
 // 自动扩充数据库：对AI推荐但DB没有的条目，后台调 /api/enrich-poi 拉取并保存
@@ -3059,8 +3240,14 @@ function loadHistoryPlan(idx) {
   if (!history[idx]) return;
   var item = history[idx];
   
-  // 隐藏其他页面，显示规划结果
-  document.querySelectorAll('.page').forEach(function(p) { p.style.display = 'none'; });
+  // 隐藏其他页面，显示规划结果（#create-result 在 #page-create 内部，不能隐藏父页面）
+  document.querySelectorAll('.page').forEach(function(p) { if (p.id !== 'page-create') p.style.display = 'none'; });
+  document.getElementById('page-create').style.display = 'block';
+  
+  // 隐藏表单，显示结果
+  var formEl = document.querySelector('.main-form');
+  if (formEl) formEl.style.display = 'none';
+  document.getElementById('weather-widget').style.display = 'none';
   
   var el = document.getElementById('create-result');
   if (!el) return;
@@ -3122,6 +3309,15 @@ function loadHistoryPlan(idx) {
     
     // Build HTML
     var h = '';
+
+    // 主图横幅（与首次生成保持一致）
+    h += '<div style="width:100%;height:160px;border-radius:14px;overflow:hidden;position:relative;margin-bottom:12px;background:linear-gradient(135deg,#1a1a2e 0%,#c0392b 50%,#f39c12 100%);">' +
+      '<img src="https://images.unsplash.com/photo-1698307227259-a31eb39b9944?w=800&q=80" alt="西安钟楼" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.style.display=\'none\'">' +
+      '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.55));display:flex;flex-direction:column;justify-content:flex-end;padding:16px;">' +
+      '<div style="font-size:22px;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5);line-height:1.2;">' + (plan.title || '西安定制游') + '</div>' +
+      '<div style="font-size:12px;color:rgba(255,255,255,.8);margin-top:4px;">长安伴游 · AI智能规划</div>' +
+      '</div></div>';
+
     if (plan.xiaoba_say) h += '<div class="rcard"><div class="xb-bubble"><div class="xb-bub-head"><div class="xb-bub-avatar">🏯</div><span class="xb-bub-name">长安伴游</span><button class="xb-play-btn" onclick="event.stopPropagation();playChangAnIntro()">🔊</button></div><div class="xb-bub-text">' + plan.xiaoba_say + '</div></div></div>';
     
     var si = 0;
@@ -3389,6 +3585,9 @@ function genTravelAdvice() {
   
   h += '</div>';
   resultEl.innerHTML = h;
+  // 隐藏"生成贴心建议"按钮（已生成后不再需要）
+  var btnWrap = document.getElementById('advice-btn-wrap');
+  if (btnWrap) btnWrap.style.display = 'none';
   resultEl.scrollIntoView({behavior:'smooth'});
 }
 
@@ -4122,27 +4321,59 @@ function safeWebsite(raw) {
   return '';
 }
 
-// ===== 统一多图渲染辅助 =====
+// ===== 统一多图渲染辅助（支持触摸左右滑动切换） =====
 function renderPhotoGallery(photos, fallbackSvg, name) {
   if (!photos || photos.length === 0) return `<img src="${fallbackSvg}" alt="${name}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" onerror="this.src='${fallbackSvg}'">`;
   if (photos.length === 1) return `<img src="${photos[0]}" alt="${name}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" onerror="this.src='${fallbackSvg}'">`;
-  // 多图：点选轮播
+  // 多图：点选轮播 + 触摸滑动
   let dots = '', imgs = '';
+  var gid = 'g_' + Date.now().toString(36) + '_' + Math.floor(Math.random()*9999);
   photos.forEach((url, i) => {
     const display = i === 0 ? 'block' : 'none';
-    imgs += `<img src="${url}" alt="${name}(${i+1})" class="gallery-img" data-idx="${i}" style="width:100%;height:100%;object-fit:cover;display:${display};position:absolute;top:0;left:0;" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.gallery-dot:nth-child(${i+1})')&&(this.parentElement.querySelector('.gallery-dot:nth-child(${i+1})').style.display='none')">`;
-    dots += `<span class="gallery-dot" data-idx="${i}" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${i===0?'#fff':'rgba(255,255,255,0.5)'};margin:0 2px;cursor:pointer;" onclick="switchGalleryPhoto(this,${i},'${name}')"></span>`;
+    imgs += `<img src="${url}" alt="${name}(${i+1})" class="gallery-img" data-idx="${i}" style="width:100%;height:100%;object-fit:cover;display:${display};position:absolute;top:0;left:0;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;" loading="lazy" onerror="this.style.display='none'">`;
+    dots += `<span class="gallery-dot" data-idx="${i}" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${i===0?'#fff':'rgba(255,255,255,0.5)'};margin:0 2px;cursor:pointer;transition:background .2s;pointer-events:auto;" onclick="switchGalleryPhoto(this,${i},'${gid}')"></span>`;
   });
-  return `<div style="position:relative;width:100%;height:100%;">${imgs}<div style="position:absolute;bottom:5px;left:0;right:0;text-align:center;z-index:2;">${dots}</div></div>`;
+  return `<div id="${gid}" data-gtotal="${photos.length}" data-gidx="0" class="touch-gallery" style="position:relative;width:100%;height:100%;overflow:hidden;">${imgs}<div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;z-index:2;pointer-events:none;padding:4px 0;background:linear-gradient(transparent, rgba(0,0,0,.25));">${dots}</div></div>`;
 }
 
-function switchGalleryPhoto(dot, idx, name) {
-  const container = dot.parentElement.parentElement;
+function switchGalleryPhoto(dot, idx, gid) {
+  var container = document.getElementById(gid);
+  if (!container) { container = dot.parentElement.parentElement; }
   const imgs = container.querySelectorAll('.gallery-img');
   const dots = container.querySelectorAll('.gallery-dot');
   imgs.forEach((img, i) => { img.style.display = i === idx ? 'block' : 'none'; });
   dots.forEach((d, i) => { d.style.background = i === idx ? '#fff' : 'rgba(255,255,255,0.5)'; });
+  container.setAttribute('data-gidx', String(idx));
 }
+
+// 全局触摸滑动事件委托（只需绑定一次）
+(function() {
+  var _tx = 0, _sx = 0, _el = null;
+  document.addEventListener('touchstart', function(e) {
+    if (e.target.closest('.touch-gallery')) {
+      _el = e.target.closest('.touch-gallery');
+      _sx = e.touches[0].clientX;
+      _tx = _sx;
+    }
+  }, { passive: true });
+  document.addEventListener('touchmove', function(e) {
+    if (_el) _tx = e.touches[0].clientX;
+  }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    if (!_el) return;
+    var diff = _tx - _sx;
+    if (Math.abs(diff) > 40) { // 滑动超过40px触发
+      var total = parseInt(_el.getAttribute('data-gtotal') || '0');
+      var cur = parseInt(_el.getAttribute('data-gidx') || '0');
+      var next = diff > 0 ? cur + 1 : cur - 1;
+      if (next < 0) next = total - 1;
+      if (next >= total) next = 0;
+      var dots = _el.querySelectorAll('.gallery-dot');
+      if (dots[next]) switchGalleryPhoto(dots[next], next, _el.id);
+    }
+    _el = null;
+  }, { passive: true });
+})();
 
 // 按菜品名+高德类型智能分类（西安本地美食四大类）
 function typeNameToCat(type, name, tag) {
@@ -4704,7 +4935,12 @@ function toggleVoiceIntro() {
 
 function playVoiceIntro() {
   if (!('speechSynthesis' in window)) {
-    toast('你的浏览器不支持语音播报');
+    toast('当前浏览器不支持语音播报（建议使用Edge或Chrome）');
+    return;
+  }
+  // 二次检测：有些浏览器有API但实际不工作
+  if (_voiceSupported === false) {
+    toast('当前浏览器不支持语音播放，请换用 Edge 或 Chrome');
     return;
   }
   const btn = document.getElementById('voice-big-btn');
@@ -4723,7 +4959,6 @@ function playVoiceIntro() {
 
   // 优先选中文声音，偏好男声/自然音色
   const voices = speechSynthesis.getVoices();
-  // 策略：Microsoft Xiaoyi(女) / Microsoft Yunjian(男) / Google中文 / 任意中文
   var preferred = [
     'Microsoft Yunjian Online', 'Microsoft Yunjian',
     'Microsoft Huihui', 'Microsoft Kangkang',
@@ -4740,14 +4975,18 @@ function playVoiceIntro() {
   if (!zhVoice) zhVoice = voices.find(function(v) { return v.lang && v.lang.startsWith('zh'); });
   if (zhVoice) utterance.voice = zhVoice;
 
-  utterance.onend = () => {
+  utterance.onend = function() {
     btn.classList.remove('playing');
     btn.textContent = '🔊 听额用陕西话给你说两句';
     voicePlayed = true;
   };
-  utterance.onerror = () => {
+  utterance.onerror = function(e) {
+    console.warn('🔊 语音播报失败:', e.error);
     btn.classList.remove('playing');
-    btn.textContent = '🔊 听额用陕西话给你说两句';
+    _voiceSupported = false;
+    btn.innerHTML = '🔇 当前浏览器不支持语音（建议用Edge/Chrome）';
+    btn.style.opacity = '0.6';
+    toast('语音播放失败，请尝试 Edge 或 Chrome 浏览器');
   };
 
   speechSynthesis.cancel();
@@ -4787,18 +5026,52 @@ function playChangAnIntro() {
   speechSynthesis.speak(utterance);
 }
 
-// 预加载语音列表并首次访问自动播报
+// 预加载语音列表 + 兼容性检测
+var _voiceSupported = null; // null=未检测, true=可用, false=不可用
+function testVoiceSupport() {
+  return new Promise(function(resolve) {
+    if (!('speechSynthesis' in window)) { _voiceSupported = false; resolve(false); return; }
+    try {
+      var u = new SpeechSynthesisUtterance('test');
+      u.volume = 0; // 静音测试
+      u.onend = function() { _voiceSupported = true; resolve(true); };
+      u.onerror = function() { _voiceSupported = false; resolve(false); };
+      // 部分浏览器需要先cancel再speak才能触发
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+      // 3秒超时：如果没回调说明可能卡住了
+      setTimeout(function() {
+        if (_voiceSupported === null) { _voiceSupported = false; resolve(false); }
+      }, 3000);
+    } catch(e) { _voiceSupported = false; resolve(false); }
+  });
+}
+
 if ('speechSynthesis' in window) {
   speechSynthesis.getVoices();
   speechSynthesis.onvoiceschanged = function() {
     speechSynthesis.getVoices();
-    if (!voicePlayed && !sessionStorage.getItem('cb_voiced')) {
-      sessionStorage.setItem('cb_voiced', '1');
-      setTimeout(function() {
-        var btn = document.getElementById('voice-big-btn');
-        if (btn) playVoiceIntro();
-      }, 1500);
-    }
+    // 延迟测试语音支持（等页面完全加载）
+    setTimeout(function() {
+      testVoiceSupport().then(function(ok) {
+        console.log('🔊 语音播报' + (ok ? '可用' : '不可用（当前浏览器不支持）'));
+        if (!ok) {
+          var btn = document.getElementById('voice-big-btn');
+          if (btn) {
+            btn.innerHTML = '🔇 当前浏览器不支持语音（建议用Edge/Chrome）';
+            btn.style.opacity = '0.6';
+            btn.onclick = function() { toast('当前浏览器不支持语音播放，请使用 Edge 或 Chrome 浏览器'); };
+          }
+        } else if (!voicePlayed && !sessionStorage.getItem('cb_voiced')) {
+          sessionStorage.setItem('cb_voiced', '1');
+          setTimeout(function() {
+            var btn = document.getElementById('voice-big-btn');
+            if (btn) playVoiceIntro();
+          }, 1500);
+        }
+      });
+    }, 2000);
+  };
   };
 }
 
@@ -4995,7 +5268,7 @@ async function doGenPlan() {
     _planAbortController = new AbortController();
     var timeout = setTimeout(function() { _planAbortController.abort(); }, 40000);
     
-    var content = await callDeepSeekAPI(prompt);
+    var content = await callDeepSeekAPI(prompt, { token: window._unlockToken || '' });
     clearTimeout(timeout);
     
     if (!content) throw new Error('AI返回空内容');
@@ -5014,6 +5287,17 @@ async function doGenPlan() {
 
     // 5. 增强渲染（使用DB真实数据填充，含预富化结果）
     renderCreateResultEnhanced(content, formData, dbData, spotLookup);
+
+    // 6. 更新 Excel 总表生成状态
+    if (window._orderId) {
+      try {
+        await fetch(getApiBase() + '/api/order/plan-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order_id: window._orderId, generated: true })
+        });
+      } catch(e) { console.warn('更新生成状态失败:', e.message); }
+    }
 
   } catch(e) {
     clearTimeout(timeout);

@@ -27,3 +27,16 @@ transform-*.js
 
 # Node modules
 node_modules/
+
+# Data files (sensitive or temp)
+data/screenshots/
+data/ocr-detail-*.xlsx
+data/orders.json
+*.traineddata
+
+# Windows batch files
+*.bat
+
+# Temp files
+proxy_out.log
+tunnel-url.txt

@@ -34,12 +34,24 @@ textarea { resize: vertical; min-height: 60px; font-family: monospace; }
 .toast.show { opacity: 1; }
 .full-link { background: #F5F5F5; padding: 10px; border-radius: 6px; font-size: 12px; word-break: break-all; margin-top: 8px; font-family: monospace; }
 .copy-btn { color: #3B82F6; cursor: pointer; font-size: 12px; border: none; background: none; text-decoration: underline; }
+/* 订单管理 */
+.order-list { font-size: 13px; }
+.order-item { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid #F0F0F0; flex-wrap: wrap; }
+.order-item:last-child { border-bottom: none; }
+.order-item.pending { background: #FFF8E1; margin: 0 -20px; padding-left: 20px; padding-right: 20px; border-radius: 6px; }
+.order-id { font-family: monospace; font-size: 11px; color: #666; min-width: 140px; }
+.order-amt { font-weight: 700; color: #E8453C; min-width: 60px; }
+.order-time { font-size: 11px; color: #999; }
+.verify-btn { padding: 5px 12px; background: #059669; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; text-wrap: nowrap; }
+.verify-btn:hover { background: #047857; }
+.verify-btn:disabled { background: #ccc; cursor: not-allowed; }
+.screenshot-link { color: #3B82F6; font-size: 11px; cursor: pointer; text-decoration: underline; }
 </style>
 </head>
 <body>
 
-<h1>🏮 长安游伴 · Token 管理</h1>
-<p class="sub">生成一次性访问码，买家付费后发送链接</p>
+<h1>🏮 长安游伴 · Token & 订单管理</h1>
+<p class="sub">生成一次访问码 · 验证支付截图 · 管理订单</p>
 
 <!-- 公网地址配置 -->
 <div class="card">
@@ -68,10 +80,14 @@ textarea { resize: vertical; min-height: 60px; font-family: monospace; }
   </div>
 </div>
 
-<!-- Token 列表 -->
+<!-- 订单管理 -->
 <div class="card">
-  <h2>📋 Token 使用记录</h2>
-  <div class="token-list" id="token-list">加载中…</div>
+  <h2>📦 订单管理（截图验证支付）</h2>
+  <div class="row" style="margin-bottom:12px;">
+    <button class="btn btn-primary btn-sm" onclick="refreshOrders()">🔄 刷新订单</button>
+    <span style="font-size:12px;color:#999;">待处理的订单会自动显黄，点击「验证」即可通过</span>
+  </div>
+  <div class="order-list" id="order-list" style="font-size:13px;">加载中…</div>
 </div>
 
 <!-- 二维码生成 -->
@@ -220,10 +236,98 @@ async function refreshList() {
   }
 }
 
+async function refreshOrders() {
+  try {
+    var resp = await fetch('/api/order/list', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: ADMIN_KEY })
+    });
+    var data = await resp.json();
+    var orders = data.orders || [];
+    var listDiv = document.getElementById('order-list');
+    
+    if (orders.length === 0) {
+      listDiv.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">暂无订单</p>';
+      return;
+    }
+    
+    var pending = orders.filter(function(o) { return o.status === 'pending'; }).length;
+    var paid = orders.filter(function(o) { return o.status === 'paid'; }).length;
+    
+    var html = '<div style="font-size:12px;color:#999;margin-bottom:8px;">' +
+      '总计: ' + orders.length + ' | ' +
+      '待验证: <b style="color:#E8453C">' + pending + '</b> | ' +
+      '已验证: ' + paid +
+      '</div>';
+    
+    orders.forEach(function(order) {
+      var isPending = order.status === 'pending';
+      var statusTag = isPending
+        ? '<span class="tag tag-red">待验证</span>'
+        : '<span class="tag tag-green">已验证</span>';
+      
+      var time = new Date(order.created_at).toLocaleString('zh-CN');
+      var paidTime = order.paid_time ? ' → 支付时间: ' + new Date(order.paid_time).toLocaleString('zh-CN') : '';
+      var paidAmt = order.paid_amount ? ' / 实付: ¥' + order.paid_amount : '';
+      
+      var verifyBtn = '';
+      if (isPending && order.screenshot_saved) {
+        verifyBtn = '<button class="verify-btn" onclick="verifyOrder(\'' + order.order_id + '\')">✅ 验证通过</button>';
+      } else if (isPending) {
+        verifyBtn = '<span style="font-size:11px;color:#999;">等待上传截图</span>';
+      }
+      
+      var screenshotLink = '';
+      if (order.screenshot_file) {
+        screenshotLink = '<a class="screenshot-link" href="data/screenshots/' + order.screenshot_file + '" target="_blank">📸 查看截图</a>';
+      }
+      
+      var manualBadge = order.manual_verified ? ' <span class="tag tag-gray">手动</span>' : '';
+      
+      html += '<div class="order-item' + (isPending ? ' pending' : '') + '">' +
+        '<span class="order-id">' + order.order_id.substring(0, 20) + '…</span>' +
+        statusTag + manualBadge +
+        '<span class="order-amt">¥' + order.expected_amount + paidAmt + '</span>' +
+        '<span class="order-time">' + time + paidTime + '</span>' +
+        screenshotLink +
+        verifyBtn +
+        '</div>';
+    });
+    
+    listDiv.innerHTML = html;
+  } catch(e) {
+    document.getElementById('order-list').innerHTML = '<p style="color:#E8453C;">加载失败: ' + e.message + '</p>';
+  }
+}
+
+async function verifyOrder(orderId) {
+  if (!confirm('确认该用户已支付 ¥9.90？')) return;
+  
+  try {
+    var resp = await fetch('/api/order/manual-verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: ADMIN_KEY, order_id: orderId })
+    });
+    var data = await resp.json();
+    
+    if (data.ok) {
+      showToast('✅ 已验证！用户将自动获得攻略');
+      refreshOrders();
+    } else {
+      showToast('验证失败: ' + (data.error || '未知错误'));
+    }
+  } catch(e) {
+    showToast('网络错误: ' + e.message);
+  }
+}
+
 // 初始化
 document.getElementById('public-host').value = getPublicHost();
 document.getElementById('current-host').textContent = getPublicHost() || '未设置（使用 localhost）';
 refreshList();
+refreshOrders();
 </script>
 </body>
 </html>
