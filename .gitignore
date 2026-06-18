@@ -1,5 +1,6 @@
 # Backup files
 *.bak
+*.bak-*
 *_bak.html
 *-bak.html
 *-old.html
@@ -10,6 +11,19 @@ _check*
 # Temp/sensitive
 tunnel.js
 qrcode.png
+proxy_out.log
+tunnel-url.txt
+*.log
+
+# Build scripts (not needed for deployment)
+build-db*.js
+generate_*.py
+create_*.py
+transform-*.js
+
+# Docs (temp)
+完成总结.md
+测试指南.md
 
 # Node modules
 node_modules/
