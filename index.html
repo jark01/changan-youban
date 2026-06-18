@@ -770,11 +770,11 @@ textarea.field-input{min-height:70px;resize:none;line-height:1.5}
         <div class="pay-qrcode-dual">
           <div class="pay-qrcode-item wechat">
             <div class="pay-qrcode-label">💚 微信支付</div>
-            <img class="pay-qrcode-img-s" id="pay-qr-wechat" src="wechat-qr.png" alt="微信收款码" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent('changanyouban')">
+            <img class="pay-qrcode-img-s" id="pay-qr-wechat" src="alipay-qr.png" alt="微信收款码" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent('changanyouban')">
           </div>
           <div class="pay-qrcode-item alipay">
             <div class="pay-qrcode-label">💙 支付宝</div>
-            <img class="pay-qrcode-img-s" id="pay-qr-alipay" src="alipay-qr.png" alt="支付宝收款码" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent('changanyouban')">
+            <img class="pay-qrcode-img-s" id="pay-qr-alipay" src="wechat-qr.png" alt="支付宝收款码" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent('changanyouban')">
           </div>
         </div>
         <div class="pay-qrcode-amount">¥9.90</div>
@@ -2158,7 +2158,29 @@ async function callDeepSeekAPI(prompt) {
       max_tokens: 3000
     })
   });
-  var data = await resp.json();
+
+  // 检查HTTP状态码
+  if (!resp.ok) {
+    var errText = '';
+    try { errText = await resp.text(); } catch(e) {}
+    throw new Error('API请求失败(' + resp.status + ')' + (errText ? ': ' + errText.substring(0, 100) : ''));
+  }
+
+  // 检查响应内容类型是否为JSON
+  var ct = (resp.headers.get('content-type') || '');
+  if (ct.indexOf('json') === -1) {
+    var body = '';
+    try { body = await resp.text(); } catch(e) {}
+    throw new Error('AI服务返回异常格式，请稍后重试');
+  }
+
+  var data;
+  try {
+    data = await resp.json();
+  } catch(e) {
+    throw new Error('AI返回数据解析失败，请重试');
+  }
+
   if (!data.choices || !data.choices[0]) throw new Error('API返回异常');
   return data.choices[0].message.content;
 }
@@ -4604,15 +4626,32 @@ function playVoiceIntro() {
   btn.classList.add('playing');
   btn.textContent = '🔊 额正在说…';
 
-  const text = '嘿！你好呀~欢迎来到长安伴游！额是你在西安的AI智能旅行伴侣，能帮你规划专属路线、推荐本地人私藏美食、一键导航到景点，还能陪你聊天解闷儿。不管你是带娃、情侣、还是一个人闯长安，额都能给你安排得明明白白的。很开心能为你服务，祝你在西安耍得开心！';
+  // 陕西话风格文案——用方言词汇+短句，让TTS读起来更有味儿
+  const text = '嘿！你好呀！欢迎来到长安伴游！额叫小长安，是你在西安的土著向导。额能给你规划路线、推荐好吃的、还能一键导航。不管你是带娃来、跟对象来、还是一个人闯西安，额都能给你安排得妥妥的。来了西安，肉夹馍要吃、泡馍要掰、城墙要骑、大雁塔要看。有啥麻达尽管问额，咱陕西人实在，不整虚的。祝你在这耍得美美的！';
 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'zh-CN';
-  utterance.rate = 0.95;
-  utterance.pitch = 1.05;
+  utterance.rate = 0.88;        // 稍慢，更像聊天语气
+  utterance.pitch = 0.92;       // 稍低沉，偏大叔音色（更接地气）
+  utterance.volume = 1.0;
 
+  // 优先选中文声音，偏好男声/自然音色
   const voices = speechSynthesis.getVoices();
-  const zhVoice = voices.find(v => v.lang.startsWith('zh')) || voices.find(v => v.lang.includes('Chinese'));
+  // 策略：Microsoft Xiaoyi(女) / Microsoft Yunjian(男) / Google中文 / 任意中文
+  var preferred = [
+    'Microsoft Yunjian Online', 'Microsoft Yunjian',
+    'Microsoft Huihui', 'Microsoft Kangkang',
+    'Google 普通话（中国大陆）', 'Google 中文（普通话）',
+    'zh-CN'
+  ];
+  var zhVoice = null;
+  for (var i = 0; i < preferred.length; i++) {
+    zhVoice = voices.find(function(v) {
+      return v.name.indexOf(preferred[i]) !== -1 || v.lang === preferred[i];
+    });
+    if (zhVoice) break;
+  }
+  if (!zhVoice) zhVoice = voices.find(function(v) { return v.lang && v.lang.startsWith('zh'); });
   if (zhVoice) utterance.voice = zhVoice;
 
   utterance.onend = () => {
@@ -4644,13 +4683,19 @@ function playChangAnIntro() {
     toast('你的浏览器不支持语音播报');
     return;
   }
-  const text = '你好呀~欢迎来到长安伴游！额是你在西安的AI智能旅行伴侣，能帮你规划专属路线、推荐本地人私藏美食、一键导航到景点，还能陪你聊天解闷儿。很开心能为你服务，祝你在西安耍得开心！';
+  const text = '嘿！你好呀！额叫小长安，是你在西安的土著向导。额能给你规划路线、推荐好吃的、还能一键导航。来了西安，肉夹馍要吃、泡馍要掰、城墙要骑、大雁塔要看。有啥麻达尽管问额，咱陕西人实在，不整虚的！';
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'zh-CN';
-  utterance.rate = 0.95;
-  utterance.pitch = 1.05;
+  utterance.rate = 0.88;
+  utterance.pitch = 0.92;
   const voices = speechSynthesis.getVoices();
-  const zhVoice = voices.find(v => v.lang.startsWith('zh'));
+  var preferred = ['Microsoft Yunjian', 'Microsoft Huihui', 'Microsoft Kangkang'];
+  var zhVoice = null;
+  for (var i = 0; i < preferred.length; i++) {
+    zhVoice = voices.find(function(v) { return v.name.indexOf(preferred[i]) !== -1; });
+    if (zhVoice) break;
+  }
+  if (!zhVoice) zhVoice = voices.find(function(v) { return v.lang && v.lang.startsWith('zh'); });
   if (zhVoice) utterance.voice = zhVoice;
   speechSynthesis.cancel();
   speechSynthesis.speak(utterance);
