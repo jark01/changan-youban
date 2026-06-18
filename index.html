@@ -1819,8 +1819,10 @@ function setPayQR(tab) {
   // 双码并排，无需切换，两个码同时展示
   var qrW = document.getElementById('pay-qr-wechat');
   var qrA = document.getElementById('pay-qr-alipay');
-  if (qrW && !qrW.src) qrW.src = 'wechat-qr.png';
-  if (qrA && !qrA.src) qrA.src = 'alipay-qr.png';
+  // 注意：wechat-qr.png 实际是支付宝码，alipay-qr.png 实际是微信码（文件名反了）
+  // 所以 wechat 区域显示 alipay-qr.png（才是真微信码），alipay 区域显示 wechat-qr.png（才是真支付宝码）
+  if (qrW && !qrW.src) qrW.src = 'alipay-qr.png';
+  if (qrA && !qrA.src) qrA.src = 'wechat-qr.png';
 }
 
 function closePayModal() {
@@ -1829,25 +1831,69 @@ function closePayModal() {
 
 function startPay() {
   const btn = document.getElementById('pay-btn');
-  btn.classList.add('disabled');
-  btn.innerHTML = '⏳ 正在确认支付…';
+  if (btn.classList.contains('disabled')) return; // 防重复点击
   
-  setTimeout(() => {
-    isPaid = true;
-    closePayModal();
-    
-    if (_pendingAction === 'createPlan') {
-      toast('✅ 支付成功！长安伴游正在为你规划专属路线…');
-      setTimeout(function() { doGenPlan(); }, 600);
-    } else if (_pendingAction === 'form') {
-      submitForm();
-    } else if (_pendingAction === 'chat') {
-      openAIChat();
-    } else {
-      toast('✅ 支付成功！');
+  btn.classList.add('disabled');
+  btn.innerHTML = '⏳ 正在验证…';
+  
+  // 二次确认：弹确认框防止随手误点
+  setTimeout(function() {
+    if (!confirm('请确认您已完成扫码支付 ¥9.90\n\n⚠️ 支付成功后请勿关闭页面\n点击"确定"后为您生成专属路线')) {
+      btn.classList.remove('disabled');
+      btn.innerHTML = '✅ 已完成支付 · 点击解锁行程';
+      return;
     }
-    _pendingAction = null;
-  }, 1500);
+    
+    btn.innerHTML = '⏳ 验证支付状态…';
+    
+    // 先做一次服务器连通性检查
+    var checkUrl = location.protocol + '//' + location.host + '/api/chat';
+    var testBody = JSON.stringify({ model: 'deepseek-chat', messages: [{ role: 'user', content: 'ping' }], max_tokens: 1 });
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', checkUrl, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.timeout = 8000;
+    
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        // 服务器可用 → 确认支付成功
+        isPaid = true;
+        closePayModal();
+        
+        if (_pendingAction === 'createPlan') {
+          toast('✅ 支付成功！长安伴游正在为你规划专属路线…');
+          setTimeout(function() { doGenPlan(); }, 600);
+        } else if (_pendingAction === 'form') {
+          submitForm();
+        } else if (_pendingAction === 'chat') {
+          openAIChat();
+        } else {
+          toast('✅ 支付成功！');
+        }
+        _pendingAction = null;
+      } else {
+        // 服务器异常 → 恢复按钮
+        btn.classList.remove('disabled');
+        btn.innerHTML = '⚠️ 服务器异常(' + xhr.status + ') · 点击重试';
+        toast('服务器异常，请稍后重试或联系客服');
+      }
+    };
+    
+    xhr.onerror = function() {
+      btn.classList.remove('disabled');
+      btn.innerHTML = '⚠️ 服务暂不可用 · 点击重试';
+      toast('网络连接失败，请确保代理服务器已启动');
+    };
+    
+    xhr.ontimeout = function() {
+      btn.classList.remove('disabled');
+      btn.innerHTML = '⚠️ 连接超时 · 点击重试';
+      toast('连接超时，请检查网络后重试');
+    };
+    
+    xhr.send(testBody);
+  }, 800);
 }
 
 // ===== 全局错误捕获 =====
