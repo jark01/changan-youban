@@ -2189,46 +2189,76 @@ function buildPromptEnhanced(formData, dbData) {
   return '请根据以下信息制定' + formData.days + '天西安旅行路线：\n\n' + parts.join('\n') + dbCtx + '\n\n重要规则：\n1. 你只能从上面【本地数据库】列表中选择景点/美食/酒店\n2. 不要推荐数据库之外的任何内容\n3. 每个景点必须包含确切的GPS坐标\n4. 每天合理分配3-4个景点，考虑距离\n\n输出格式（纯JSON）：\n{\n  "title":"路线标题",\n  "xiaoba_say":"长安伴游开场白（100字内）",\n  "days":[{"day":1,"theme":"主题","spots":[{"time":"08:00-10:00","name":"景点名","tip":"建议1句","coord":"lng,lat"}]}],\n  "foods":[{"name":"美食名","area":"区域","tip":"建议","coord":"lng,lat"}],\n  "hotel":{"name":"酒店名（从上面列表选）","area":"钟楼附近","reason":"理由","budget":"价位"},\n  "budget":{"transport":"交通费","tickets":"门票","food":"餐饮","hotel":"住宿","total":"合计"},\n  "tips":["避坑1","避坑2","避坑3"]\n}';
 }
 
-// ===== 调用DeepSeek API =====
+// DeepSeek API Key — 公网(GitHub Pages)直连AI服务
+var DEEPSEEK_KEY = 'sk-2061c4530730466589b025bd975a7bed';
+
+// ===== 调用DeepSeek API（双层策略：本地代理优先，公网直连兜底）=====
 async function callDeepSeekAPI(prompt) {
-  var resp = await fetch('/api/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'deepseek-chat',
-      messages: [
-        { role: 'system', content: '你是"长安伴游"，西安14年土著向导，陕西腔（额代替我），热情直爽。输出纯JSON。坐标格式：兵马俑coord为"109.285,34.385"，大雁塔为"108.963,34.225"，钟楼为"108.948,34.267"。只输出JSON，字数精简。' },
-        { role: 'user', content: prompt }
-      ],
-      temperature: 0.7,
-      max_tokens: 3000
-    })
+  var body = JSON.stringify({
+    model: 'deepseek-chat',
+    messages: [
+      { role: 'system', content: '你是"长安伴游"，西安14年土著向导，陕西腔（额代替我），热情直爽。输出纯JSON。坐标格式：兵马俑coord为"109.285,34.385"，大雁塔为"108.963,34.225"，钟楼为"108.948,34.267"。只输出JSON，字数精简。' },
+      { role: 'user', content: prompt }
+    ],
+    temperature: 0.7,
+    max_tokens: 3000
   });
 
-  // 检查HTTP状态码
-  if (!resp.ok) {
-    var errText = '';
-    try { errText = await resp.text(); } catch(e) {}
-    throw new Error('API请求失败(' + resp.status + ')' + (errText ? ': ' + errText.substring(0, 100) : ''));
+  // 策略1：本地环境 → 走代理（/api/chat），性能最优
+  if (IS_LOCAL) {
+    try {
+      var resp = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: body
+      });
+      if (resp.ok) {
+        var ct = (resp.headers.get('content-type') || '');
+        if (ct.indexOf('json') !== -1) {
+          var data = await resp.json();
+          if (data.choices && data.choices[0]) return data.choices[0].message.content;
+        }
+      }
+      if (!resp.ok) throw new Error('代理返回异常(' + resp.status + ')');
+    } catch(e) {
+      console.warn('[长安游伴] 本地代理不可用，降级直连DeepSeek:', e.message);
+    }
   }
 
-  // 检查响应内容类型是否为JSON
-  var ct = (resp.headers.get('content-type') || '');
-  if (ct.indexOf('json') === -1) {
-    var body = '';
-    try { body = await resp.text(); } catch(e) {}
-    throw new Error('AI服务返回异常格式，请稍后重试');
-  }
-
-  var data;
+  // 策略2：直连DeepSeek API（公网GitHub Pages / 代理挂了时）
   try {
-    data = await resp.json();
-  } catch(e) {
-    throw new Error('AI返回数据解析失败，请重试');
-  }
+    var resp2 = await fetch('https://api.deepseek.com/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + DEEPSEEK_KEY
+      },
+      body: body
+    });
 
-  if (!data.choices || !data.choices[0]) throw new Error('API返回异常');
-  return data.choices[0].message.content;
+    if (!resp2.ok) {
+      var errText = '';
+      try { errText = await resp2.text(); } catch(e) {}
+      throw new Error('DeepSeek API错误(' + resp2.status + ')' + (errText ? ': ' + errText.substring(0, 100) : ''));
+    }
+
+    var data2 = await resp2.json();
+    if (!data2.choices || !data2.choices[0]) throw new Error('API返回数据异常');
+    return data2.choices[0].message.content;
+
+  } catch(e2) {
+    // 直连失败：CORS/网络/防火墙
+    var em = e2.message || '';
+    if (em.indexOf('Failed to fetch') !== -1 || em.indexOf('NetworkError') !== -1) {
+      if (IS_LOCAL) {
+        throw new Error('通讯失败 — 请双击运行 proxy.js 启动本地服务器后再试');
+      } else {
+        throw new Error('AI服务连接超时 — 请检查网络后刷新页面重试。仍不行请联系客服。');
+      }
+    }
+    // 其他错误原样抛出
+    throw e2;
+  }
 }
 
 // ===== 增强版结果渲染（使用DB真实数据填充） =====
